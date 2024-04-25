@@ -1,31 +1,20 @@
-import SideMenu from '@/components/nav/side-menu'
-import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { AuthContext } from '@/hooks/use-auth'
+import { Toaster } from '@/components/ui/sonner'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
 
-export const Route = createRootRoute({
+type RouterContext = {
+    authentication: AuthContext
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
     component: () => {
-        if (sessionStorage.getItem('isLoggedIn'))
-            return (
-                <>
-                    <div className="flex">
-                        <SideMenu />
-                        <ScrollArea className="h-screen w-full">
-                            <main className="flex h-[calc(100vh-1rem)] w-full bg-muted/40 p-4">
-                                <Outlet />
-                            </main>
-                            <ScrollBar orientation="horizontal" />
-                        </ScrollArea>
-                    </div>
-                    <TanStackRouterDevtools />
-                </>
-            )
-        else
-            return (
-                <>
-                    <Outlet />
-                    <TanStackRouterDevtools />
-                </>
-            )
+        return (
+            <>
+                <Outlet />
+                <Toaster richColors />
+                <TanStackRouterDevtools position="bottom-right" />
+            </>
+        )
     },
 })

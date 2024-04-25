@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
+import { useAuth } from '@/hooks/use-auth'
 import { LogOut, Menu } from 'lucide-react'
 import NavigationItems from '@/context/navigation'
 import { Link, useNavigate } from '@tanstack/react-router'
@@ -25,10 +26,11 @@ const MenuItem = ({ icon, label, href, expanded }: { icon: React.ReactNode; href
 
 const SideMenu = () => {
     const navigate = useNavigate()
+    const { signOut } = useAuth()
     const [expanded, setExpanded] = useState(false)
 
-    const handleLogout = () => {
-        sessionStorage.removeItem('isLoggedIn')
+    const handleLogout = async () => {
+        await signOut()
         navigate({ to: '/' })
     }
 

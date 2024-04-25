@@ -11,13 +11,16 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as DashboardImport } from './routes/dashboard'
+import { Route as DashboardLayoutImport } from './routes/_dashboard-layout'
 import { Route as IndexImport } from './routes/index'
+import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboard-layout/dashboard/index'
+import { Route as DashboardLayoutDashboardAdditivesIndexImport } from './routes/_dashboard-layout/dashboard/additives/index'
+import { Route as DashboardLayoutDashboardAdditivesIdImport } from './routes/_dashboard-layout/dashboard/additives/$id'
 
 // Create/Update Routes
 
-const DashboardRoute = DashboardImport.update({
-  path: '/dashboard',
+const DashboardLayoutRoute = DashboardLayoutImport.update({
+  id: '/_dashboard-layout',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -25,6 +28,24 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const DashboardLayoutDashboardIndexRoute =
+  DashboardLayoutDashboardIndexImport.update({
+    path: '/dashboard/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardAdditivesIndexRoute =
+  DashboardLayoutDashboardAdditivesIndexImport.update({
+    path: '/dashboard/additives/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardAdditivesIdRoute =
+  DashboardLayoutDashboardAdditivesIdImport.update({
+    path: '/dashboard/additives/$id',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -34,15 +55,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard': {
-      preLoaderRoute: typeof DashboardImport
+    '/_dashboard-layout': {
+      preLoaderRoute: typeof DashboardLayoutImport
       parentRoute: typeof rootRoute
+    }
+    '/_dashboard-layout/dashboard/': {
+      preLoaderRoute: typeof DashboardLayoutDashboardIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/additives/$id': {
+      preLoaderRoute: typeof DashboardLayoutDashboardAdditivesIdImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/additives/': {
+      preLoaderRoute: typeof DashboardLayoutDashboardAdditivesIndexImport
+      parentRoute: typeof DashboardLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([IndexRoute, DashboardRoute])
+export const routeTree = rootRoute.addChildren([
+  IndexRoute,
+  DashboardLayoutRoute.addChildren([
+    DashboardLayoutDashboardIndexRoute,
+    DashboardLayoutDashboardAdditivesIdRoute,
+    DashboardLayoutDashboardAdditivesIndexRoute,
+  ]),
+])
 
 /* prettier-ignore-end */

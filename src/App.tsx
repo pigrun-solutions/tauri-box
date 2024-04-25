@@ -3,17 +3,10 @@
 // import Database from 'tauri-plugin-sql-api'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
+import { useAuth } from './hooks/use-auth'
 
-// interface Additive {
-//     id: string
-//     name: string
-//     costKg: number
-//     densityGmCc: number
-//     createdAt: string
-//     updatedAt: string
-// }
 
-const router = createRouter({ routeTree })
+const router = createRouter({ routeTree, context: undefined! })
 
 declare module '@tanstack/react-router' {
     interface Register {
@@ -22,7 +15,8 @@ declare module '@tanstack/react-router' {
 }
 
 const App = () => {
-    return <RouterProvider router={router} />
+    const authentication = useAuth()
+    return <RouterProvider router={router} context={{ authentication }} />
 
     // const [additives, setAdditives] = useState<Additive[] | undefined>()
     // useEffect(() => {

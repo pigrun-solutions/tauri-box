@@ -3,8 +3,9 @@ import LoginForm from '@/components/auth/login-form'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
-    beforeLoad: async ({ location }) => {
-        if (sessionStorage.getItem('isLoggedIn')) throw redirect({ to: '/dashboard', search: location.search })
+    beforeLoad: async ({ context }) => {
+        const { isLogged } = context.authentication
+        if (isLogged()) throw redirect({ to: '/dashboard' })
     },
     component: () => <SignIn />,
 })
