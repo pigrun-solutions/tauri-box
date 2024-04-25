@@ -16,6 +16,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboard-layout/dashboard/index'
 import { Route as DashboardLayoutDashboardCustomersIndexImport } from './routes/_dashboard-layout/dashboard/customers/index'
 import { Route as DashboardLayoutDashboardAdditivesIndexImport } from './routes/_dashboard-layout/dashboard/additives/index'
+import { Route as DashboardLayoutDashboardCustomersIdImport } from './routes/_dashboard-layout/dashboard/customers/$id'
 import { Route as DashboardLayoutDashboardAdditivesIdImport } from './routes/_dashboard-layout/dashboard/additives/$id'
 
 // Create/Update Routes
@@ -48,6 +49,12 @@ const DashboardLayoutDashboardAdditivesIndexRoute =
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
+const DashboardLayoutDashboardCustomersIdRoute =
+  DashboardLayoutDashboardCustomersIdImport.update({
+    path: '/dashboard/customers/$id',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
 const DashboardLayoutDashboardAdditivesIdRoute =
   DashboardLayoutDashboardAdditivesIdImport.update({
     path: '/dashboard/additives/$id',
@@ -74,6 +81,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutDashboardAdditivesIdImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboard-layout/dashboard/customers/$id': {
+      preLoaderRoute: typeof DashboardLayoutDashboardCustomersIdImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboard-layout/dashboard/additives/': {
       preLoaderRoute: typeof DashboardLayoutDashboardAdditivesIndexImport
       parentRoute: typeof DashboardLayoutImport
@@ -92,6 +103,7 @@ export const routeTree = rootRoute.addChildren([
   DashboardLayoutRoute.addChildren([
     DashboardLayoutDashboardIndexRoute,
     DashboardLayoutDashboardAdditivesIdRoute,
+    DashboardLayoutDashboardCustomersIdRoute,
     DashboardLayoutDashboardAdditivesIndexRoute,
     DashboardLayoutDashboardCustomersIndexRoute,
   ]),

@@ -4,8 +4,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import AdditiveForm from '@/components/dashboard/additives/slug/additive-form'
 
 export const Route = createFileRoute('/_dashboard-layout/dashboard/additives/$id')({
-    beforeLoad: async ({ params }) => await getAdditive(params.id),
-
     loader: async ({ params }) => await getAdditive(params.id),
     component: () => <AdditivePage />,
 })

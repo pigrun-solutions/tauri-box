@@ -13,7 +13,14 @@ export default async function useAdditive() {
 
     // await db.execute(`DROP TABLE Additives`)
     await db.execute(
-        `CREATE TABLE IF NOT EXISTS Additives (id INTEGER PRIMARY KEY autoincrement, name TEXT UNIQUE, costKg REAL DEFAULT 0.00, densityGmCc REAL DEFAULT 1.00, createdAt DATETIME DEFAULT CURRENT_TIMESTAMP, updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP)`
+        `CREATE TABLE IF NOT EXISTS Additives (
+            id INTEGER PRIMARY KEY autoincrement, 
+            name TEXT UNIQUE, 
+            costKg REAL DEFAULT 0.00, 
+            densityGmCc REAL DEFAULT 1.00, 
+            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP, 
+            updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+        )`
     )
 
     return db

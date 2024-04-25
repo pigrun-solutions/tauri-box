@@ -16,17 +16,17 @@ export default async function useAdditive() {
 
     // await db.execute(`DROP TABLE Customers`)
     await db.execute(
-        `CREATE TABLE Customers (
-            id VARCHAR(191) PRIMARY KEY DEFAULT (UUID()),
-            name VARCHAR(255) NOT NULL,
-            email VARCHAR(255),
-            phone VARCHAR(255) NOT NULL,
-            fax VARCHAR(255),
-            contact VARCHAR(255),
-            address VARCHAR(255),
-            createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updatedAt DATETIME ON UPDATE CURRENT_TIMESTAMP
-          )`
+        `CREATE TABLE IF NOT EXISTS Customers (
+                id VARCHAR(191) PRIMARY KEY DEFAULT (UUID()),
+                name VARCHAR(255) NOT NULL,
+                email VARCHAR(255),
+                phone VARCHAR(255) NOT NULL,
+                fax VARCHAR(255),
+                contact VARCHAR(255),
+                address VARCHAR(255),
+                createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+              )`
     )
 
     return db
@@ -40,6 +40,7 @@ export const getAllCustomers = async () => {
 
         return { success: true, data }
     } catch (error) {
+        console.error(error)
         return { success: false, error }
     }
 }

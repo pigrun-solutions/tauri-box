@@ -11,7 +11,7 @@ const NoProducts = ({ title }: { title: string }) => {
                 <h3 className="text-2xl font-bold tracking-tight">You have no {title}</h3>
                 <p className="text-sm text-muted-foreground">You can see the data table as soon as you add a product.</p>
                 <Button className="mt-4" asChild>
-                    <Link to={`${pathname}/add`}>Add Product</Link>
+                    <Link to={`${pathname}/add`}>Add {title}</Link>
                 </Button>
             </div>
         </div>

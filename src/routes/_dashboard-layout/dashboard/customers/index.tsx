@@ -21,6 +21,7 @@ const Customers = () => {
         const getCustomers = async () => {
             try {
                 const customers = await getAllCustomers()
+                console.log(customers.error)
                 setCustomers(customers.data as Customer[])
             } catch (error) {
                 toast.error('Server Error!')
