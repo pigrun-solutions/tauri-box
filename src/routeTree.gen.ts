@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as DashboardLayoutImport } from './routes/_dashboard-layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboard-layout/dashboard/index'
+import { Route as DashboardLayoutDashboardCustomersIndexImport } from './routes/_dashboard-layout/dashboard/customers/index'
 import { Route as DashboardLayoutDashboardAdditivesIndexImport } from './routes/_dashboard-layout/dashboard/additives/index'
 import { Route as DashboardLayoutDashboardAdditivesIdImport } from './routes/_dashboard-layout/dashboard/additives/$id'
 
@@ -32,6 +33,12 @@ const IndexRoute = IndexImport.update({
 const DashboardLayoutDashboardIndexRoute =
   DashboardLayoutDashboardIndexImport.update({
     path: '/dashboard/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardCustomersIndexRoute =
+  DashboardLayoutDashboardCustomersIndexImport.update({
+    path: '/dashboard/customers/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -71,6 +78,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutDashboardAdditivesIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboard-layout/dashboard/customers/': {
+      preLoaderRoute: typeof DashboardLayoutDashboardCustomersIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
   }
 }
 
@@ -82,6 +93,7 @@ export const routeTree = rootRoute.addChildren([
     DashboardLayoutDashboardIndexRoute,
     DashboardLayoutDashboardAdditivesIdRoute,
     DashboardLayoutDashboardAdditivesIndexRoute,
+    DashboardLayoutDashboardCustomersIndexRoute,
   ]),
 ])
 

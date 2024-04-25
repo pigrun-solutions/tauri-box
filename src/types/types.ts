@@ -6,3 +6,15 @@ export type Additive = {
     createdAt: string
     updatedAt: string
 }
+
+export type Customer = {
+    id: string
+    name: string
+    email?: string
+    phone: string
+    fax?: string
+    contact?: string
+    address?: string
+    createdAt: string
+    updatedAt: string
+}

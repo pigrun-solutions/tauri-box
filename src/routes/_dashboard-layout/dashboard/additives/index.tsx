@@ -3,11 +3,11 @@ import { Additive } from '@/types/types'
 import Loader from '@/components/ui/loader'
 import { useEffect, useState } from 'react'
 import { getAllAdditives } from '@/database/additives'
+import TableHeader from '@/components/ui/table-header'
 import { createFileRoute } from '@tanstack/react-router'
 import { useAdditivesStore } from '@/zustand/additives-store'
 import FormBreadcrumbs from '@/components/ui/form-breadcrumbs'
 import AdditivesTable from '@/components/dashboard/additives/table'
-import TableHeader from '@/components/dashboard/additives/table-header'
 
 export const Route = createFileRoute('/_dashboard-layout/dashboard/additives/')({
     component: () => <Additives />,
@@ -18,7 +18,7 @@ const Additives = () => {
     const [loading, setLoading] = useState<Boolean>(true)
 
     useEffect(() => {
-        const checkDb = async () => {
+        const getAdditives = async () => {
             try {
                 const additives = await getAllAdditives()
                 setAdditives(additives.data as Additive[])
@@ -29,7 +29,7 @@ const Additives = () => {
             }
         }
 
-        checkDb()
+        getAdditives()
     }, [])
 
     if (loading) return <Loader />

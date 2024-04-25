@@ -56,10 +56,7 @@ export const createEditAdditive = async (data: AdditiveProps) => {
         if (id) {
             const exists = await db.select('SELECT * from Additives WHERE id = $1', [id])
             if (exists) await db.execute('UPDATE Additives SET name = $1, costKg = $2, densityGmCc = $3 WHERE id = $4', [name, costKg, densityGmCc, id])
-        } else {
-            const response = await db.execute('INSERT into Additives (name, costKg, densityGmCc) VALUES ($1, $2, $3)', [name, costKg, densityGmCc])
-            console.log(response)
-        }
+        } else await db.execute('INSERT into Additives (name, costKg, densityGmCc) VALUES ($1, $2, $3)', [name, costKg, densityGmCc])
 
         return { success: true }
     } catch (error) {

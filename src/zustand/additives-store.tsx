@@ -1,5 +1,5 @@
-import { Additive } from '@/types/types'
 import { create } from 'zustand'
+import { Additive } from '@/types/types'
 
 type AdditivesStore = {
     additives: Additive[]

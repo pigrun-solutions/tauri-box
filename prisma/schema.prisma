@@ -1,0 +1,346 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// * ================================= Customers =================================
+model Customers {
+  id      String  @id @default(cuid())
+  name    String
+  email   String?
+  phone   String
+  fax     String?
+  contact String?
+  address String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// * ================================= Additives =================================
+
+model Additives {
+  id          String @id @default(cuid())
+  name        String @unique
+  costKg      Float  @default(0.00)
+  densityGmCc Float  @default(1.00)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// * ================================= Bolts =================================
+model Bolts {
+  id           String         @id @default(cuid())
+  name         String         @unique
+  BoltVariants BoltVariants[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BoltVariants {
+  id           String @id @default(cuid())
+  boltId       String
+  diameterInch Float  @default(0.00)
+  lengthInch   Float  @default(0.00)
+  boltCost     Float  @default(0.00)
+  nutCost      Float  @default(0.00)
+  washerCost   Float  @default(0.00)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Bolt Bolts @relation(fields: [boltId], references: [id])
+}
+
+// * ================================= Glasses =================================
+model Glasses {
+  id     String @id @default(cuid())
+  name   String @unique
+  costKg Float  @default(0.00)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  LaminateCorrosion  LaminateCorrosion[]
+  LaminateStructural LaminateStructural[]
+}
+
+// * ================================= Manways =================================
+model Manways {
+  id             String           @id @default(cuid())
+  name           String           @unique
+  ManwayVariants ManwayVariants[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ManwayVariants {
+  id        String @id @default(cuid())
+  manwayId  String
+  sizeInch  Float  @default(0.0)
+  cost      Float  @default(0.00)
+  nozWtLbs  Float  @default(0.00)
+  weldWtLbs Float  @default(0.00)
+  labHours  Float  @default(0.00)
+  diameter  Float  @default(0.00)
+  boltsNum  Int    @default(0)
+  length    Float  @default(0.00)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Manway Manways @relation(fields: [manwayId], references: [id])
+}
+
+// * ================================= Nozzles =================================
+model Nozzles {
+  id             String           @id @default(cuid())
+  name           String           @unique
+  NozzleVariants NozzleVariants[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model NozzleVariants {
+  id        String @id @default(cuid())
+  nozzleId  String
+  variantId Float  @default(0.0)
+  od        Float  @default(0.0)
+  bc        Float  @default(0.0)
+  boltsNum  Int    @default(0)
+  diameter  Float  @default(0.0)
+  flgT      Float  @default(0.0)
+  cost      Float  @default(0.00)
+  blindCost Float  @default(0.00)
+  nozWtLbs  Float  @default(0.00)
+  weldWtLbs Float  @default(0.00)
+  labHours  Float  @default(0.00)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Nozzle Nozzles @relation(fields: [nozzleId], references: [id])
+}
+
+// * ================================= Resins =================================
+model Resins {
+  id          String @id @default(cuid())
+  name        String @unique
+  costKg      Float  @default(0.00)
+  densityGmCc Float  @default(1.00)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// * ================================= Sight Glasses =================================
+model SightGlasses {
+  id                 String               @id @default(cuid())
+  name               String               @unique
+  SightGlassVariants SightGlassVariants[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SightGlassVariants {
+  id           String @id @default(cuid())
+  diameterInch Float  @default(0.00)
+  cost         Float  @default(0.00)
+
+  sightGlassId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  SightGlass SightGlasses @relation(fields: [sightGlassId], references: [id])
+}
+
+// * ================================= Vents =================================
+model Vents {
+  id           String @id @default(cuid())
+  diameterInch Float  @default(0.00)
+  wtLbs        Float  @default(0.00)
+  labHours     Float  @default(0.00)
+  matCost      Float  @default(0.00)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// * ================================= Gasskets =================================
+model Gasskets {
+  id              String            @id @default(cuid())
+  name            String            @unique
+  GassketVariants GassketVariants[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model GassketVariants {
+  id           String @id @default(cuid())
+  diameterInch Float  @default(0.00)
+  cost         Float  @default(0.00)
+
+  gassketId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Gassket Gasskets @relation(fields: [gassketId], references: [id])
+}
+
+// * ================================= Lift Lugs =================================
+model LiftLugs {
+  id          String @id @default(cuid())
+  capacityLbs Int    @default(0)
+  wtLbs       Float  @default(0.00)
+  labHours    Float  @default(0.00)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// * ================================= Ledges =================================
+model Ledges {
+  id           String @id @default(cuid())
+  type         String
+  wtLbs        Float  @default(0.00)
+  layupRateLbs Float  @default(0.00)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// * ================================= Laminates =================================
+model Laminates {
+  id   String @id @default(cuid())
+  name String @unique
+
+  axialTensileStressWithLinear      Int @default(100)
+  axialTensileStressWithNonLinear   Int @default(100)
+  axialFlexuralStressWithLinear     Int @default(100)
+  axialFlexuralStressWithNonLinear  Int @default(100)
+  axialTensileModulusWithLinear     Int @default(1000)
+  axialTensileModulusWithNonLinear  Int @default(1000)
+  axialFlexuralModulusWithLinear    Int @default(1000)
+  axialFlexuralModulusWithNonLinear Int @default(1000)
+
+  hoopTensileStressWithLinear      Int @default(100)
+  hoopTensileStressWithNonLinear   Int @default(100)
+  hoopFlexuralStressWithLinear     Int @default(100)
+  hoopFlexuralStressWithNonLinear  Int @default(100)
+  hoopTensileModulusWithLinear     Int @default(1000)
+  hoopTensileModulusWithNonLinear  Int @default(1000)
+  hoopFlexuralModulusWithLinear    Int @default(1000)
+  hoopFlexuralModulusWithNonLinear Int @default(1000)
+
+  inplanSheerStressWithLinear    Int @default(30)
+  inplanSheerStressWithNonLinear Int @default(30)
+
+  minimumThicknessWithLinear    Float @default(0.00)
+  minimumThicknessWithNonLinear Float @default(0.00)
+
+  layupRate Float @default(1.00)
+
+  LaminateCorrosion  LaminateCorrosion[]
+  LaminateStructural LaminateStructural[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LaminateCorrosion {
+  id          String @id @default(cuid())
+  laminateId  String
+  glassId     String
+  ozFtSquared Float  @default(0.00)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Glasses   Glasses    @relation(fields: [glassId], references: [id])
+  Laminates Laminates? @relation(fields: [laminateId], references: [id])
+}
+
+model LaminateStructural {
+  id              String @id @default(cuid())
+  laminateId      String
+  glassId         String
+  ozFtSquaredInch Float  @default(0.00)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Glasses   Glasses    @relation(fields: [glassId], references: [id])
+  Laminates Laminates? @relation(fields: [laminateId], references: [id])
+}
+
+// * ================================= Other =================================
+model Other {
+  id         String @id @default(cuid())
+  labourRate Float  @default(95.00)
+  wastage    Float  @default(15.00)
+  nameplate  Float  @default(600.00)
+  pattern    Float  @default(8.00)
+  usage      Float  @default(20.00)
+
+  ladderClipsCost Float @default(360.00)
+  ladderClipsLbs  Float @default(20.00)
+  ladderClipsHrs  Float @default(7.5)
+
+  manwayHingesCost Float @default(800.00)
+  manwayHingesLbs  Float @default(30.00)
+  manwayHingesHrs  Float @default(15.00)
+
+  manwayDavitsCost Float @default(800.00)
+  manwayDavitsLbs  Float @default(30.00)
+  manwayDavitsHrs  Float @default(15.00)
+
+  layupRateSqFt Float @default(6.00)
+
+  OtherThicknesses OtherThicknesses[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OtherThicknesses {
+  id            String @id @default(cuid())
+  thicknessInch Float  @default(0.00)
+  costSqFt      Float  @default(0.00)
+
+  otherId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Other Other @relation(fields: [otherId], references: [id])
+}
+
+// * ================================= Order =================================
+model Order {
+  id        String   @id @default(cuid())
+  Date      DateTime
+  reference String
+  rfq       String
+
+  customerId      String?
+  customerName    String?
+  customerAddress String?
+  customerPhone   String?
+  customerFax     String?
+  customarContact String?
+
+  dwgName   String
+  dwgNumber String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
