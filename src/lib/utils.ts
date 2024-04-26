@@ -6,6 +6,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // ? convert from kg to lbs
-export const kgToLbs = (kg: number) => kg * 2.20462
+export const kgToLbs = (kg: number) => kg / 2.20462
 
-export const lbsToKg = (lbs: number) => lbs / 2.20462
+export const lbsToKg = (lbs: number) => lbs * 2.20462

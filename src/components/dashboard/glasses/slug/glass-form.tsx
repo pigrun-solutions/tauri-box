@@ -1,40 +1,40 @@
 'use client'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { Additive } from '@/types/types'
+import { Glass } from '@/types/types'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { kgToLbs, lbsToKg } from '@/lib/utils'
+import glassSchema from '@/lib/schemas/glassSchema'
 import FormHeader from '@/components/ui/form-header'
 import { useNavigate } from '@tanstack/react-router'
+import { createEditGlass } from '@/database/glasses'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Card, CardContent } from '@/components/ui/card'
-import additiveSchema from '@/lib/schemas/additiveSchema'
-import { createEditAdditive } from '@/database/additives'
 import FormBreadcrumbs from '@/components/ui/form-breadcrumbs'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 
-const AdditiveForm = ({ initialData }: { initialData: Additive | undefined }) => {
+const GlassForm = ({ initialData }: { initialData: Glass | undefined }) => {
     const navigate = useNavigate()
     const [costLbs, setCostLbs] = useState<number>(0.0)
     const [loading, setLoading] = useState<boolean>(false)
 
-    const form = useForm<z.infer<typeof additiveSchema>>({
-        resolver: zodResolver(additiveSchema),
-        defaultValues: initialData ? initialData : { name: '', costKg: 0.0, densityGmCc: 1.0 },
+    const form = useForm<z.infer<typeof glassSchema>>({
+        resolver: zodResolver(glassSchema),
+        defaultValues: initialData ? initialData : { name: '', costKg: 0.0 },
     })
 
-    const onSubmit = async (values: z.infer<typeof additiveSchema>) => {
+    const onSubmit = async (values: z.infer<typeof glassSchema>) => {
         try {
             setLoading(true)
 
-            if (initialData) await createEditAdditive({ ...values, id: initialData.id })
-            else await createEditAdditive(values)
+            if (initialData) await createEditGlass({ ...values, id: initialData.id })
+            else await createEditGlass(values)
 
-            navigate({ to: '/dashboard/additives' })
-            toast.success('Additive saved successfully')
+            navigate({ to: '/dashboard/glasses' })
+            toast.success('Glass saved successfully')
         } catch (error: any) {
             console.log(error)
             toast.error(error)
@@ -58,16 +58,10 @@ const AdditiveForm = ({ initialData }: { initialData: Additive | undefined }) =>
             setCostLbs(result.toFixed(2) as unknown as number)
         }
     }
-    const onNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let value = parseFloat(e.target.value)
-        value = Math.round(value * 100) / 100
-
-        form.setValue(e.target.name as 'name' | 'costKg' | 'densityGmCc', value)
-    }
 
     useEffect(() => {
-        if (initialData) form.reset({ name: initialData.name, costKg: initialData.costKg, densityGmCc: initialData.densityGmCc })
-        else form.reset({ name: '', costKg: 0.0, densityGmCc: 1.0 })
+        if (initialData) form.reset({ name: initialData.name, costKg: initialData.costKg })
+        else form.reset({ name: '', costKg: 0.0 })
 
         setCostLbs(initialData ? (kgToLbs(initialData.costKg).toFixed(2) as unknown as number) : 0.0)
     }, [initialData])
@@ -78,7 +72,7 @@ const AdditiveForm = ({ initialData }: { initialData: Additive | undefined }) =>
 
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <FormHeader title={initialData ? initialData.name : 'Create Additive'} />
+                    <FormHeader title={initialData ? initialData.name : 'Create Glass'} />
                     <Card>
                         <CardContent className="p-6">
                             <div className="grid gap-6">
@@ -89,7 +83,7 @@ const AdditiveForm = ({ initialData }: { initialData: Additive | undefined }) =>
                                         <FormItem>
                                             <FormLabel htmlFor="name">Name</FormLabel>
                                             <FormControl>
-                                                <Input id="name" autoFocus placeholder="Electronics" className="w-full" {...field} disabled={loading} />
+                                                <Input id="name" autoFocus placeholder="Steel" className="w-full" {...field} disabled={loading} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -136,30 +130,6 @@ const AdditiveForm = ({ initialData }: { initialData: Additive | undefined }) =>
                                         />
                                     </div>
                                 </div>
-
-                                <FormField
-                                    control={form.control}
-                                    name="densityGmCc"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel htmlFor="densityGmCc">Density gm/cc</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    id="densityGmCc"
-                                                    type="number"
-                                                    placeholder="0.00"
-                                                    step={0.01}
-                                                    min={1}
-                                                    className="w-full"
-                                                    {...field}
-                                                    onChange={onNumberChange}
-                                                    disabled={loading}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
                             </div>
                         </CardContent>
                     </Card>
@@ -169,4 +139,4 @@ const AdditiveForm = ({ initialData }: { initialData: Additive | undefined }) =>
     )
 }
 
-export default AdditiveForm
+export default GlassForm

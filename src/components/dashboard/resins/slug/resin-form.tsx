@@ -1,40 +1,40 @@
 'use client'
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { Additive } from '@/types/types'
+import { Resin } from '@/types/types'
 import { useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { kgToLbs, lbsToKg } from '@/lib/utils'
+import { createEditResin } from '@/database/resin'
+import resinSchema from '@/lib/schemas/resinSchema'
 import FormHeader from '@/components/ui/form-header'
 import { useNavigate } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Card, CardContent } from '@/components/ui/card'
-import additiveSchema from '@/lib/schemas/additiveSchema'
-import { createEditAdditive } from '@/database/additives'
 import FormBreadcrumbs from '@/components/ui/form-breadcrumbs'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 
-const AdditiveForm = ({ initialData }: { initialData: Additive | undefined }) => {
+const ResinForm = ({ initialData }: { initialData: Resin | undefined }) => {
     const navigate = useNavigate()
     const [costLbs, setCostLbs] = useState<number>(0.0)
     const [loading, setLoading] = useState<boolean>(false)
 
-    const form = useForm<z.infer<typeof additiveSchema>>({
-        resolver: zodResolver(additiveSchema),
+    const form = useForm<z.infer<typeof resinSchema>>({
+        resolver: zodResolver(resinSchema),
         defaultValues: initialData ? initialData : { name: '', costKg: 0.0, densityGmCc: 1.0 },
     })
 
-    const onSubmit = async (values: z.infer<typeof additiveSchema>) => {
+    const onSubmit = async (values: z.infer<typeof resinSchema>) => {
         try {
             setLoading(true)
 
-            if (initialData) await createEditAdditive({ ...values, id: initialData.id })
-            else await createEditAdditive(values)
+            if (initialData) await createEditResin({ ...values, id: initialData.id })
+            else await createEditResin(values)
 
-            navigate({ to: '/dashboard/additives' })
-            toast.success('Additive saved successfully')
+            navigate({ to: '/dashboard/resins' })
+            toast.success('Resin saved successfully')
         } catch (error: any) {
             console.log(error)
             toast.error(error)
@@ -78,7 +78,7 @@ const AdditiveForm = ({ initialData }: { initialData: Additive | undefined }) =>
 
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <FormHeader title={initialData ? initialData.name : 'Create Additive'} />
+                    <FormHeader title={initialData ? initialData.name : 'Create Resin'} />
                     <Card>
                         <CardContent className="p-6">
                             <div className="grid gap-6">
@@ -169,4 +169,4 @@ const AdditiveForm = ({ initialData }: { initialData: Additive | undefined }) =>
     )
 }
 
-export default AdditiveForm
+export default ResinForm

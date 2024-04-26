@@ -18,3 +18,20 @@ export type Customer = {
     createdAt: string
     updatedAt: string
 }
+
+export type Glass = {
+    id: string
+    name: string
+    costKg: number
+    createdAt: string
+    updatedAt: string
+}
+
+export type Resin = {
+    id: string
+    name: string
+    costKg: number
+    densityGmCc: number
+    createdAt: string
+    updatedAt: string
+}

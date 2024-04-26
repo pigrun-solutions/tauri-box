@@ -14,8 +14,12 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as DashboardLayoutImport } from './routes/_dashboard-layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboard-layout/dashboard/index'
+import { Route as DashboardLayoutDashboardResinsIndexImport } from './routes/_dashboard-layout/dashboard/resins/index'
+import { Route as DashboardLayoutDashboardGlassesIndexImport } from './routes/_dashboard-layout/dashboard/glasses/index'
 import { Route as DashboardLayoutDashboardCustomersIndexImport } from './routes/_dashboard-layout/dashboard/customers/index'
 import { Route as DashboardLayoutDashboardAdditivesIndexImport } from './routes/_dashboard-layout/dashboard/additives/index'
+import { Route as DashboardLayoutDashboardResinsIdImport } from './routes/_dashboard-layout/dashboard/resins/$id'
+import { Route as DashboardLayoutDashboardGlassesIdImport } from './routes/_dashboard-layout/dashboard/glasses/$id'
 import { Route as DashboardLayoutDashboardCustomersIdImport } from './routes/_dashboard-layout/dashboard/customers/$id'
 import { Route as DashboardLayoutDashboardAdditivesIdImport } from './routes/_dashboard-layout/dashboard/additives/$id'
 
@@ -37,6 +41,18 @@ const DashboardLayoutDashboardIndexRoute =
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
+const DashboardLayoutDashboardResinsIndexRoute =
+  DashboardLayoutDashboardResinsIndexImport.update({
+    path: '/dashboard/resins/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardGlassesIndexRoute =
+  DashboardLayoutDashboardGlassesIndexImport.update({
+    path: '/dashboard/glasses/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
 const DashboardLayoutDashboardCustomersIndexRoute =
   DashboardLayoutDashboardCustomersIndexImport.update({
     path: '/dashboard/customers/',
@@ -46,6 +62,18 @@ const DashboardLayoutDashboardCustomersIndexRoute =
 const DashboardLayoutDashboardAdditivesIndexRoute =
   DashboardLayoutDashboardAdditivesIndexImport.update({
     path: '/dashboard/additives/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardResinsIdRoute =
+  DashboardLayoutDashboardResinsIdImport.update({
+    path: '/dashboard/resins/$id',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardGlassesIdRoute =
+  DashboardLayoutDashboardGlassesIdImport.update({
+    path: '/dashboard/glasses/$id',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -85,12 +113,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutDashboardCustomersIdImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboard-layout/dashboard/glasses/$id': {
+      preLoaderRoute: typeof DashboardLayoutDashboardGlassesIdImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/resins/$id': {
+      preLoaderRoute: typeof DashboardLayoutDashboardResinsIdImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboard-layout/dashboard/additives/': {
       preLoaderRoute: typeof DashboardLayoutDashboardAdditivesIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
     '/_dashboard-layout/dashboard/customers/': {
       preLoaderRoute: typeof DashboardLayoutDashboardCustomersIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/glasses/': {
+      preLoaderRoute: typeof DashboardLayoutDashboardGlassesIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/resins/': {
+      preLoaderRoute: typeof DashboardLayoutDashboardResinsIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
   }
@@ -104,8 +148,12 @@ export const routeTree = rootRoute.addChildren([
     DashboardLayoutDashboardIndexRoute,
     DashboardLayoutDashboardAdditivesIdRoute,
     DashboardLayoutDashboardCustomersIdRoute,
+    DashboardLayoutDashboardGlassesIdRoute,
+    DashboardLayoutDashboardResinsIdRoute,
     DashboardLayoutDashboardAdditivesIndexRoute,
     DashboardLayoutDashboardCustomersIndexRoute,
+    DashboardLayoutDashboardGlassesIndexRoute,
+    DashboardLayoutDashboardResinsIndexRoute,
   ]),
 ])
 
