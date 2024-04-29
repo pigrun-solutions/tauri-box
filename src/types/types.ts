@@ -13,11 +13,12 @@ export type Resin = Additive
 export type Customer = {
     id: string
     name: string
-    email?: string
     phone: string
     fax?: string
     contact?: string
-    address?: string
+    address1?: string
+    address2?: string
+    address3?: string
     createdAt: string
     updatedAt: string
 }

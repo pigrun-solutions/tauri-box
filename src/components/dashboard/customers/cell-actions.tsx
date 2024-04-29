@@ -1,15 +1,15 @@
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { Customer } from '@/types/types'
-import { Link } from '@tanstack/react-router'
-import { MoreHorizontal } from 'lucide-react'
+import { Edit3, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import AlertModal from '@/components/ui/alert-modal'
-import { deleteAdditive } from '@/database/additives'
+import { Customer } from '@/types/types'
 import { useCustomersStore } from '@/zustand/customers-store'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { deleteCustomer } from '@/database/customers'
+import { useNavigate } from '@tanstack/react-router'
 
 const CellActions = ({ data }: { data: Customer }) => {
+    const navigate = useNavigate()
     const { setCustomers } = useCustomersStore()
     const [loading, setLoading] = useState(false)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
@@ -18,11 +18,11 @@ const CellActions = ({ data }: { data: Customer }) => {
         try {
             setLoading(true)
 
-            const response = await deleteAdditive(data.id)
+            const response = await deleteCustomer(data.id)
             setDeleteModalOpen(false)
             setCustomers(response.data as Customer[])
 
-            toast.success('Additive deleted!')
+            toast.success('Customer deleted!')
         } catch (error: any) {
             toast.error(error.response.data)
         } finally {
@@ -34,24 +34,15 @@ const CellActions = ({ data }: { data: Customer }) => {
         <>
             <AlertModal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} onConfirm={onDelete} loading={loading} />
 
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button aria-haspopup="true" size="icon" variant="ghost">
-                        <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                        <Link to={`/dashboard/additives/${data.id}`}>Edit</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setDeleteModalOpen(true)} className="text-destructive hover:!text-destructive">
-                        Delete
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="flex gap-2 items-center justify-end h-full">
+                <Button variant="ghost" size="icon" className="size-5" asChild>
+                    <Edit3 className="text-primary cursor-pointer size-5" onClick={() => navigate({ to: `/dashboard/customers/${data.id}` })} />
+                </Button>
+
+                <Button variant="ghost" size="icon" className="size-5" asChild>
+                    <Trash2 className="text-destructive cursor-pointer size-5" onClick={() => setDeleteModalOpen(true)} />
+                </Button>
+            </div>
         </>
     )
 }

@@ -2,16 +2,17 @@ import { Customer } from '@/types/types'
 import Database from 'tauri-plugin-sql-api'
 
 type CustomerNameProps = {
-    id: string
+    id?: string
     name: string
 }
 type CustomerDetailsProps = {
     id?: string
-    email?: string
-    phone: string
+    address1?: string
+    address2?: string
+    address3?: string
+    phone?: string
     fax?: string
     contact?: string
-    address?: string
 }
 
 export default async function useCustomer() {
@@ -20,13 +21,14 @@ export default async function useCustomer() {
     // await db.execute(`DROP TABLE Customers`)
     await db.execute(
         `CREATE TABLE IF NOT EXISTS Customers (
-                id VARCHAR(191) PRIMARY KEY DEFAULT (UUID()),
+                id INTEGER PRIMARY KEY autoincrement,
                 name VARCHAR(255) NOT NULL,
-                email VARCHAR(255),
-                phone VARCHAR(255) NOT NULL,
+                address1 VARCHAR(255),
+                address2 VARCHAR(255),
+                address3 VARCHAR(255),
+                phone VARCHAR(255),
                 fax VARCHAR(255),
                 contact VARCHAR(255),
-                address VARCHAR(255),
                 createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
               )`
@@ -44,34 +46,30 @@ export const getAllCustomers = async () => {
 
         return { success: true, data }
     } catch (error) {
-        console.error(error)
         return { success: false, error }
     }
 }
 export const getCustomer = async (id: string) => {
     try {
-        if (id !== 'add') {
-            const db = await useCustomer()
+        const db = await useCustomer()
 
-            const data = (await db.select('SELECT * from Customers WHERE id = $1', [id])) as Customer[]
-            const result = data[0]
+        const data = (await db.select('SELECT * FROM Customers WHERE id = $1', [id])) as Customer[]
 
-            return { success: true, data: result }
-        }
-        return { success: true, data: undefined }
+        return { success: true, data }
     } catch (error) {
         return { success: false, error }
     }
 }
 
 // ? POST, PUT
-export const updateCustomerName = async (data: CustomerNameProps) => {
+export const createEditCustomerName = async (data: CustomerNameProps) => {
     try {
         const db = await useCustomer()
 
         const { name, id } = data
 
-        await db.execute('UPDATE Customers SET name = $1 WHERE id = $2', [name, id])
+        if (!id) await db.execute('INSERT INTO Customers (name) VALUES ($1)', [name])
+        else await db.execute('UPDATE Customers SET name = $1 WHERE id = $2', [name, id])
 
         return { success: true }
     } catch (error) {
@@ -82,9 +80,9 @@ export const createEditCustomerDetails = async (data: CustomerDetailsProps) => {
     try {
         const db = await useCustomer()
 
-        const { email, phone, fax, contact, address, id } = data
+        const { id, address1, address2, address3, phone, fax, contact } = data
 
-        await db.execute('UPDATE Customers SET email = $1, phone = $2, fax = $3, contact = $4, address = $5 WHERE id = $6', [email, phone, fax, contact, address, id])
+        await db.execute(`UPDATE Customers SET address1 = $1, address2 = $2, address3 = $3, phone = $4, fax = $5, contact = $6 WHERE id = $7`, [address1, address2, address3, phone, fax, contact, id])
 
         return { success: true }
     } catch (error) {

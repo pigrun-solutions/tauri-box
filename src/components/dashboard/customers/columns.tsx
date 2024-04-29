@@ -1,20 +1,28 @@
 import CellActions from './cell-actions'
-import { Customer } from '@/types/types'
-import { Link } from '@tanstack/react-router'
-import { ColumnDef } from '@tanstack/react-table'
+import { GridColDef } from '@mui/x-data-grid'
 
-export const columns: ColumnDef<Customer>[] = [
+export const columns: GridColDef[] = [
     {
-        accessorKey: 'id',
-        header: () => <span>ID</span>,
+        field: 'id',
+        headerName: 'ID',
+        type: 'number',
+        width: 90,
+        editable: false,
     },
     {
-        accessorKey: 'name',
-        header: () => <span>Name</span>,
-        cell: ({ row }) => <Link to={`/dashboard/additives/${row.original.id}`}>{row.original.name}</Link>,
+        field: 'name',
+        headerName: 'Name',
+        width: 180,
+        editable: true,
     },
     {
-        id: 'actions',
-        cell: ({ row }) => <CellActions data={row.original} />,
+        field: 'actions',
+        headerName: '',
+        width: 150,
+        editable: false,
+        sortable: false,
+        renderCell: params => {
+            return <CellActions data={params.row} />
+        },
     },
 ]
