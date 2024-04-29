@@ -141,4 +141,7 @@ export type NozzleVariants = {
     updatedAt: string
 }
 
+// * ================================= Laminate =================================
+export type Laminate = Bolt
+
 // ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2 pager ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

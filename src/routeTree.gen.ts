@@ -21,6 +21,7 @@ import { Route as DashboardLayoutDashboardNozzlesIndexImport } from './routes/_d
 import { Route as DashboardLayoutDashboardManwaysIndexImport } from './routes/_dashboard-layout/dashboard/manways/index'
 import { Route as DashboardLayoutDashboardLiftlugsIndexImport } from './routes/_dashboard-layout/dashboard/liftlugs/index'
 import { Route as DashboardLayoutDashboardLedgesIndexImport } from './routes/_dashboard-layout/dashboard/ledges/index'
+import { Route as DashboardLayoutDashboardLaminatesIndexImport } from './routes/_dashboard-layout/dashboard/laminates/index'
 import { Route as DashboardLayoutDashboardGlassesIndexImport } from './routes/_dashboard-layout/dashboard/glasses/index'
 import { Route as DashboardLayoutDashboardGasketsIndexImport } from './routes/_dashboard-layout/dashboard/gaskets/index'
 import { Route as DashboardLayoutDashboardCustomersIndexImport } from './routes/_dashboard-layout/dashboard/customers/index'
@@ -90,6 +91,12 @@ const DashboardLayoutDashboardLiftlugsIndexRoute =
 const DashboardLayoutDashboardLedgesIndexRoute =
   DashboardLayoutDashboardLedgesIndexImport.update({
     path: '/dashboard/ledges/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardLaminatesIndexRoute =
+  DashboardLayoutDashboardLaminatesIndexImport.update({
+    path: '/dashboard/laminates/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -219,6 +226,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutDashboardGlassesIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboard-layout/dashboard/laminates/': {
+      preLoaderRoute: typeof DashboardLayoutDashboardLaminatesIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboard-layout/dashboard/ledges/': {
       preLoaderRoute: typeof DashboardLayoutDashboardLedgesIndexImport
       parentRoute: typeof DashboardLayoutImport
@@ -267,6 +278,7 @@ export const routeTree = rootRoute.addChildren([
     DashboardLayoutDashboardCustomersIndexRoute,
     DashboardLayoutDashboardGasketsIndexRoute,
     DashboardLayoutDashboardGlassesIndexRoute,
+    DashboardLayoutDashboardLaminatesIndexRoute,
     DashboardLayoutDashboardLedgesIndexRoute,
     DashboardLayoutDashboardLiftlugsIndexRoute,
     DashboardLayoutDashboardManwaysIndexRoute,

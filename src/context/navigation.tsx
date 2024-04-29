@@ -63,7 +63,7 @@ const NavigationItems = [
     {
         label: 'Laminates',
         href: '/dashboard/laminates',
-        disabled: true,
+        disabled: false,
         icon: <Printer className="h-5 w-5" />,
     },
     {
