@@ -2,28 +2,28 @@ import { toast } from 'sonner'
 import { columns } from './columns'
 import { Plus } from 'lucide-react'
 import { Button } from '@mui/material'
-import { ManwayVariants } from '@/types/types'
+import { Nozzle } from '@/types/types'
 import NoProducts from '@/components/ui/no-products'
-import { useManwayVariantsStore } from '@/zustand/manways-store'
+import { useNozzleStore } from '@/zustand/nozzles-store'
 import { DataGrid, GridRowsProp, GridSlots } from '@mui/x-data-grid'
-import { createEditManwayVariant, getAllManwayVariants } from '@/database/manways'
+import { createEditNozzle, getAllNozzles } from '@/database/nozzles'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default function ManwayVariantsTable({ manwayId }: { manwayId: string }) {
-    const { manwayVariants, setManwayVariants } = useManwayVariantsStore()
+export default function NozzleTable() {
+    const { nozzles, setNozzles } = useNozzleStore()
 
-    const title = 'Manway Variants'
-    const count = manwayVariants.length
+    const title = 'Nozzles'
+    const count = nozzles.length
 
-    const rows: GridRowsProp = manwayVariants
+    const rows: GridRowsProp = nozzles
 
     const AddNew = async () => {
-        const data = { manwayId, sizeInch: 0, cost: 0, nozWtLbs: 0, weldWtLbs: 0, labHours: 0, diameter: 0, boltsNum: 0, length: 0 }
-        await createEditManwayVariant(data)
-        const response = await getAllManwayVariants(manwayId)
+        const data = { name: 'blank' }
+        await createEditNozzle(data)
+        const response = await getAllNozzles()
         if (response.error) return toast.error(response.error as string)
 
-        setManwayVariants(response.data as ManwayVariants[])
+        setNozzles(response.data as Nozzle[])
         toast.success(`${title} added successfully!`)
     }
     function EditToolbar() {
@@ -60,20 +60,17 @@ export default function ManwayVariantsTable({ manwayId }: { manwayId: string }) 
                                 slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
                                 initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
                                 processRowUpdate={async updatedRow => {
-                                    const originalRow = manwayVariants.find(r => r.id === updatedRow.id)
+                                    const originalRow = nozzles.find(r => r.id === updatedRow.id)
                                     if (originalRow && JSON.stringify(originalRow) !== JSON.stringify(updatedRow)) {
-                                        for (const key in updatedRow) if (updatedRow[key] < 0 || updatedRow[key] === null) updatedRow[key] = 0
-                                        updatedRow.boltsNum = parseInt(updatedRow.boltsNum as any)
+                                        await createEditNozzle(updatedRow)
 
-                                        await createEditManwayVariant(updatedRow)
+                                        const response = await getAllNozzles()
 
-                                        const response = await getAllManwayVariants(manwayId)
-
-                                        const updatedManwayVariants = response.data as ManwayVariants[]
-                                        setManwayVariants(updatedManwayVariants)
+                                        const updatedNozzles = response.data as Nozzle[]
+                                        setNozzles(updatedNozzles)
 
                                         toast.success(`${title} updated successfully!`)
-                                        return updatedManwayVariants.find(r => r.id === updatedRow.id)
+                                        return updatedNozzles.find(r => r.id === updatedRow.id)
                                     } else return originalRow
                                 }}
                                 onProcessRowUpdateError={(params): void => console.error(params)}

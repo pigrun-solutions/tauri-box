@@ -17,6 +17,7 @@ import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboar
 import { Route as DashboardLayoutDashboardVentsIndexImport } from './routes/_dashboard-layout/dashboard/vents/index'
 import { Route as DashboardLayoutDashboardSightglassesIndexImport } from './routes/_dashboard-layout/dashboard/sightglasses/index'
 import { Route as DashboardLayoutDashboardResinsIndexImport } from './routes/_dashboard-layout/dashboard/resins/index'
+import { Route as DashboardLayoutDashboardNozzlesIndexImport } from './routes/_dashboard-layout/dashboard/nozzles/index'
 import { Route as DashboardLayoutDashboardManwaysIndexImport } from './routes/_dashboard-layout/dashboard/manways/index'
 import { Route as DashboardLayoutDashboardLiftlugsIndexImport } from './routes/_dashboard-layout/dashboard/liftlugs/index'
 import { Route as DashboardLayoutDashboardLedgesIndexImport } from './routes/_dashboard-layout/dashboard/ledges/index'
@@ -26,6 +27,7 @@ import { Route as DashboardLayoutDashboardCustomersIndexImport } from './routes/
 import { Route as DashboardLayoutDashboardBoltsIndexImport } from './routes/_dashboard-layout/dashboard/bolts/index'
 import { Route as DashboardLayoutDashboardAdditivesIndexImport } from './routes/_dashboard-layout/dashboard/additives/index'
 import { Route as DashboardLayoutDashboardSightglassesIdImport } from './routes/_dashboard-layout/dashboard/sightglasses/$id'
+import { Route as DashboardLayoutDashboardNozzlesIdImport } from './routes/_dashboard-layout/dashboard/nozzles/$id'
 import { Route as DashboardLayoutDashboardManwaysIdImport } from './routes/_dashboard-layout/dashboard/manways/$id'
 import { Route as DashboardLayoutDashboardGasketsIdImport } from './routes/_dashboard-layout/dashboard/gaskets/$id'
 import { Route as DashboardLayoutDashboardCustomersIdImport } from './routes/_dashboard-layout/dashboard/customers/$id'
@@ -64,6 +66,12 @@ const DashboardLayoutDashboardSightglassesIndexRoute =
 const DashboardLayoutDashboardResinsIndexRoute =
   DashboardLayoutDashboardResinsIndexImport.update({
     path: '/dashboard/resins/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardNozzlesIndexRoute =
+  DashboardLayoutDashboardNozzlesIndexImport.update({
+    path: '/dashboard/nozzles/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -118,6 +126,12 @@ const DashboardLayoutDashboardAdditivesIndexRoute =
 const DashboardLayoutDashboardSightglassesIdRoute =
   DashboardLayoutDashboardSightglassesIdImport.update({
     path: '/dashboard/sightglasses/$id',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardNozzlesIdRoute =
+  DashboardLayoutDashboardNozzlesIdImport.update({
+    path: '/dashboard/nozzles/$id',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -177,6 +191,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutDashboardManwaysIdImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboard-layout/dashboard/nozzles/$id': {
+      preLoaderRoute: typeof DashboardLayoutDashboardNozzlesIdImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboard-layout/dashboard/sightglasses/$id': {
       preLoaderRoute: typeof DashboardLayoutDashboardSightglassesIdImport
       parentRoute: typeof DashboardLayoutImport
@@ -213,6 +231,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutDashboardManwaysIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboard-layout/dashboard/nozzles/': {
+      preLoaderRoute: typeof DashboardLayoutDashboardNozzlesIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboard-layout/dashboard/resins/': {
       preLoaderRoute: typeof DashboardLayoutDashboardResinsIndexImport
       parentRoute: typeof DashboardLayoutImport
@@ -238,6 +260,7 @@ export const routeTree = rootRoute.addChildren([
     DashboardLayoutDashboardCustomersIdRoute,
     DashboardLayoutDashboardGasketsIdRoute,
     DashboardLayoutDashboardManwaysIdRoute,
+    DashboardLayoutDashboardNozzlesIdRoute,
     DashboardLayoutDashboardSightglassesIdRoute,
     DashboardLayoutDashboardAdditivesIndexRoute,
     DashboardLayoutDashboardBoltsIndexRoute,
@@ -247,6 +270,7 @@ export const routeTree = rootRoute.addChildren([
     DashboardLayoutDashboardLedgesIndexRoute,
     DashboardLayoutDashboardLiftlugsIndexRoute,
     DashboardLayoutDashboardManwaysIndexRoute,
+    DashboardLayoutDashboardNozzlesIndexRoute,
     DashboardLayoutDashboardResinsIndexRoute,
     DashboardLayoutDashboardSightglassesIndexRoute,
     DashboardLayoutDashboardVentsIndexRoute,

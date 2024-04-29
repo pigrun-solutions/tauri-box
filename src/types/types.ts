@@ -120,4 +120,24 @@ export type ManwayVariants = {
     updatedAt: string
 }
 
+// *  ================================= Nozzle =================================
+export type Nozzle = Bolt
+export type NozzleVariants = {
+    id: string
+    nozzleId: string
+    variantId: number
+    od: number
+    bc: number
+    boltsNum: number
+    diameter: number
+    flgT: number
+    cost: number
+    blindCost: number
+    nozWtLbs: number
+    welWtLbs: number
+    labHours: number
+    createdAt: string
+    updatedAt: string
+}
+
 // ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2 pager ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

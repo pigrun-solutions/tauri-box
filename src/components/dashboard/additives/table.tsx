@@ -63,7 +63,7 @@ const AdditivesTable = () => {
                                 processRowUpdate={async updatedRow => {
                                     const originalRow = additives.find(r => r.id === updatedRow.id)
                                     if (originalRow && JSON.stringify(originalRow) !== JSON.stringify(updatedRow)) {
-                                        for (const key in updatedRow) if (updatedRow[key] < 0) updatedRow[key] = 0
+                                        for (const key in updatedRow) if (updatedRow[key] < 0 || updatedRow[key] === null) updatedRow[key] = 0
                                         const costKgUpdated = originalRow.costKg !== Number(updatedRow.costKg)
                                         const costLbsUpdated = originalRow.costLbs !== Number(updatedRow.costLbs)
                                         if (costKgUpdated) await createEditAdditive({ ...updatedRow, costKg: Number(updatedRow.costKg), costLbs: kgToLbs(Number(updatedRow.costKg)) })

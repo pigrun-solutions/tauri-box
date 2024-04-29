@@ -1,4 +1,4 @@
-import { Bolt, BookCopy, Circle, Fan, Forklift, GlassWater, Glasses, Home, Milk, Package, Pentagon, Users2 } from 'lucide-react'
+import { Bolt, BookCopy, Circle, Fan, Forklift, GlassWater, Glasses, Home, Milk, Package, Pentagon, Syringe, Users2 } from 'lucide-react'
 
 const NavigationItems = [
     {
@@ -55,6 +55,11 @@ const NavigationItems = [
         label: 'Manways',
         href: '/dashboard/manways',
         icon: <Circle className="h-5 w-5" />,
+    },
+    {
+        label: 'Nozzles',
+        href: '/dashboard/nozzles',
+        icon: <Syringe className="h-5 w-5" />,
     },
     {
         label: 'Customers',

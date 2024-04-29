@@ -9,7 +9,7 @@
 # 2 Pager
 [x] Bolts
 [x] Manways
-[ ] Nozzles
+[x] Nozzles
 [x] Sight Glasses
 [x] Gaskets
 

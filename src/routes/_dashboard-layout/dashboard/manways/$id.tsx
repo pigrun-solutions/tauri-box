@@ -35,7 +35,7 @@ const GasketVariantsPage = () => {
     if (loading) return <Loader />
     return (
         <div className="flex h-full w-full flex-col gap-4">
-            <FormBreadcrumbs currentPage={'Gasket Variants'} />
+            <FormBreadcrumbs currentPage={'Manway Variants'} />
 
             <ManwayVariantsTable manwayId={id} />
         </div>

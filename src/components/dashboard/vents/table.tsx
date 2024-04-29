@@ -62,7 +62,7 @@ export default function VentsTable() {
                                 processRowUpdate={async updatedRow => {
                                     const originalRow = vents.find(r => r.id === updatedRow.id)
                                     if (originalRow && JSON.stringify(originalRow) !== JSON.stringify(updatedRow)) {
-                                        for (const key in updatedRow) if (updatedRow[key] < 0) updatedRow[key] = 0
+                                        for (const key in updatedRow) if (updatedRow[key] < 0 || updatedRow[key] === null) updatedRow[key] = 0
 
                                         await createEditVent(updatedRow)
 
