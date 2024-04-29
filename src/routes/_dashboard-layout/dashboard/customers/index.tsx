@@ -3,7 +3,6 @@ import { Customer } from '@/types/types'
 import { useEffect, useState } from 'react'
 import Loader from '@/components/ui/loader'
 import { getAllCustomers } from '@/database/customers'
-import TableHeader from '@/components/ui/table-header'
 import { createFileRoute } from '@tanstack/react-router'
 import { useCustomersStore } from '@/zustand/customers-store'
 import FormBreadcrumbs from '@/components/ui/form-breadcrumbs'
@@ -35,9 +34,7 @@ const Customers = () => {
     if (loading) return <Loader />
     return (
         <div className="flex h-full w-full flex-col gap-4">
-            <FormBreadcrumbs currentPage={'Customers'}>
-                <TableHeader />
-            </FormBreadcrumbs>
+            <FormBreadcrumbs currentPage={'Customers'} />
 
             <CustomersTable />
         </div>

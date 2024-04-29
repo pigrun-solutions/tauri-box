@@ -3,7 +3,6 @@ import { Additive } from '@/types/types'
 import Loader from '@/components/ui/loader'
 import { useEffect, useState } from 'react'
 import { getAllAdditives } from '@/database/additives'
-import TableHeader from '@/components/ui/table-header'
 import { createFileRoute } from '@tanstack/react-router'
 import { useAdditivesStore } from '@/zustand/additives-store'
 import FormBreadcrumbs from '@/components/ui/form-breadcrumbs'
@@ -35,9 +34,7 @@ const Additives = () => {
     if (loading) return <Loader />
     return (
         <div className="flex h-full w-full flex-col gap-4">
-            <FormBreadcrumbs currentPage={'Additives'}>
-                <TableHeader />
-            </FormBreadcrumbs>
+            <FormBreadcrumbs currentPage={'Additives'} />
 
             <AdditivesTable />
         </div>

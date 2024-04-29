@@ -1,15 +1,15 @@
 'use client'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { LiftLug } from '@/types/types'
 import { Trash2 } from 'lucide-react'
-import { Additive } from '@/types/types'
 import { Button } from '@/components/ui/button'
+import { deleteLiftLug } from '@/database/liftlugs'
 import AlertModal from '@/components/ui/alert-modal'
-import { deleteAdditive } from '@/database/additives'
-import { useAdditivesStore } from '@/zustand/additives-store'
+import { useLiftLugsStore } from '@/zustand/liftlugs-store'
 
-const CellActions = ({ data }: { data: Additive }) => {
-    const { setAdditives } = useAdditivesStore()
+const CellActions = ({ data }: { data: LiftLug }) => {
+    const { setLiftLugs } = useLiftLugsStore()
     const [loading, setLoading] = useState(false)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
@@ -17,11 +17,11 @@ const CellActions = ({ data }: { data: Additive }) => {
         try {
             setLoading(true)
 
-            const response = await deleteAdditive(data.id)
+            const response = await deleteLiftLug(data.id)
             setDeleteModalOpen(false)
-            setAdditives(response.data as Additive[])
+            setLiftLugs(response.data as LiftLug[])
 
-            toast.success('Additive deleted!')
+            toast.success('Lift Lug deleted!')
         } catch (error: any) {
             toast.error(error.response.data)
         } finally {

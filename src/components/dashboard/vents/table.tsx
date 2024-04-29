@@ -1,30 +1,29 @@
 import { toast } from 'sonner'
 import { columns } from './columns'
 import { Plus } from 'lucide-react'
+import { Vent } from '@/types/types'
 import { Button } from '@mui/material'
-import { Additive } from '@/types/types'
-import { kgToLbs, lbsToKg } from '@/lib/utils'
 import NoProducts from '@/components/ui/no-products'
-import { useAdditivesStore } from '@/zustand/additives-store'
+import { useVentsStore } from '@/zustand/vents-store'
+import { createEditVent, getAllVents } from '@/database/vents'
 import { DataGrid, GridRowsProp, GridSlots } from '@mui/x-data-grid'
-import { createEditAdditive, getAllAdditives } from '@/database/additives'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-const AdditivesTable = () => {
-    const { additives, setAdditives } = useAdditivesStore()
+export default function VentsTable() {
+    const { vents, setVents } = useVentsStore()
 
-    const title = 'Additives'
-    const count = additives.length
+    const title = 'Vents'
+    const count = vents.length
 
-    const rows: GridRowsProp = additives
+    const rows: GridRowsProp = vents
 
     const AddNew = async () => {
-        const data = { name: 'blank', costKg: 0, costLbs: 0, densityGmCc: 1 }
-        await createEditAdditive(data)
-        const response = await getAllAdditives()
+        const data = { diameterInch: 0, wtLbs: 0, labHours: 0, matCost: 0 }
+        await createEditVent(data)
+        const response = await getAllVents()
         if (response.error) return toast.error(response.error as string)
 
-        setAdditives(response.data as Additive[])
+        setVents(response.data as Vent[])
         toast.success(`${title} added successfully!`)
     }
     function EditToolbar() {
@@ -39,7 +38,7 @@ const AdditivesTable = () => {
 
     return (
         <>
-            {additives.length === 0 ? (
+            {count === 0 ? (
                 <NoProducts title={title} addNew={AddNew} />
             ) : (
                 <Card className="max-h-screen flex flex-col">
@@ -61,21 +60,19 @@ const AdditivesTable = () => {
                                 slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
                                 initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
                                 processRowUpdate={async updatedRow => {
-                                    const originalRow = additives.find(r => r.id === updatedRow.id)
+                                    const originalRow = vents.find(r => r.id === updatedRow.id)
                                     if (originalRow && JSON.stringify(originalRow) !== JSON.stringify(updatedRow)) {
                                         for (const key in updatedRow) if (updatedRow[key] < 0) updatedRow[key] = 0
-                                        const costKgUpdated = originalRow.costKg !== Number(updatedRow.costKg)
-                                        const costLbsUpdated = originalRow.costLbs !== Number(updatedRow.costLbs)
-                                        if (costKgUpdated) await createEditAdditive({ ...updatedRow, costKg: Number(updatedRow.costKg), costLbs: kgToLbs(Number(updatedRow.costKg)) })
-                                        else if (costLbsUpdated) await createEditAdditive({ ...updatedRow, costKg: lbsToKg(Number(updatedRow.costLbs)), costLbs: Number(updatedRow.costLbs) })
 
-                                        const response = await getAllAdditives()
+                                        await createEditVent(updatedRow)
 
-                                        const upadtedAdditive = response.data as Additive[]
-                                        setAdditives(upadtedAdditive)
+                                        const response = await getAllVents()
+
+                                        const updatedVent = response.data as Vent[]
+                                        setVents(updatedVent)
 
                                         toast.success(`${title} updated successfully!`)
-                                        return upadtedAdditive.find(r => r.id === updatedRow.id)
+                                        return updatedVent.find(r => r.id === updatedRow.id)
                                     } else return originalRow
                                 }}
                                 onProcessRowUpdateError={(params): void => console.error(params)}
@@ -87,5 +84,3 @@ const AdditivesTable = () => {
         </>
     )
 }
-
-export default AdditivesTable

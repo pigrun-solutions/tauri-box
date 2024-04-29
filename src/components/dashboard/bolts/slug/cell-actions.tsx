@@ -2,14 +2,14 @@
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
-import { Additive } from '@/types/types'
+import { BoltVariants } from '@/types/types'
 import { Button } from '@/components/ui/button'
+import { deleteBoltVariant } from '@/database/bolts'
 import AlertModal from '@/components/ui/alert-modal'
-import { deleteAdditive } from '@/database/additives'
-import { useAdditivesStore } from '@/zustand/additives-store'
+import { useBoltVariantsStore } from '@/zustand/bolts-store'
 
-const CellActions = ({ data }: { data: Additive }) => {
-    const { setAdditives } = useAdditivesStore()
+const CellActions = ({ data }: { data: BoltVariants }) => {
+    const { setBoltVariants } = useBoltVariantsStore()
     const [loading, setLoading] = useState(false)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
@@ -17,11 +17,11 @@ const CellActions = ({ data }: { data: Additive }) => {
         try {
             setLoading(true)
 
-            const response = await deleteAdditive(data.id)
+            const response = await deleteBoltVariant(data.id)
             setDeleteModalOpen(false)
-            setAdditives(response.data as Additive[])
+            setBoltVariants(response.data as BoltVariants[])
 
-            toast.success('Additive deleted!')
+            toast.success('Bolt Variant deleted!')
         } catch (error: any) {
             toast.error(error.response.data)
         } finally {

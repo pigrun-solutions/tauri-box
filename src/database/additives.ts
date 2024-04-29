@@ -5,6 +5,7 @@ type AdditiveProps = {
     id?: string
     name: string
     costKg: number
+    costLbs: number
     densityGmCc: number
 }
 
@@ -15,8 +16,9 @@ export default async function useAdditive() {
     await db.execute(
         `CREATE TABLE IF NOT EXISTS Additives (
             id INTEGER PRIMARY KEY autoincrement, 
-            name TEXT UNIQUE, 
-            costKg REAL DEFAULT 0.00, 
+            name VARCHAR(255) NOT NULL,
+            costKg REAL DEFAULT 0.00,
+            costLbs REAL DEFAULT 0.00,
             densityGmCc REAL DEFAULT 1.00, 
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP, 
             updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -58,12 +60,12 @@ export const createEditAdditive = async (data: AdditiveProps) => {
     try {
         const db = await useAdditive()
 
-        const { name, costKg, densityGmCc, id } = data
+        const { name, costKg, densityGmCc, costLbs, id } = data
 
         if (id) {
             const exists = await db.select('SELECT * from Additives WHERE id = $1', [id])
-            if (exists) await db.execute('UPDATE Additives SET name = $1, costKg = $2, densityGmCc = $3 WHERE id = $4', [name, costKg, densityGmCc, id])
-        } else await db.execute('INSERT into Additives (name, costKg, densityGmCc) VALUES ($1, $2, $3)', [name, costKg, densityGmCc])
+            if (exists) await db.execute('UPDATE Additives SET name = $1, costKg = $2, costLbs= $3, densityGmCc = $4 WHERE id = $5', [name, costKg, costLbs, densityGmCc, id])
+        } else await db.execute('INSERT into Additives (name, costKg, costLbs, densityGmCc) VALUES ($1, $2, $3, $4)', [name, costKg, costLbs, densityGmCc])
 
         return { success: true }
     } catch (error) {

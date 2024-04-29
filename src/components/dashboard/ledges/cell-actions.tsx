@@ -2,14 +2,14 @@
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
-import { Additive } from '@/types/types'
+import { Ledge } from '@/types/types'
+import { deleteLedge } from '@/database/ledges'
 import { Button } from '@/components/ui/button'
 import AlertModal from '@/components/ui/alert-modal'
-import { deleteAdditive } from '@/database/additives'
-import { useAdditivesStore } from '@/zustand/additives-store'
+import { useLedgeStore } from '@/zustand/ledges-store'
 
-const CellActions = ({ data }: { data: Additive }) => {
-    const { setAdditives } = useAdditivesStore()
+const CellActions = ({ data }: { data: Ledge }) => {
+    const { setLedges } = useLedgeStore()
     const [loading, setLoading] = useState(false)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
@@ -17,11 +17,11 @@ const CellActions = ({ data }: { data: Additive }) => {
         try {
             setLoading(true)
 
-            const response = await deleteAdditive(data.id)
+            const response = await deleteLedge(data.id)
             setDeleteModalOpen(false)
-            setAdditives(response.data as Additive[])
+            setLedges(response.data as Ledge[])
 
-            toast.success('Additive deleted!')
+            toast.success('Ledge deleted!')
         } catch (error: any) {
             toast.error(error.response.data)
         } finally {

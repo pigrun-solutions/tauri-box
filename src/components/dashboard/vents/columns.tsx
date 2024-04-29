@@ -11,38 +11,32 @@ export const columns: GridColDef[] = [
         editable: false,
     },
     {
-        field: 'name',
-        headerName: 'Name',
-        width: 180,
-        editable: true,
-    },
-    {
-        field: 'costKg',
-        headerName: 'Cost $/Kg',
+        field: 'diameterInch',
+        headerName: 'Diameter in.',
         type: 'number',
         width: 180,
         editable: true,
     },
     {
-        field: 'costLbs',
-        headerName: 'Cost $/Lbs',
+        field: 'wtLbs',
+        headerName: 'Wt. lbs.',
         type: 'number',
         width: 180,
         editable: true,
     },
     {
-        field: 'densityGmCc',
-        headerName: 'Density gm/cm',
+        field: 'labHours',
+        headerName: 'Lab. hrs.',
         type: 'number',
         width: 180,
         editable: true,
-        valueSetter: (newValue, oldRow) => {
-            const updatedValue = parseFloat(newValue)
-            if (updatedValue < 1) return oldRow
-
-            const updatedRow = { ...oldRow, densityGmCc: updatedValue }
-            return updatedRow
-        },
+    },
+    {
+        field: 'matCost',
+        headerName: 'Mat. cost',
+        type: 'number',
+        width: 180,
+        editable: true,
     },
     {
         field: 'actions',

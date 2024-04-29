@@ -1,14 +1,12 @@
 'use client'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { Trash2 } from 'lucide-react'
 import { Resin } from '@/types/types'
-import { Link } from '@tanstack/react-router'
-import { MoreHorizontal } from 'lucide-react'
 import { deleteResin } from '@/database/resin'
 import { Button } from '@/components/ui/button'
 import AlertModal from '@/components/ui/alert-modal'
 import { useResinStore } from '@/zustand/resin-store'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 const CellActions = ({ data }: { data: Resin }) => {
     const { setResin } = useResinStore()
@@ -35,24 +33,11 @@ const CellActions = ({ data }: { data: Resin }) => {
         <>
             <AlertModal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} onConfirm={onDelete} loading={loading} />
 
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <Button aria-haspopup="true" size="icon" variant="ghost">
-                        <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                        <Link to={`/dashboard/resins/${data.id}`}>Edit</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setDeleteModalOpen(true)} className="text-destructive hover:!text-destructive">
-                        Delete
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+            <div className="flex gap-2 items-center justify-end h-full">
+                <Button variant="ghost" size="icon" className="size-5" asChild>
+                    <Trash2 className="text-destructive cursor-pointer size-5" onClick={() => setDeleteModalOpen(true)} />
+                </Button>
+            </div>
         </>
     )
 }

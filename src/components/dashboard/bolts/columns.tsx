@@ -13,20 +13,7 @@ export const columns: GridColDef[] = [
     {
         field: 'name',
         headerName: 'Name',
-        width: 180,
-        editable: true,
-    },
-    {
-        field: 'costKg',
-        headerName: 'Cost $/Kg',
-        type: 'number',
-        width: 180,
-        editable: true,
-    },
-    {
-        field: 'costLbs',
-        headerName: 'Cost $/Lbs',
-        type: 'number',
+        type: 'string',
         width: 180,
         editable: true,
     },

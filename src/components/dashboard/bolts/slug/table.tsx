@@ -2,29 +2,28 @@ import { toast } from 'sonner'
 import { columns } from './columns'
 import { Plus } from 'lucide-react'
 import { Button } from '@mui/material'
-import { Additive } from '@/types/types'
-import { kgToLbs, lbsToKg } from '@/lib/utils'
+import { BoltVariants } from '@/types/types'
 import NoProducts from '@/components/ui/no-products'
-import { useAdditivesStore } from '@/zustand/additives-store'
+import { useBoltVariantsStore } from '@/zustand/bolts-store'
 import { DataGrid, GridRowsProp, GridSlots } from '@mui/x-data-grid'
-import { createEditAdditive, getAllAdditives } from '@/database/additives'
+import { createEditBoltVariant, getAllBoltVariants } from '@/database/bolts'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-const AdditivesTable = () => {
-    const { additives, setAdditives } = useAdditivesStore()
+export default function BoltVariantsTable({ boltId }: { boltId: string }) {
+    const { boltVariants, setBoltVariants } = useBoltVariantsStore()
 
-    const title = 'Additives'
-    const count = additives.length
+    const title = 'Bolt Variants'
+    const count = boltVariants.length
 
-    const rows: GridRowsProp = additives
+    const rows: GridRowsProp = boltVariants
 
     const AddNew = async () => {
-        const data = { name: 'blank', costKg: 0, costLbs: 0, densityGmCc: 1 }
-        await createEditAdditive(data)
-        const response = await getAllAdditives()
+        const data = { boltId, diameterInch: 0, lengthInch: 0, boltCost: 0, nutCost: 0, washerCost: 0 }
+        await createEditBoltVariant(data)
+        const response = await getAllBoltVariants(boltId)
         if (response.error) return toast.error(response.error as string)
 
-        setAdditives(response.data as Additive[])
+        setBoltVariants(response.data as BoltVariants[])
         toast.success(`${title} added successfully!`)
     }
     function EditToolbar() {
@@ -39,7 +38,7 @@ const AdditivesTable = () => {
 
     return (
         <>
-            {additives.length === 0 ? (
+            {count === 0 ? (
                 <NoProducts title={title} addNew={AddNew} />
             ) : (
                 <Card className="max-h-screen flex flex-col">
@@ -61,21 +60,19 @@ const AdditivesTable = () => {
                                 slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
                                 initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
                                 processRowUpdate={async updatedRow => {
-                                    const originalRow = additives.find(r => r.id === updatedRow.id)
+                                    const originalRow = boltVariants.find(r => r.id === updatedRow.id)
                                     if (originalRow && JSON.stringify(originalRow) !== JSON.stringify(updatedRow)) {
                                         for (const key in updatedRow) if (updatedRow[key] < 0) updatedRow[key] = 0
-                                        const costKgUpdated = originalRow.costKg !== Number(updatedRow.costKg)
-                                        const costLbsUpdated = originalRow.costLbs !== Number(updatedRow.costLbs)
-                                        if (costKgUpdated) await createEditAdditive({ ...updatedRow, costKg: Number(updatedRow.costKg), costLbs: kgToLbs(Number(updatedRow.costKg)) })
-                                        else if (costLbsUpdated) await createEditAdditive({ ...updatedRow, costKg: lbsToKg(Number(updatedRow.costLbs)), costLbs: Number(updatedRow.costLbs) })
 
-                                        const response = await getAllAdditives()
+                                        await createEditBoltVariant(updatedRow)
 
-                                        const upadtedAdditive = response.data as Additive[]
-                                        setAdditives(upadtedAdditive)
+                                        const response = await getAllBoltVariants(boltId)
+
+                                        const updatedBoltVariant = response.data as BoltVariants[]
+                                        setBoltVariants(updatedBoltVariant)
 
                                         toast.success(`${title} updated successfully!`)
-                                        return upadtedAdditive.find(r => r.id === updatedRow.id)
+                                        return updatedBoltVariant.find(r => r.id === updatedRow.id)
                                     } else return originalRow
                                 }}
                                 onProcessRowUpdateError={(params): void => console.error(params)}
@@ -87,5 +84,3 @@ const AdditivesTable = () => {
         </>
     )
 }
-
-export default AdditivesTable

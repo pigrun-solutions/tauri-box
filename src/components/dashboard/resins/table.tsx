@@ -1,58 +1,14 @@
-import { kgToLbs } from '@/lib/utils'
+import { toast } from 'sonner'
+import { columns } from './columns'
+import { Plus } from 'lucide-react'
 import { Resin } from '@/types/types'
+import { Button } from '@mui/material'
+import { kgToLbs, lbsToKg } from '@/lib/utils'
 import NoProducts from '@/components/ui/no-products'
 import { useResinStore } from '@/zustand/resin-store'
 import { createEditResin, getAllResins } from '@/database/resin'
-import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid'
+import { DataGrid, GridRowsProp, GridSlots } from '@mui/x-data-grid'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { toast } from 'sonner'
-
-export const columns: GridColDef[] = [
-    {
-        field: 'id',
-        headerName: 'ID',
-        type: 'number',
-        width: 90,
-        editable: false,
-    },
-    {
-        field: 'name',
-        headerName: 'Name',
-        width: 180,
-        editable: true,
-    },
-    {
-        field: 'costKg',
-        headerName: 'Cost $/Kg',
-        type: 'number',
-        width: 180,
-        editable: true,
-    },
-    {
-        field: 'costLbs',
-        headerName: 'Cost $/Lbs',
-        type: 'number',
-        width: 180,
-        editable: false,
-        valueGetter: (_, row) => kgToLbs(row.costKg).toFixed(2),
-    },
-    {
-        field: 'densityGmCc',
-        headerName: 'Density gm/cm',
-        type: 'number',
-        width: 180,
-        editable: true,
-        valueSetter: (newValue, oldRow) => {
-            const updatedValue = parseFloat(newValue)
-            if (updatedValue < 1) {
-                toast.error('Density must be greater than 1')
-                return oldRow.densityGmCc
-            }
-            const updatedRow = { ...oldRow, densityGmCc: updatedValue }
-            return updatedRow
-        },
-    },
-]
 
 export default function ResinTable() {
     const { resin, setResin } = useResinStore()
@@ -62,10 +18,29 @@ export default function ResinTable() {
 
     const rows: GridRowsProp = resin
 
+    const AddNew = async () => {
+        const data = { name: 'blank', costKg: 0, costLbs: 0, densityGmCc: 1 }
+        await createEditResin(data)
+        const response = await getAllResins()
+        if (response.error) return toast.error(response.error as string)
+
+        setResin(response.data as Resin[])
+        toast.success(`${title} added successfully!`)
+    }
+    function EditToolbar() {
+        return (
+            <div className="flex">
+                <Button color="primary" startIcon={<Plus />} onClick={AddNew}>
+                    Add New
+                </Button>
+            </div>
+        )
+    }
+
     return (
         <>
             {count === 0 ? (
-                <NoProducts title={title} />
+                <NoProducts title={title} addNew={AddNew} />
             ) : (
                 <Card className="max-h-screen flex flex-col">
                     <CardHeader>
@@ -81,20 +56,29 @@ export default function ResinTable() {
                                 editMode="row"
                                 rows={rows}
                                 columns={columns}
-                                initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
                                 pageSizeOptions={[10, 25, 50, 100]}
+                                columnVisibilityModel={{ id: false }}
+                                slots={{ toolbar: EditToolbar as GridSlots['toolbar'] }}
+                                initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
                                 processRowUpdate={async updatedRow => {
                                     const originalRow = resin.find(r => r.id === updatedRow.id)
                                     if (originalRow && JSON.stringify(originalRow) !== JSON.stringify(updatedRow)) {
-                                        await createEditResin(updatedRow)
+                                        for (const key in updatedRow) if (updatedRow[key] < 0) updatedRow[key] = 0
+                                        const costKgUpdated = originalRow.costKg !== Number(updatedRow.costKg)
+                                        const costLbsUpdated = originalRow.costLbs !== Number(updatedRow.costLbs)
+                                        if (costKgUpdated) await createEditResin({ ...updatedRow, costKg: Number(updatedRow.costKg), costLbs: kgToLbs(Number(updatedRow.costKg)) })
+                                        else if (costLbsUpdated) await createEditResin({ ...updatedRow, costKg: lbsToKg(Number(updatedRow.costLbs)), costLbs: Number(updatedRow.costLbs) })
+
                                         const response = await getAllResins()
-                                        toast.success('Resin updated successfully!')
+
                                         const updatedResin = response.data as Resin[]
                                         setResin(updatedResin)
+
+                                        toast.success(`${title} updated successfully!`)
                                         return updatedResin.find(r => r.id === updatedRow.id)
                                     } else return originalRow
                                 }}
-                                onProcessRowUpdateError={(params): void => console.log(params)}
+                                onProcessRowUpdateError={(params): void => console.error(params)}
                             />
                         </div>
                     </CardContent>

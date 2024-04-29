@@ -5,6 +5,7 @@ type GlassesProps = {
     id?: string
     name: string
     costKg: number
+    costLbs: number
 }
 
 export default async function useGlasses() {
@@ -15,7 +16,8 @@ export default async function useGlasses() {
         `CREATE TABLE IF NOT EXISTS Glasses (
             id INTEGER PRIMARY KEY autoincrement, 
             name VARCHAR(255) NOT NULL,
-            costKg REAL DEFAULT 0.00, 
+            costKg REAL DEFAULT 0.00,
+            costLbs REAL DEFAULT 0.00,
             createdAt DATETIME DEFAULT CURRENT_TIMESTAMP, 
             updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
         )`
@@ -57,9 +59,9 @@ export const createEditGlass = async (data: GlassesProps) => {
         const db = await useGlasses()
 
         if (data.id) {
-            await db.execute(`UPDATE Glasses SET name = $1, costKg = $2, updatedAt = CURRENT_TIMESTAMP WHERE id = $3`, [data.name, data.costKg, data.id])
+            await db.execute(`UPDATE Glasses SET name = $1, costKg = $2, costLbs = $3, updatedAt = CURRENT_TIMESTAMP WHERE id = $4`, [data.name, data.costKg, data.costLbs, data.id])
         } else {
-            await db.execute(`INSERT INTO Glasses (name, costKg) VALUES ($1, $2)`, [data.name, data.costKg])
+            await db.execute(`INSERT INTO Glasses (name, costKg, costLbs) VALUES ($1, $2, $3)`, [data.name, data.costKg, data.costLbs])
         }
 
         return { success: true }

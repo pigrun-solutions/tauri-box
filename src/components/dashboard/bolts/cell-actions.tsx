@@ -1,27 +1,30 @@
 'use client'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { Trash2 } from 'lucide-react'
-import { Additive } from '@/types/types'
+import { Bolt } from '@/types/types'
+import { Edit3, Trash2 } from 'lucide-react'
+import { deleteBolt } from '@/database/bolts'
 import { Button } from '@/components/ui/button'
+import { useNavigate } from '@tanstack/react-router'
 import AlertModal from '@/components/ui/alert-modal'
-import { deleteAdditive } from '@/database/additives'
-import { useAdditivesStore } from '@/zustand/additives-store'
+import { useBoltsStore } from '@/zustand/bolts-store'
 
-const CellActions = ({ data }: { data: Additive }) => {
-    const { setAdditives } = useAdditivesStore()
+const CellActions = ({ data }: { data: Bolt }) => {
+    const navigate = useNavigate()
+    const { setBolts } = useBoltsStore()
     const [loading, setLoading] = useState(false)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
     const onDelete = async () => {
         try {
             setLoading(true)
+            console.log('data', data)
 
-            const response = await deleteAdditive(data.id)
+            const response = await deleteBolt(data.id)
             setDeleteModalOpen(false)
-            setAdditives(response.data as Additive[])
+            setBolts(response.data as Bolt[])
 
-            toast.success('Additive deleted!')
+            toast.success('Bolt deleted!')
         } catch (error: any) {
             toast.error(error.response.data)
         } finally {
@@ -34,6 +37,10 @@ const CellActions = ({ data }: { data: Additive }) => {
             <AlertModal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} onConfirm={onDelete} loading={loading} />
 
             <div className="flex gap-2 items-center justify-end h-full">
+                <Button variant="ghost" size="icon" className="size-5" asChild>
+                    <Edit3 className="text-primary cursor-pointer size-5" onClick={() => navigate({ to: `/dashboard/bolts/${data.id}` })} />
+                </Button>
+
                 <Button variant="ghost" size="icon" className="size-5" asChild>
                     <Trash2 className="text-destructive cursor-pointer size-5" onClick={() => setDeleteModalOpen(true)} />
                 </Button>

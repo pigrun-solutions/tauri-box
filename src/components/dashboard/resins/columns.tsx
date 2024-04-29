@@ -1,21 +1,57 @@
 'use client'
 import CellActions from './cell-actions'
-import { Resin } from '@/types/types'
-import { Link } from '@tanstack/react-router'
-import { ColumnDef } from '@tanstack/react-table'
+import { GridColDef } from '@mui/x-data-grid'
 
-export const columns: ColumnDef<Resin>[] = [
+export const columns: GridColDef[] = [
     {
-        accessorKey: 'id',
-        header: () => <span>ID</span>,
+        field: 'id',
+        headerName: 'ID',
+        type: 'number',
+        width: 90,
+        editable: false,
     },
     {
-        accessorKey: 'name',
-        header: () => <span>Name</span>,
-        cell: ({ row }) => <Link to={`/dashboard/resins/${row.original.id}`}>{row.original.name}</Link>,
+        field: 'name',
+        headerName: 'Name',
+        width: 180,
+        editable: true,
     },
     {
-        id: 'actions',
-        cell: ({ row }) => <CellActions data={row.original} />,
+        field: 'costKg',
+        headerName: 'Cost $/Kg',
+        type: 'number',
+        width: 180,
+        editable: true,
+    },
+    {
+        field: 'costLbs',
+        headerName: 'Cost $/Lbs',
+        type: 'number',
+        width: 180,
+        editable: true,
+    },
+    {
+        field: 'densityGmCc',
+        headerName: 'Density gm/cm',
+        type: 'number',
+        width: 180,
+        editable: true,
+        valueSetter: (newValue, oldRow) => {
+            const updatedValue = parseFloat(newValue)
+            if (updatedValue < 1) return oldRow
+
+            const updatedRow = { ...oldRow, densityGmCc: updatedValue }
+            return updatedRow
+        },
+    },
+    {
+        field: 'actions',
+        headerName: '',
+        width: 150,
+        editable: false,
+        sortable: false,
+        renderCell: params => {
+            return <CellActions data={params.row} />
+        },
     },
 ]

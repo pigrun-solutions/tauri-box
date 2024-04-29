@@ -1,15 +1,15 @@
 'use client'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { Vent } from '@/types/types'
 import { Trash2 } from 'lucide-react'
-import { Additive } from '@/types/types'
+import { deleteVent } from '@/database/vents'
 import { Button } from '@/components/ui/button'
 import AlertModal from '@/components/ui/alert-modal'
-import { deleteAdditive } from '@/database/additives'
-import { useAdditivesStore } from '@/zustand/additives-store'
+import { useVentsStore } from '@/zustand/vents-store'
 
-const CellActions = ({ data }: { data: Additive }) => {
-    const { setAdditives } = useAdditivesStore()
+const CellActions = ({ data }: { data: Vent }) => {
+    const { setVents } = useVentsStore()
     const [loading, setLoading] = useState(false)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
 
@@ -17,11 +17,11 @@ const CellActions = ({ data }: { data: Additive }) => {
         try {
             setLoading(true)
 
-            const response = await deleteAdditive(data.id)
+            const response = await deleteVent(data.id)
             setDeleteModalOpen(false)
-            setAdditives(response.data as Additive[])
+            setVents(response.data as Vent[])
 
-            toast.success('Additive deleted!')
+            toast.success('Vent deleted!')
         } catch (error: any) {
             toast.error(error.response.data)
         } finally {
