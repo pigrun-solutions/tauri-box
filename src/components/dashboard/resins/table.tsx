@@ -68,6 +68,7 @@ export default function ResinTable() {
                                         const costLbsUpdated = originalRow.costLbs !== Number(updatedRow.costLbs)
                                         if (costKgUpdated) await createEditResin({ ...updatedRow, costKg: Number(updatedRow.costKg), costLbs: kgToLbs(Number(updatedRow.costKg)) })
                                         else if (costLbsUpdated) await createEditResin({ ...updatedRow, costKg: lbsToKg(Number(updatedRow.costLbs)), costLbs: Number(updatedRow.costLbs) })
+                                        else await createEditResin(updatedRow)
 
                                         const response = await getAllResins()
 

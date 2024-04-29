@@ -6,7 +6,7 @@
         "distDir": "../dist"
     },
     "package": {
-        "productName": "tauriv2",
+        "productName": "Troy Tank Clone",
         "version": "0.0.0"
     },
     "tauri": {
@@ -23,7 +23,8 @@
                 "height": 800,
                 "width": 1280,
                 "contentProtected": false,
-                "title": "TauriV2"
+                "title": "Troy Tank Clone",
+                "resizable": false
             }
         ],
         "security": {

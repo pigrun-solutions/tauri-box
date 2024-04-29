@@ -1,5 +1,5 @@
 [package]
-name = "tauriv2"
+name = "troytankclone"
 version = "0.0.0"
 description = "A Tauri App"
 authors = ["you"]

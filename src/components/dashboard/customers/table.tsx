@@ -7,12 +7,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 const CustomersTable = () => {
     const { customers } = useCustomersStore()
     const count = customers.length
-    
 
     return (
         <>
             {customers.length === 0 ? (
-                <NoProducts title={'Customers'} />
+                <NoProducts title={'Customers'} addNew={() => {}} />
             ) : (
                 <Card>
                     <CardHeader>

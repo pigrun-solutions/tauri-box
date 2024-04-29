@@ -67,6 +67,7 @@ const GlassesTable = () => {
                                         const costLbsUpdated = originalRow.costLbs !== Number(updatedRow.costLbs)
                                         if (costKgUpdated) await createEditGlass({ ...updatedRow, costKg: Number(updatedRow.costKg), costLbs: kgToLbs(Number(updatedRow.costKg)) })
                                         else if (costLbsUpdated) await createEditGlass({ ...updatedRow, costKg: lbsToKg(Number(updatedRow.costLbs)), costLbs: Number(updatedRow.costLbs) })
+                                        else await createEditGlass(updatedRow)
 
                                         const response = await getAllGlasses()
 

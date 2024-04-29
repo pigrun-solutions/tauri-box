@@ -68,6 +68,7 @@ const AdditivesTable = () => {
                                         const costLbsUpdated = originalRow.costLbs !== Number(updatedRow.costLbs)
                                         if (costKgUpdated) await createEditAdditive({ ...updatedRow, costKg: Number(updatedRow.costKg), costLbs: kgToLbs(Number(updatedRow.costKg)) })
                                         else if (costLbsUpdated) await createEditAdditive({ ...updatedRow, costKg: lbsToKg(Number(updatedRow.costLbs)), costLbs: Number(updatedRow.costLbs) })
+                                        else await createEditAdditive(updatedRow)
 
                                         const response = await getAllAdditives()
 
