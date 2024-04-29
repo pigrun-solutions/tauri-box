@@ -14,6 +14,6 @@
 [x] Gaskets
 
 # Complicated
-[ ] Customers
+[~] Customers
 [ ] Laminates
 [ ] Other

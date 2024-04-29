@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import Heading from '@/components/ui/heading'
 import NavigationItems from '@/context/navigation'
@@ -14,7 +15,10 @@ const Dashboard = () => {
             <div className="grid grid-cols-2 gap-4">
                 {NavigationItems.slice(1).map((nav, index): any => {
                     return (
-                        <Card key={index} className="hover:bg-muted-foreground/10 cursor-pointer" onClick={() => navigate({ to: nav.href })}>
+                        <Card
+                            key={index}
+                            className={cn('hover:bg-muted-foreground/10 cursor-pointer', nav.disabled && 'bg-muted-foreground/10 cursor-not-allowed')}
+                            onClick={() => !nav.disabled && navigate({ to: nav.href })}>
                             <div className="flex items-center p-4 gap-4">
                                 {nav.icon}
                                 <h4>{nav.label}</h4>

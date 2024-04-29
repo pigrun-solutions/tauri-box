@@ -1,9 +1,12 @@
 import { Customer } from '@/types/types'
 import Database from 'tauri-plugin-sql-api'
 
-type AdditiveProps = {
-    id?: string
+type CustomerNameProps = {
+    id: string
     name: string
+}
+type CustomerDetailsProps = {
+    id?: string
     email?: string
     phone: string
     fax?: string
@@ -11,7 +14,7 @@ type AdditiveProps = {
     address?: string
 }
 
-export default async function useAdditive() {
+export default async function useCustomer() {
     const db = await Database.load('sqlite:test.db')
 
     // await db.execute(`DROP TABLE Customers`)
@@ -32,9 +35,10 @@ export default async function useAdditive() {
     return db
 }
 
+// ? GET
 export const getAllCustomers = async () => {
     try {
-        const db = await useAdditive()
+        const db = await useCustomer()
 
         const data = (await db.select('SELECT * FROM Customers')) as Customer[]
 
@@ -44,11 +48,10 @@ export const getAllCustomers = async () => {
         return { success: false, error }
     }
 }
-
 export const getCustomer = async (id: string) => {
     try {
         if (id !== 'add') {
-            const db = await useAdditive()
+            const db = await useCustomer()
 
             const data = (await db.select('SELECT * from Customers WHERE id = $1', [id])) as Customer[]
             const result = data[0]
@@ -61,16 +64,27 @@ export const getCustomer = async (id: string) => {
     }
 }
 
-export const createEditCustomer = async (data: AdditiveProps) => {
+// ? POST, PUT
+export const updateCustomerName = async (data: CustomerNameProps) => {
     try {
-        const db = await useAdditive()
+        const db = await useCustomer()
 
-        const { name, email, phone, fax, contact, address, id } = data
+        const { name, id } = data
 
-        if (id) {
-            const exists = await db.select('SELECT * from Customers WHERE id = $1', [id])
-            if (exists) await db.execute('UPDATE Customers SET name = $1, email = $2, phone = $3, fax = $4, contact = $5, address = $6 WHERE id = $7', [name, email, phone, fax, contact, address, id])
-        } else await db.execute('INSERT into Customers (name, email, phone, fax, contact, address) VALUES ($1, $2, $3, $4, $5, $6)', [name, email, phone, fax, contact, address])
+        await db.execute('UPDATE Customers SET name = $1 WHERE id = $2', [name, id])
+
+        return { success: true }
+    } catch (error) {
+        return { success: false, error }
+    }
+}
+export const createEditCustomerDetails = async (data: CustomerDetailsProps) => {
+    try {
+        const db = await useCustomer()
+
+        const { email, phone, fax, contact, address, id } = data
+
+        await db.execute('UPDATE Customers SET email = $1, phone = $2, fax = $3, contact = $4, address = $5 WHERE id = $6', [email, phone, fax, contact, address, id])
 
         return { success: true }
     } catch (error) {
@@ -78,9 +92,10 @@ export const createEditCustomer = async (data: AdditiveProps) => {
     }
 }
 
+// ? DELETE
 export const deleteCustomer = async (id: string) => {
     try {
-        const db = await useAdditive()
+        const db = await useCustomer()
 
         await db.execute('DELETE from Customers WHERE id = $1', [id])
 
