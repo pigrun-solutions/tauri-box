@@ -10,8 +10,8 @@
 [x] Bolts
 [ ] Manways
 [ ] Nozzles
-[ ] Sight Glasses
-[ ] Gaskets
+[x] Sight Glasses
+[x] Gaskets
 
 # Complicated
 [ ] Customers

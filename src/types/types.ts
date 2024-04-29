@@ -62,10 +62,10 @@ export type Ledge = {
 
 // ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2 pager ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+// * ================================= Bolts =================================
 export type Bolt = {
     id: string
     name: string
-    BoltVariants: BoltVariants[]
     createdAt: string
     updatedAt: string
 }
@@ -77,6 +77,28 @@ export type BoltVariants = {
     boltCost: number
     nutCost: number
     washerCost: number
+    createdAt: string
+    updatedAt: string
+}
+
+// * ================================= Sight Glasses =================================
+export type SightGlasses = Bolt
+export type SightGlassVariants = {
+    id: string
+    sightGlassId: string
+    diameterInch: number
+    cost: number
+    createdAt: string
+    updatedAt: string
+}
+
+// * ================================= Gaskets =================================
+export type Gasket = Bolt
+export type GasketVariants = {
+    id: string
+    gasketId: string
+    diameterInch: number
+    cost: number
     createdAt: string
     updatedAt: string
 }

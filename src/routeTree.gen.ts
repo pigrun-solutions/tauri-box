@@ -15,13 +15,17 @@ import { Route as DashboardLayoutImport } from './routes/_dashboard-layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboard-layout/dashboard/index'
 import { Route as DashboardLayoutDashboardVentsIndexImport } from './routes/_dashboard-layout/dashboard/vents/index'
+import { Route as DashboardLayoutDashboardSightglassesIndexImport } from './routes/_dashboard-layout/dashboard/sightglasses/index'
 import { Route as DashboardLayoutDashboardResinsIndexImport } from './routes/_dashboard-layout/dashboard/resins/index'
 import { Route as DashboardLayoutDashboardLiftlugsIndexImport } from './routes/_dashboard-layout/dashboard/liftlugs/index'
 import { Route as DashboardLayoutDashboardLedgesIndexImport } from './routes/_dashboard-layout/dashboard/ledges/index'
 import { Route as DashboardLayoutDashboardGlassesIndexImport } from './routes/_dashboard-layout/dashboard/glasses/index'
+import { Route as DashboardLayoutDashboardGasketsIndexImport } from './routes/_dashboard-layout/dashboard/gaskets/index'
 import { Route as DashboardLayoutDashboardCustomersIndexImport } from './routes/_dashboard-layout/dashboard/customers/index'
 import { Route as DashboardLayoutDashboardBoltsIndexImport } from './routes/_dashboard-layout/dashboard/bolts/index'
 import { Route as DashboardLayoutDashboardAdditivesIndexImport } from './routes/_dashboard-layout/dashboard/additives/index'
+import { Route as DashboardLayoutDashboardSightglassesIdImport } from './routes/_dashboard-layout/dashboard/sightglasses/$id'
+import { Route as DashboardLayoutDashboardGasketsIdImport } from './routes/_dashboard-layout/dashboard/gaskets/$id'
 import { Route as DashboardLayoutDashboardCustomersIdImport } from './routes/_dashboard-layout/dashboard/customers/$id'
 import { Route as DashboardLayoutDashboardBoltsIdImport } from './routes/_dashboard-layout/dashboard/bolts/$id'
 
@@ -49,6 +53,12 @@ const DashboardLayoutDashboardVentsIndexRoute =
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
+const DashboardLayoutDashboardSightglassesIndexRoute =
+  DashboardLayoutDashboardSightglassesIndexImport.update({
+    path: '/dashboard/sightglasses/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
 const DashboardLayoutDashboardResinsIndexRoute =
   DashboardLayoutDashboardResinsIndexImport.update({
     path: '/dashboard/resins/',
@@ -73,6 +83,12 @@ const DashboardLayoutDashboardGlassesIndexRoute =
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
+const DashboardLayoutDashboardGasketsIndexRoute =
+  DashboardLayoutDashboardGasketsIndexImport.update({
+    path: '/dashboard/gaskets/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
 const DashboardLayoutDashboardCustomersIndexRoute =
   DashboardLayoutDashboardCustomersIndexImport.update({
     path: '/dashboard/customers/',
@@ -88,6 +104,18 @@ const DashboardLayoutDashboardBoltsIndexRoute =
 const DashboardLayoutDashboardAdditivesIndexRoute =
   DashboardLayoutDashboardAdditivesIndexImport.update({
     path: '/dashboard/additives/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardSightglassesIdRoute =
+  DashboardLayoutDashboardSightglassesIdImport.update({
+    path: '/dashboard/sightglasses/$id',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardGasketsIdRoute =
+  DashboardLayoutDashboardGasketsIdImport.update({
+    path: '/dashboard/gaskets/$id',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -127,6 +155,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutDashboardCustomersIdImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboard-layout/dashboard/gaskets/$id': {
+      preLoaderRoute: typeof DashboardLayoutDashboardGasketsIdImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/sightglasses/$id': {
+      preLoaderRoute: typeof DashboardLayoutDashboardSightglassesIdImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboard-layout/dashboard/additives/': {
       preLoaderRoute: typeof DashboardLayoutDashboardAdditivesIndexImport
       parentRoute: typeof DashboardLayoutImport
@@ -137,6 +173,10 @@ declare module '@tanstack/react-router' {
     }
     '/_dashboard-layout/dashboard/customers/': {
       preLoaderRoute: typeof DashboardLayoutDashboardCustomersIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/gaskets/': {
+      preLoaderRoute: typeof DashboardLayoutDashboardGasketsIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
     '/_dashboard-layout/dashboard/glasses/': {
@@ -155,6 +195,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutDashboardResinsIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboard-layout/dashboard/sightglasses/': {
+      preLoaderRoute: typeof DashboardLayoutDashboardSightglassesIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboard-layout/dashboard/vents/': {
       preLoaderRoute: typeof DashboardLayoutDashboardVentsIndexImport
       parentRoute: typeof DashboardLayoutImport
@@ -170,13 +214,17 @@ export const routeTree = rootRoute.addChildren([
     DashboardLayoutDashboardIndexRoute,
     DashboardLayoutDashboardBoltsIdRoute,
     DashboardLayoutDashboardCustomersIdRoute,
+    DashboardLayoutDashboardGasketsIdRoute,
+    DashboardLayoutDashboardSightglassesIdRoute,
     DashboardLayoutDashboardAdditivesIndexRoute,
     DashboardLayoutDashboardBoltsIndexRoute,
     DashboardLayoutDashboardCustomersIndexRoute,
+    DashboardLayoutDashboardGasketsIndexRoute,
     DashboardLayoutDashboardGlassesIndexRoute,
     DashboardLayoutDashboardLedgesIndexRoute,
     DashboardLayoutDashboardLiftlugsIndexRoute,
     DashboardLayoutDashboardResinsIndexRoute,
+    DashboardLayoutDashboardSightglassesIndexRoute,
     DashboardLayoutDashboardVentsIndexRoute,
   ]),
 ])
