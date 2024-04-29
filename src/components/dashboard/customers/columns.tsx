@@ -1,4 +1,3 @@
-'use client'
 import CellActions from './cell-actions'
 import { Customer } from '@/types/types'
 import { Link } from '@tanstack/react-router'

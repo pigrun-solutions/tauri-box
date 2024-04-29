@@ -1,4 +1,3 @@
-'use client'
 import CellActions from './cell-actions'
 import { GridColDef } from '@mui/x-data-grid'
 

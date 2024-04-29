@@ -1,4 +1,3 @@
-'use client'
 import { toast } from 'sonner'
 import { useState } from 'react'
 import { Gasket } from '@/types/types'
