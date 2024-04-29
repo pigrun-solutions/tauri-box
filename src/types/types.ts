@@ -103,4 +103,21 @@ export type GasketVariants = {
     updatedAt: string
 }
 
+// * ================================= Manway =================================
+export type Manway = Bolt
+export type ManwayVariants = {
+    id: string
+    manwayId: string
+    sizeInch: number
+    cost: number
+    nozWtLbs: number
+    weldWtLbs: number
+    labHours: number
+    diameter: number
+    boltsNum: number
+    length: number
+    createdAt: string
+    updatedAt: string
+}
+
 // ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2 pager ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

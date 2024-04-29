@@ -8,7 +8,7 @@
 
 # 2 Pager
 [x] Bolts
-[ ] Manways
+[x] Manways
 [ ] Nozzles
 [x] Sight Glasses
 [x] Gaskets
