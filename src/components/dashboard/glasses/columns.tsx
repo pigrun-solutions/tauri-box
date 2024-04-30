@@ -16,8 +16,8 @@ export const columns: GridColDef[] = [
         editable: true,
     },
     {
-        field: 'costKg',
-        headerName: 'Cost $/Kg',
+        field: 'costLbs',
+        headerName: 'Cost $/Lbs',
         type: 'number',
         width: 180,
         editable: true,
@@ -27,8 +27,8 @@ export const columns: GridColDef[] = [
         },
     },
     {
-        field: 'costLbs',
-        headerName: 'Cost $/Lbs',
+        field: 'costKg',
+        headerName: 'Cost $/Kg',
         type: 'number',
         width: 180,
         editable: true,
