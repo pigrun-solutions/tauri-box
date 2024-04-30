@@ -13,22 +13,34 @@ export const columns: GridColDef[] = [
         field: 'variantId',
         headerName: 'ID',
         type: 'number',
-        width: 95,
+        width: 85,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(1)
+            return roundedValue
+        },
     },
     {
         field: 'od',
         headerName: 'OD',
         type: 'number',
-        width: 95,
+        width: 85,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(1)
+            return roundedValue
+        },
     },
     {
         field: 'bc',
         headerName: 'BC',
         type: 'number',
-        width: 95,
+        width: 85,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(1)
+            return roundedValue
+        },
     },
     {
         field: 'boltsNum',
@@ -43,6 +55,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 95,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(3)
+            return roundedValue
+        },
     },
     {
         field: 'flgT',
@@ -50,6 +66,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 95,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(3)
+            return roundedValue
+        },
     },
     {
         field: 'cost',
@@ -57,6 +77,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 95,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(2)
+            return roundedValue
+        },
     },
     {
         field: 'blindCost',
@@ -64,20 +88,32 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 95,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(2)
+            return roundedValue
+        },
     },
     {
         field: 'nozWtLbs',
         headerName: 'Noz. Wt. lbs.',
         type: 'number',
-        width: 95,
+        width: 110,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(1)
+            return roundedValue
+        },
     },
     {
         field: 'welWtLbs',
         headerName: 'Weld. Wt. lbs.',
         type: 'number',
-        width: 95,
+        width: 110,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(1)
+            return roundedValue
+        },
     },
     {
         field: 'labHours',
@@ -85,6 +121,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 95,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(1)
+            return roundedValue
+        },
     },
     {
         field: 'actions',

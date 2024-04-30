@@ -21,6 +21,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 180,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(2)
+            return roundedValue
+        },
     },
     {
         field: 'costLbs',
@@ -28,6 +32,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 180,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(2)
+            return roundedValue
+        },
     },
     {
         field: 'densityGmCc',
@@ -37,10 +45,14 @@ export const columns: GridColDef[] = [
         editable: true,
         valueSetter: (newValue, oldRow) => {
             const updatedValue = parseFloat(newValue)
-            if (updatedValue < 1) return oldRow
+            if (updatedValue < 0) return oldRow
 
             const updatedRow = { ...oldRow, densityGmCc: updatedValue }
             return updatedRow
+        },
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(3)
+            return roundedValue
         },
     },
     {

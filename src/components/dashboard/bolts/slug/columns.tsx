@@ -15,6 +15,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 150,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(3)
+            return roundedValue
+        },
     },
     {
         field: 'lengthInch',
@@ -22,6 +26,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 150,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(3)
+            return roundedValue
+        },
     },
     {
         field: 'boltCost',
@@ -29,6 +37,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 150,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(2)
+            return roundedValue
+        },
     },
     {
         field: 'nutCost',
@@ -36,6 +48,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 150,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(2)
+            return roundedValue
+        },
     },
     {
         field: 'washerCost',
@@ -43,6 +59,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 150,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(2)
+            return roundedValue
+        },
     },
     {
         field: 'total',

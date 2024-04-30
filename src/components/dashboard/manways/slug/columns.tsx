@@ -15,6 +15,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 120,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(1)
+            return roundedValue
+        },
     },
     {
         field: 'cost',
@@ -22,6 +26,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 120,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(2)
+            return roundedValue
+        },
     },
     {
         field: 'nozWtLbs',
@@ -29,6 +37,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 120,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(2)
+            return roundedValue
+        },
     },
     {
         field: 'weldWtLbs',
@@ -36,6 +48,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 120,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(2)
+            return roundedValue
+        },
     },
     {
         field: 'labHours',
@@ -43,6 +59,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 120,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(1)
+            return roundedValue
+        },
     },
     {
         field: 'diameter',
@@ -50,6 +70,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 120,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(3)
+            return roundedValue
+        },
     },
     {
         field: 'boltsNum',
@@ -64,6 +88,10 @@ export const columns: GridColDef[] = [
         type: 'number',
         width: 120,
         editable: true,
+        valueFormatter: params => {
+            const roundedValue = Number(params).toFixed(3)
+            return roundedValue
+        },
     },
     {
         field: 'actions',
