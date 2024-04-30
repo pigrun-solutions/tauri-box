@@ -33,7 +33,7 @@ const Gaskets = () => {
 
     if (loading) return <Loader />
     return (
-        <div className="flex h-full w-full flex-col gap-4">
+        <div className="flex h-full w-full grow flex-col gap-4">
             <FormBreadcrumbs currentPage={'Gaskets'} />
 
             <GasketsTable />
