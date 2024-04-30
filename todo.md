@@ -16,4 +16,4 @@
 # Complicated
 [x] Customers
 [~] Laminates
-[ ] Other
+[x] Other

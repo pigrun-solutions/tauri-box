@@ -17,6 +17,7 @@ import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboar
 import { Route as DashboardLayoutDashboardVentsIndexImport } from './routes/_dashboard-layout/dashboard/vents/index'
 import { Route as DashboardLayoutDashboardSightglassesIndexImport } from './routes/_dashboard-layout/dashboard/sightglasses/index'
 import { Route as DashboardLayoutDashboardResinsIndexImport } from './routes/_dashboard-layout/dashboard/resins/index'
+import { Route as DashboardLayoutDashboardOtherIndexImport } from './routes/_dashboard-layout/dashboard/other/index'
 import { Route as DashboardLayoutDashboardNozzlesIndexImport } from './routes/_dashboard-layout/dashboard/nozzles/index'
 import { Route as DashboardLayoutDashboardManwaysIndexImport } from './routes/_dashboard-layout/dashboard/manways/index'
 import { Route as DashboardLayoutDashboardLiftlugsIndexImport } from './routes/_dashboard-layout/dashboard/liftlugs/index'
@@ -67,6 +68,12 @@ const DashboardLayoutDashboardSightglassesIndexRoute =
 const DashboardLayoutDashboardResinsIndexRoute =
   DashboardLayoutDashboardResinsIndexImport.update({
     path: '/dashboard/resins/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardOtherIndexRoute =
+  DashboardLayoutDashboardOtherIndexImport.update({
+    path: '/dashboard/other/',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -246,6 +253,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutDashboardNozzlesIndexImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboard-layout/dashboard/other/': {
+      preLoaderRoute: typeof DashboardLayoutDashboardOtherIndexImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboard-layout/dashboard/resins/': {
       preLoaderRoute: typeof DashboardLayoutDashboardResinsIndexImport
       parentRoute: typeof DashboardLayoutImport
@@ -283,6 +294,7 @@ export const routeTree = rootRoute.addChildren([
     DashboardLayoutDashboardLiftlugsIndexRoute,
     DashboardLayoutDashboardManwaysIndexRoute,
     DashboardLayoutDashboardNozzlesIndexRoute,
+    DashboardLayoutDashboardOtherIndexRoute,
     DashboardLayoutDashboardResinsIndexRoute,
     DashboardLayoutDashboardSightglassesIndexRoute,
     DashboardLayoutDashboardVentsIndexRoute,

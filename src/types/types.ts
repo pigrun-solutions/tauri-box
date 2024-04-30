@@ -145,3 +145,43 @@ export type NozzleVariants = {
 export type Laminate = Bolt
 
 // ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2 pager ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Complicated ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+export type Other = {
+    id: string
+    labourRate: number
+    wastage: number
+    nameplate: number
+    pattern: number
+    usage: number
+
+    ladderClipsCost: number
+    ladderClipsLbs: number
+    ladderClipsHrs: number
+
+    manwayHingesCost: number
+    manwayHingesLbs: number
+    manwayHingesHrs: number
+
+    manwayDavitsCost: number
+    manwayDavitsLbs: number
+    manwayDavitsHrs: number
+
+    layupRateSqFt: number
+
+    balsaThickness1: number
+    balsaThickness2: number
+    balsaThickness3: number
+    balsaThickness4: number
+    balsaThickness5: number
+
+    balsaCost1: number
+    balsaCost2: number
+    balsaCost3: number
+    balsaCost4: number
+    balsaCost5: number
+
+    createdAt: string
+    updatedAt: string
+}

@@ -20,8 +20,8 @@
         "windows": [
             {
                 "fullscreen": false,
-                "height": 800,
-                "width": 1280,
+                "height": 900,
+                "width": 1380,
                 "contentProtected": false,
                 "title": "Troy Tank Clone",
                 "resizable": false

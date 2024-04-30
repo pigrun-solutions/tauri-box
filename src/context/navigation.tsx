@@ -17,7 +17,7 @@ const NavigationItems = [
     {
         label: 'Other',
         href: '/dashboard/other',
-        disabled: true,
+        disabled: false,
         icon: <GripHorizontal className="h-5 w-5" />,
     },
 
