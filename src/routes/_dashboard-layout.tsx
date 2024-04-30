@@ -11,7 +11,7 @@ export const Route = createFileRoute('/_dashboard-layout')({
         <div className="flex">
             <SideMenu />
             <ScrollArea className="h-screen w-full">
-                <main className="flex h-[calc(100vh-1rem)] w-full bg-muted/40 p-4">
+                <main className="flex max-sm:h-[calc(100vh-1rem)] min-h-screen w-full bg-muted/40 p-4">
                     <Outlet />
                 </main>
                 <ScrollBar orientation="horizontal" />

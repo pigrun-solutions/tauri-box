@@ -31,6 +31,7 @@ import { Route as DashboardLayoutDashboardAdditivesIndexImport } from './routes/
 import { Route as DashboardLayoutDashboardSightglassesIdImport } from './routes/_dashboard-layout/dashboard/sightglasses/$id'
 import { Route as DashboardLayoutDashboardNozzlesIdImport } from './routes/_dashboard-layout/dashboard/nozzles/$id'
 import { Route as DashboardLayoutDashboardManwaysIdImport } from './routes/_dashboard-layout/dashboard/manways/$id'
+import { Route as DashboardLayoutDashboardLaminatesIdImport } from './routes/_dashboard-layout/dashboard/laminates/$id'
 import { Route as DashboardLayoutDashboardGasketsIdImport } from './routes/_dashboard-layout/dashboard/gaskets/$id'
 import { Route as DashboardLayoutDashboardCustomersIdImport } from './routes/_dashboard-layout/dashboard/customers/$id'
 import { Route as DashboardLayoutDashboardBoltsIdImport } from './routes/_dashboard-layout/dashboard/bolts/$id'
@@ -155,6 +156,12 @@ const DashboardLayoutDashboardManwaysIdRoute =
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
+const DashboardLayoutDashboardLaminatesIdRoute =
+  DashboardLayoutDashboardLaminatesIdImport.update({
+    path: '/dashboard/laminates/$id',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
 const DashboardLayoutDashboardGasketsIdRoute =
   DashboardLayoutDashboardGasketsIdImport.update({
     path: '/dashboard/gaskets/$id',
@@ -199,6 +206,10 @@ declare module '@tanstack/react-router' {
     }
     '/_dashboard-layout/dashboard/gaskets/$id': {
       preLoaderRoute: typeof DashboardLayoutDashboardGasketsIdImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/laminates/$id': {
+      preLoaderRoute: typeof DashboardLayoutDashboardLaminatesIdImport
       parentRoute: typeof DashboardLayoutImport
     }
     '/_dashboard-layout/dashboard/manways/$id': {
@@ -281,6 +292,7 @@ export const routeTree = rootRoute.addChildren([
     DashboardLayoutDashboardBoltsIdRoute,
     DashboardLayoutDashboardCustomersIdRoute,
     DashboardLayoutDashboardGasketsIdRoute,
+    DashboardLayoutDashboardLaminatesIdRoute,
     DashboardLayoutDashboardManwaysIdRoute,
     DashboardLayoutDashboardNozzlesIdRoute,
     DashboardLayoutDashboardSightglassesIdRoute,

@@ -1,3 +1,4 @@
+## Phase 1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 1 Pager
 [x] Additives
 [x] Glass
@@ -14,6 +15,8 @@
 [x] Gaskets
 
 # Complicated
-[x] Customers
-[~] Laminates
 [x] Other
+[x] Customers
+[x] Laminates
+
+## Phase 2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

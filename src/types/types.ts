@@ -143,6 +143,52 @@ export type NozzleVariants = {
 
 // * ================================= Laminate =================================
 export type Laminate = Bolt
+export type LaminateDetails = {
+    id: string
+
+    atsLinear: number
+    atsNonLinear: number
+    afsLinear: number
+    afsNonLinear: number
+    atmLinear: number
+    atmNonLinear: number
+    afmLinear: number
+    afmNonLinear: number
+
+    htsLinear: number
+    htsNonLinear: number
+    hfsLinear: number
+    hfsNonLinear: number
+    htmLinear: number
+    htmNonLinear: number
+    hfmLinear: number
+    hfmNonLinear: number
+
+    issLinear: number
+    issNonLinear: number
+
+    mtLinear: number
+    mtNonLinear: number
+
+    layupRate: number
+
+    clrName1: string
+    clrName2: string
+    clrOz1: number
+    clrOz2: number
+
+    swrName1: string
+    swrName2: string
+    swrName3: string
+    swrName4: string
+    swrOz1: number
+    swrOz2: number
+    swrOz3: number
+    swrOz4: number
+
+    createdAt: string
+    updatedAt: string
+}
 
 // ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2 pager ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

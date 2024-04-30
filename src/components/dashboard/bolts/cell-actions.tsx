@@ -17,7 +17,6 @@ const CellActions = ({ data }: { data: Bolt }) => {
     const onDelete = async () => {
         try {
             setLoading(true)
-            console.log('data', data)
 
             const response = await deleteBolt(data.id)
             setDeleteModalOpen(false)

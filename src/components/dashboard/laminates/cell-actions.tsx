@@ -3,13 +3,13 @@ import { useState } from 'react'
 import { Laminate } from '@/types/types'
 import { Edit3, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-// import { useNavigate } from '@tanstack/react-router'
+import { useNavigate } from '@tanstack/react-router'
 import AlertModal from '@/components/ui/alert-modal'
 import { deleteLaminate } from '@/database/laminates'
 import { useLaminateStore } from '@/zustand/laminate-store'
 
 const CellActions = ({ data }: { data: Laminate }) => {
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
     const { setLaminates } = useLaminateStore()
     const [loading, setLoading] = useState(false)
     const [deleteModalOpen, setDeleteModalOpen] = useState(false)
@@ -17,7 +17,6 @@ const CellActions = ({ data }: { data: Laminate }) => {
     const onDelete = async () => {
         try {
             setLoading(true)
-            console.log('data', data)
 
             const response = await deleteLaminate(data.id)
             setDeleteModalOpen(false)
@@ -37,12 +36,7 @@ const CellActions = ({ data }: { data: Laminate }) => {
 
             <div className="flex gap-2 items-center justify-end h-full">
                 <Button variant="ghost" size="icon" className="size-5" disabled={true} asChild>
-                    <Edit3
-                        className="text-primary cursor-pointer size-5"
-                        onClick={() => {
-                            // navigate({ to: `/dashboard/laminate/${data.id}` })
-                        }}
-                    />
+                    <Edit3 className="text-primary cursor-pointer size-5" onClick={() => navigate({ to: `/dashboard/laminates/${data.id}` })} />
                 </Button>
 
                 <Button variant="ghost" size="icon" className="size-5" asChild>

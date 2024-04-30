@@ -46,7 +46,7 @@ const SideMenu = () => {
                 </Button>
 
                 <TooltipProvider delayDuration={0}>
-                    {NavigationItems.map((item, index) => !item.disabled && <MenuItem key={index} icon={item.icon} label={item.label} href={item.href} expanded={expanded} />)}
+                    {NavigationItems.slice(0, 1).map((item, index) => !item.disabled && <MenuItem key={index} icon={item.icon} label={item.label} href={item.href} expanded={expanded} />)}
                 </TooltipProvider>
             </nav>
 

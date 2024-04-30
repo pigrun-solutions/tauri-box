@@ -19,8 +19,8 @@ const Laminates = () => {
     useEffect(() => {
         const getLaminates = async () => {
             try {
-                const bolts = await getAllLaminates()
-                setLaminates(bolts.data as Laminate[])
+                const laminates = await getAllLaminates()
+                setLaminates(laminates.data as Laminate[])
             } catch (error) {
                 toast.error('Server Error!')
             } finally {
@@ -34,7 +34,7 @@ const Laminates = () => {
     if (loading) return <Loader />
     return (
         <div className="flex h-full w-full flex-col gap-4">
-            <FormBreadcrumbs currentPage={'Bolts'} />
+            <FormBreadcrumbs currentPage={'Laminates'} />
 
             <LaminatesTable />
         </div>
