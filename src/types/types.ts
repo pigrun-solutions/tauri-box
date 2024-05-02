@@ -16,6 +16,7 @@ export type Customer = {
     phone: string
     fax?: string
     contact?: string
+    contactPhone?: string
     address1?: string
     address2?: string
     address3?: string
@@ -230,4 +231,36 @@ export type Other = {
 
     createdAt: string
     updatedAt: string
+}
+
+// ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Complicated ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ? Step 1
+export type OrderDesign = {
+    date?: string
+    reference?: string
+    rfq?: string
+    customerName?: string
+    customerAddress1?: string
+    customerAddress2?: string
+    customerAddress3?: string
+    customerPhone?: string
+    customerFax?: string
+    customerContact?: string
+    customerContactPhone?: string
+    dwgName?: string
+    dwgNo?: string
+}
+
+// ? Step 3
+export type OrderNozzle = {
+    drawingRef?: string
+    size: number
+    press: number
+    loc: number
+    orient: number
+    nozId?: string
+    boltId?: string
+    gasketId?: string
+    blind?: string
 }

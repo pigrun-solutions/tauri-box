@@ -26,6 +26,7 @@ const CustomerForm = ({ initialData }: { initialData: Customer }) => {
             phone: initialData.phone || '',
             fax: initialData.fax || '',
             contact: initialData.contact || '',
+            contactPhone: initialData.contactPhone || '',
         },
     })
 
@@ -54,6 +55,7 @@ const CustomerForm = ({ initialData }: { initialData: Customer }) => {
             phone: initialData.phone || '',
             fax: initialData.fax || '',
             contact: initialData.contact || '',
+            contactPhone: initialData.contactPhone || '',
         })
     }, [initialData])
 
@@ -87,7 +89,7 @@ const CustomerForm = ({ initialData }: { initialData: Customer }) => {
                                         <FormItem>
                                             <FormLabel htmlFor="address2"></FormLabel>
                                             <FormControl>
-                                                <Input id="address2" autoFocus className="w-full" disabled={loading} {...field} />
+                                                <Input id="address2" className="w-full" disabled={loading} {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -100,7 +102,7 @@ const CustomerForm = ({ initialData }: { initialData: Customer }) => {
                                         <FormItem>
                                             <FormLabel htmlFor="address2"></FormLabel>
                                             <FormControl>
-                                                <Input id="address3" autoFocus className="w-full" disabled={loading} {...field} />
+                                                <Input id="address3" className="w-full" disabled={loading} {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -120,7 +122,7 @@ const CustomerForm = ({ initialData }: { initialData: Customer }) => {
                                         <FormItem>
                                             <FormLabel htmlFor="phone">Phone</FormLabel>
                                             <FormControl>
-                                                <Input id="phone" autoFocus className="w-full" disabled={loading} {...field} />
+                                                <Input id="phone" className="w-full" disabled={loading} {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -133,7 +135,7 @@ const CustomerForm = ({ initialData }: { initialData: Customer }) => {
                                         <FormItem>
                                             <FormLabel htmlFor="fax">Fax</FormLabel>
                                             <FormControl>
-                                                <Input id="fax" autoFocus className="w-full" disabled={loading} {...field} />
+                                                <Input id="fax" className="w-full" disabled={loading} {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -146,7 +148,20 @@ const CustomerForm = ({ initialData }: { initialData: Customer }) => {
                                         <FormItem>
                                             <FormLabel htmlFor="contact">Contact</FormLabel>
                                             <FormControl>
-                                                <Input id="contact" autoFocus className="w-full" disabled={loading} {...field} />
+                                                <Input id="contact" className="w-full" disabled={loading} {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="contactPhone"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel htmlFor="contactPhone">Contact Phone</FormLabel>
+                                            <FormControl>
+                                                <Input id="contactPhone" className="w-full" disabled={loading} {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

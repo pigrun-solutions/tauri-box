@@ -13,6 +13,7 @@ type CustomerDetailsProps = {
     phone?: string
     fax?: string
     contact?: string
+    contactPhone?: string
 }
 
 export default async function useCustomer() {
@@ -29,6 +30,7 @@ export default async function useCustomer() {
                 phone VARCHAR(255),
                 fax VARCHAR(255),
                 contact VARCHAR(255),
+                contactPhone VARCHAR(255),
                 createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
               )`
@@ -80,9 +82,18 @@ export const createEditCustomerDetails = async (data: CustomerDetailsProps) => {
     try {
         const db = await useCustomer()
 
-        const { id, address1, address2, address3, phone, fax, contact } = data
+        const { id, address1, address2, address3, phone, fax, contact, contactPhone } = data
 
-        await db.execute(`UPDATE Customers SET address1 = $1, address2 = $2, address3 = $3, phone = $4, fax = $5, contact = $6 WHERE id = $7`, [address1, address2, address3, phone, fax, contact, id])
+        await db.execute(`UPDATE Customers SET address1 = $1, address2 = $2, address3 = $3, phone = $4, fax = $5, contact = $6, contactPhone = $7 WHERE id = $8`, [
+            address1,
+            address2,
+            address3,
+            phone,
+            fax,
+            contact,
+            contactPhone,
+            id,
+        ])
 
         return { success: true }
     } catch (error) {

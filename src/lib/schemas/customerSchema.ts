@@ -7,6 +7,7 @@ const customerSchema = z.object({
     phone: z.string().optional(),
     fax: z.string().optional(),
     contact: z.string().optional(),
+    contactPhone: z.string().optional(),
 })
 
 export default customerSchema
