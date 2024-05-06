@@ -1,6 +1,9 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, redirect, useNavigate } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_dashboard-layout/dashboard/horizontal/')({
+    loader: () => {
+        throw redirect({ to: '/dashboard/horizontal/1' })
+    },
     component: () => {
         const navigate = useNavigate()
         navigate({ to: '/dashboard/horizontal/1' })

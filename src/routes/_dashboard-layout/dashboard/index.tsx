@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card'
 import Heading from '@/components/ui/heading'
 import { RectangleHorizontal } from 'lucide-react'
 import NavigationItems from '@/context/navigation'
+import { ModeToggle } from '@/components/ui/mode-toggle'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_dashboard-layout/dashboard/')({ component: () => <Dashboard /> })
@@ -11,7 +12,11 @@ const Dashboard = () => {
     const navigate = useNavigate()
     return (
         <div className="w-full space-y-10">
-            <Heading title="Troy Tank" />
+            <div className="flex justify-between">
+                <Heading title="Troy Tank" />
+
+                <ModeToggle />
+            </div>
 
             <div className="grid grid-cols-2 gap-4">
                 <Card className={cn('hover:bg-muted-foreground/10 cursor-pointer h-32')} onClick={() => navigate({ to: '/dashboard/horizontal' })}>

@@ -18,6 +18,7 @@ const AdditivesTable = () => {
 
     const rows: GridRowsProp = additives
 
+
     const AddNew = async () => {
         const data = { name: 'blank', costKg: 0, costLbs: 0, densityGmCc: 1 }
         await createEditAdditive(data)

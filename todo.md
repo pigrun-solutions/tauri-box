@@ -20,3 +20,7 @@
 [x] Laminates
 
 ## Phase 2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[x] Add dark mode
+[ ] Add page 4
+[ ] Add autosave to state without next
+[ ] Add page number and navigation

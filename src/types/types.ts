@@ -252,6 +252,52 @@ export type OrderDesign = {
     dwgNo?: string
 }
 
+// ? Step 2
+export type OrderTankData = {
+    resinId?: number
+    corrLinear: string // ? ["yes", "no", "buckling only"]
+
+    shellInternalDiam: number
+    shellLength: number
+    shellJoint1?: number
+    shellJoint2?: number
+    shellJoint3?: number
+    shellJoint4?: number
+    shellJoint5?: number
+    shellJoint6?: number
+    shellLaminateId?: number
+    shellLaminateMinThk: number
+
+    headType: string // ? ["Conical", "Torispherical", "Elliptical", "Hemispherical", "Flat", "Special"]
+    headHeight: number
+    headLaminateId?: number
+    headLaminateMinThk: number
+
+    saddleHeight: number
+    saddleWidth: number
+    saddleLaminateId?: number
+    saddleLaminateMinThk: number
+
+    bodyFlange: string // ? ["yes", "no"]
+    bodyFlangeLocation1?: number
+    bodyFlangeLocation2?: number
+    bodyFlangeLocation3?: number
+    bodyFlangeLocation4?: number
+    bodyFlangeLocation5?: number
+    bodyFlangeLocation6?: number
+
+    liquidDensity: number
+    pressure: number
+
+    vacuum: number
+    vacuumBuckle: number
+
+    snowLoad: number
+    wind: number
+
+    seismic: string // ? ["0", "1", "2A", "2B", "3", "4", "Special"]
+}
+
 // ? Step 3
 export type OrderNozzle = {
     drawingRef?: string

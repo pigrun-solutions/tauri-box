@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { OrderDesign, OrderNozzle } from '@/types/types'
+import { OrderDesign, OrderNozzle, OrderTankData } from '@/types/types'
 
 type StepOneStore = {
     stepOne: OrderDesign
@@ -7,8 +7,19 @@ type StepOneStore = {
 }
 
 export const useStepOneStore = create<StepOneStore>(set => ({
-    stepOne: [] as OrderDesign,
+    stepOne: {} as OrderDesign,
     setStepOne: (stepOne: OrderDesign) => set({ stepOne }),
+}))
+// ! ======================================== ! //
+
+type StepTwoStore = {
+    stepTwo: OrderTankData
+    setStepTwo: (stepTwo: OrderTankData) => void
+}
+
+export const useStepTwoStore = create<StepTwoStore>(set => ({
+    stepTwo: {} as OrderTankData,
+    setStepTwo: (stepTwo: OrderTankData) => set({ stepTwo }),
 }))
 
 // ! ======================================== ! //

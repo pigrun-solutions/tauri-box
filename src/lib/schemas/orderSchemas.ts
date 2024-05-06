@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const order1Schema = z.object({
+export const order1Schema = z.object({
     date: z.string().optional(),
     reference: z.string().optional(),
     rfq: z.string().optional(),
@@ -18,7 +18,50 @@ const order1Schema = z.object({
     dwgNo: z.string().optional(),
 })
 
-export default order1Schema
+export const order2Schema = z.object({
+    resinId: z.number().min(1, 'Select a resin'),
+    corrLinear: z.string().default('yes'),
+
+    shellInternalDiam: z.number(),
+    shellLength: z.number(),
+    shellJoint1: z.number(),
+    shellJoint2: z.number(),
+    shellJoint3: z.number(),
+    shellJoint4: z.number(),
+    shellJoint5: z.number(),
+    shellJoint6: z.number(),
+    shellLaminateId: z.number().min(1, 'Select a laminate'),
+    shellLaminateMinThk: z.number(),
+
+    headType: z.string().default('Conical'),
+    headHeight: z.number(),
+    headLaminateId: z.number().min(1, 'Select a laminate'),
+    headLaminateMinThk: z.number(),
+
+    saddleHeight: z.number(),
+    saddleWidth: z.number(),
+    saddleLaminateId: z.number().min(1, 'Select a laminate'),
+    saddleLaminateMinThk: z.number(),
+
+    bodyFlange: z.string().default('no'),
+    bodyFlangeLocation1: z.number(),
+    bodyFlangeLocation2: z.number(),
+    bodyFlangeLocation3: z.number(),
+    bodyFlangeLocation4: z.number(),
+    bodyFlangeLocation5: z.number(),
+    bodyFlangeLocation6: z.number(),
+
+    liquidDensity: z.number(),
+    pressure: z.number(),
+
+    vacuum: z.number(),
+    vacuumBuckle: z.number(),
+
+    snowLoad: z.number(),
+    wind: z.number(),
+
+    seismic: z.string().default('0'),
+})
 
 export const order3Schema = z.object({
     drawingRef: z.string().optional(),
