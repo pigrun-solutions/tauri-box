@@ -167,7 +167,7 @@ const StepSixForm = () => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Details</CardTitle>
+                            <CardTitle>Items</CardTitle>
                         </CardHeader>
                         <CardContent className="p-6 pt-0 space-y-4">
                             <div className="grid grid-cols-12 gap-2 select-none text-center font-semibold text-sm">
@@ -176,7 +176,7 @@ const StepSixForm = () => {
                                 <span className="col-span-2">Mat $</span>
                                 <span className="col-span-2">Wt. $</span>
                                 <span className="col-span-2">Lab. Hrs.</span>
-                                <span>Action</span>
+                                <span></span>
                             </div>
 
                             {form.watch('otherCostItems').map((_, index) => (
@@ -200,8 +200,8 @@ const StepSixForm = () => {
                         </CardHeader>
                         <CardContent className="p-6 pt-0 space-y-4">
                             <div className="grid grid-cols-4 gap-2 select-none text-center font-semibold text-sm">
-                                <span className="col-span-3 text-start">Notes</span>
-                                <span>Action</span>
+                                <span className="col-span-3">Notes</span>
+                                <span></span>
                             </div>
 
                             {form.watch('otherCostNotes').map((_, index) => (
