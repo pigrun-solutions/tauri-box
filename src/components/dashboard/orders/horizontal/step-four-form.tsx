@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Bolt, Gasket, Manway, ManwayTable } from '@/types/types'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -10,12 +9,13 @@ import { useBoltsStore } from '@/zustand/bolts-store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { CircleMinus, CirclePlus } from 'lucide-react'
 import { useGasketsStore } from '@/zustand/gasket-store'
+import { useManwayStore } from '@/zustand/manways-store'
 import { order4Schema } from '@/lib/schemas/orderSchemas'
 import { ItemCombobox } from './comboboxes/item-combobox'
 import { useStepFourStore } from '@/zustand/orders-store'
 import FormHeaderSteps from '@/components/ui/form-header-steps'
+import { Bolt, Gasket, Manway, ManwayTable } from '@/types/types'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useManwayStore } from '@/zustand/manways-store'
 
 type FormItemsProps = {
     index: number
@@ -106,9 +106,8 @@ const StepFourForm = () => {
         ])
 
     const onSubmit = async (_values: z.infer<typeof order4Schema>) => {
-        // console.log('formDetails: ', formDetails)
         setStepFour(formDetails)
-        navigate({ to: '/dashboard/horizontal/1' })
+        navigate({ to: '/dashboard/horizontal/5' })
     }
 
     return (

@@ -23,7 +23,6 @@ const FormHeaderSteps: React.FC<FormHeaderStepsProps> = ({ title, loading, last 
         const prevItem = lastItemNumber - 1
         url = pathname.split('/').slice(0, -1).join('/') + '/' + prevItem
     }
-    console.log(lastItem)
 
     return (
         <div className="flex items-center gap-4">

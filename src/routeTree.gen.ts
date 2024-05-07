@@ -34,6 +34,7 @@ import { Route as DashboardLayoutDashboardSightglassesIdImport } from './routes/
 import { Route as DashboardLayoutDashboardNozzlesIdImport } from './routes/_dashboard-layout/dashboard/nozzles/$id'
 import { Route as DashboardLayoutDashboardManwaysIdImport } from './routes/_dashboard-layout/dashboard/manways/$id'
 import { Route as DashboardLayoutDashboardLaminatesIdImport } from './routes/_dashboard-layout/dashboard/laminates/$id'
+import { Route as DashboardLayoutDashboardHorizontal5Import } from './routes/_dashboard-layout/dashboard/horizontal/5'
 import { Route as DashboardLayoutDashboardHorizontal4Import } from './routes/_dashboard-layout/dashboard/horizontal/4'
 import { Route as DashboardLayoutDashboardHorizontal3Import } from './routes/_dashboard-layout/dashboard/horizontal/3'
 import { Route as DashboardLayoutDashboardHorizontal2Import } from './routes/_dashboard-layout/dashboard/horizontal/2'
@@ -180,6 +181,12 @@ const DashboardLayoutDashboardLaminatesIdRoute =
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
+const DashboardLayoutDashboardHorizontal5Route =
+  DashboardLayoutDashboardHorizontal5Import.update({
+    path: '/dashboard/horizontal/5',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
 const DashboardLayoutDashboardHorizontal4Route =
   DashboardLayoutDashboardHorizontal4Import.update({
     path: '/dashboard/horizontal/4',
@@ -264,6 +271,10 @@ declare module '@tanstack/react-router' {
     }
     '/_dashboard-layout/dashboard/horizontal/4': {
       preLoaderRoute: typeof DashboardLayoutDashboardHorizontal4Import
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/horizontal/5': {
+      preLoaderRoute: typeof DashboardLayoutDashboardHorizontal5Import
       parentRoute: typeof DashboardLayoutImport
     }
     '/_dashboard-layout/dashboard/laminates/$id': {
@@ -362,6 +373,7 @@ export const routeTree = rootRoute.addChildren([
     DashboardLayoutDashboardHorizontal2Route,
     DashboardLayoutDashboardHorizontal3Route,
     DashboardLayoutDashboardHorizontal4Route,
+    DashboardLayoutDashboardHorizontal5Route,
     DashboardLayoutDashboardLaminatesIdRoute,
     DashboardLayoutDashboardManwaysIdRoute,
     DashboardLayoutDashboardNozzlesIdRoute,

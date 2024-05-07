@@ -322,3 +322,34 @@ export type ManwayTable = {
     gasketId?: string
     hinge: string // ? ['hinge', 'davit', 'none']
 }
+
+// ? Step 5
+export type AdditionalCosts = {
+    liftLugs: number
+    markup: number
+    design: number
+    postcure: number
+    // additives?: string
+    nameplate: number
+    ladderClips: number
+    ventDiameter: number
+
+    // ? Testing
+    hydro: number
+    ae: number
+    vacuum: number
+    cutouts: number
+
+    // ? Shipping
+    freight: number
+    handling: number
+    cradles: number
+    escort: number
+
+    // ? Pattern
+    new: boolean
+    tankNum: number
+    head: number
+    shell: number
+    other: number
+}

@@ -21,6 +21,7 @@
 
 # Phase 2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 [x] Add dark mode
-[ ] Add page 4
+[x] Add page 4
+[~] Add page number and navigation
+[ ] Fix addititional cost page with additives and correct type
 [ ] Add autosave to state without next
-[ ] Add page number and navigation

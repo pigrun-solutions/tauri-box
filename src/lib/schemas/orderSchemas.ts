@@ -85,3 +85,30 @@ export const order4Schema = z.object({
     gasketId: z.string().optional(),
     hinge: z.string().default('none').optional(),
 })
+
+export const order5Schema = z.object({
+    liftLugs: z.number(),
+    markup: z.number(),
+    design: z.number(),
+    postcure: z.number(),
+    // additives?: string
+    nameplate: z.number(),
+    ladderClips: z.number(),
+    ventDiameter: z.number(),
+
+    hydro: z.number(),
+    ae: z.number(),
+    vacuum: z.number(),
+    cutouts: z.number(),
+
+    freight: z.number(),
+    handling: z.number(),
+    cradles: z.number(),
+    escort: z.number(),
+
+    new: z.boolean(),
+    tankNum: z.number(),
+    head: z.number(),
+    shell: z.number(),
+    other: z.number(),
+})
