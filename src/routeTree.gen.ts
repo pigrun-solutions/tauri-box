@@ -34,6 +34,8 @@ import { Route as DashboardLayoutDashboardSightglassesIdImport } from './routes/
 import { Route as DashboardLayoutDashboardNozzlesIdImport } from './routes/_dashboard-layout/dashboard/nozzles/$id'
 import { Route as DashboardLayoutDashboardManwaysIdImport } from './routes/_dashboard-layout/dashboard/manways/$id'
 import { Route as DashboardLayoutDashboardLaminatesIdImport } from './routes/_dashboard-layout/dashboard/laminates/$id'
+import { Route as DashboardLayoutDashboardHorizontal7Import } from './routes/_dashboard-layout/dashboard/horizontal/7'
+import { Route as DashboardLayoutDashboardHorizontal6Import } from './routes/_dashboard-layout/dashboard/horizontal/6'
 import { Route as DashboardLayoutDashboardHorizontal5Import } from './routes/_dashboard-layout/dashboard/horizontal/5'
 import { Route as DashboardLayoutDashboardHorizontal4Import } from './routes/_dashboard-layout/dashboard/horizontal/4'
 import { Route as DashboardLayoutDashboardHorizontal3Import } from './routes/_dashboard-layout/dashboard/horizontal/3'
@@ -181,6 +183,18 @@ const DashboardLayoutDashboardLaminatesIdRoute =
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
+const DashboardLayoutDashboardHorizontal7Route =
+  DashboardLayoutDashboardHorizontal7Import.update({
+    path: '/dashboard/horizontal/7',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardHorizontal6Route =
+  DashboardLayoutDashboardHorizontal6Import.update({
+    path: '/dashboard/horizontal/6',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
 const DashboardLayoutDashboardHorizontal5Route =
   DashboardLayoutDashboardHorizontal5Import.update({
     path: '/dashboard/horizontal/5',
@@ -275,6 +289,14 @@ declare module '@tanstack/react-router' {
     }
     '/_dashboard-layout/dashboard/horizontal/5': {
       preLoaderRoute: typeof DashboardLayoutDashboardHorizontal5Import
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/horizontal/6': {
+      preLoaderRoute: typeof DashboardLayoutDashboardHorizontal6Import
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/horizontal/7': {
+      preLoaderRoute: typeof DashboardLayoutDashboardHorizontal7Import
       parentRoute: typeof DashboardLayoutImport
     }
     '/_dashboard-layout/dashboard/laminates/$id': {
@@ -374,6 +396,8 @@ export const routeTree = rootRoute.addChildren([
     DashboardLayoutDashboardHorizontal3Route,
     DashboardLayoutDashboardHorizontal4Route,
     DashboardLayoutDashboardHorizontal5Route,
+    DashboardLayoutDashboardHorizontal6Route,
+    DashboardLayoutDashboardHorizontal7Route,
     DashboardLayoutDashboardLaminatesIdRoute,
     DashboardLayoutDashboardManwaysIdRoute,
     DashboardLayoutDashboardNozzlesIdRoute,

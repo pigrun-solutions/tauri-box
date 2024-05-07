@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { AdditionalCosts, ManwayTable, OrderDesign, OrderNozzle, OrderTankData } from '@/types/types'
+import { AdditionalCosts, ManwayTable, OrderDesign, OrderNozzle, OrderTankData, Step6Type } from '@/types/types'
 
 type StepOneStore = {
     stepOne: OrderDesign
@@ -56,4 +56,16 @@ type StepFiveStore = {
 export const useStepFiveStore = create<StepFiveStore>(set => ({
     stepFive: {} as AdditionalCosts,
     setStepFive: (stepFive: AdditionalCosts) => set({ stepFive }),
+}))
+
+// ! ======================================== ! //
+
+type StepSixStore = {
+    stepSix: Step6Type
+    setStepSix: (stepSix: Step6Type) => void
+}
+
+export const useStepSixStore = create<StepSixStore>(set => ({
+    stepSix: {} as Step6Type,
+    setStepSix: (stepSix: Step6Type) => set({ stepSix }),
 }))

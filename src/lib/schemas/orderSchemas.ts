@@ -112,3 +112,8 @@ export const order5Schema = z.object({
     shell: z.number(),
     other: z.number(),
 })
+
+export const order6Schema = z.object({
+    otherCostItems: z.array(z.object({ description: z.string(), itemCost: z.number().optional(), matCost: z.number().optional(), wtLbs: z.number().optional(), labHours: z.number().optional() })),
+    otherCostNotes: z.array(z.object({ note: z.string() })),
+})

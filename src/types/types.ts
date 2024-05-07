@@ -353,3 +353,18 @@ export type AdditionalCosts = {
     shell: number
     other: number
 }
+
+// ? Step 6
+export type OtherCostItems = {
+    description: string
+    itemCost?: number
+    matCost?: number
+    wtLbs?: number
+    labHours?: number
+}
+
+export type OtherCostNotes = { note: string }
+export type Step6Type = {
+    otherCostItems: OtherCostItems[]
+    otherCostNotes: OtherCostNotes[]
+}
