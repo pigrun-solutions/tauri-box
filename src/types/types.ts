@@ -310,3 +310,15 @@ export type OrderNozzle = {
     gasketId?: string
     blind?: string
 }
+
+// ? Step 4
+export type ManwayTable = {
+    drawingRef?: string
+    manwayId: string
+    size: number // ? [20.0, 24.0, 30.0, 36.0]
+    loc: number
+    orient: number
+    boltId?: string
+    gasketId?: string
+    hinge: string // ? ['hinge', 'davit', 'none']
+}

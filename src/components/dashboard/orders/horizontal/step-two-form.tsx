@@ -26,7 +26,7 @@ const StepTwoForm = () => {
     const form = useForm<z.infer<typeof order2Schema>>({
         resolver: zodResolver(order2Schema),
         defaultValues: {
-            resinId: stepTwo.resinId || undefined,
+            resinId: stepTwo.resinId || (resin.length > 0 && Number(resin[0].id)) || undefined,
             corrLinear: stepTwo.corrLinear || 'yes',
 
             shellInternalDiam: stepTwo.shellInternalDiam || 0,
@@ -37,17 +37,17 @@ const StepTwoForm = () => {
             shellJoint4: stepTwo.shellJoint4 || 0,
             shellJoint5: stepTwo.shellJoint5 || 0,
             shellJoint6: stepTwo.shellJoint6 || 0,
-            shellLaminateId: stepTwo.shellLaminateId || undefined,
+            shellLaminateId: stepTwo.shellLaminateId || (laminates.length > 0 && Number(laminates[0].id)) || undefined,
             shellLaminateMinThk: stepTwo.shellLaminateMinThk || 0,
 
             headType: stepTwo.headType || 'Conical',
             headHeight: stepTwo.headHeight || 0,
-            headLaminateId: stepTwo.headLaminateId || undefined,
+            headLaminateId: stepTwo.headLaminateId || (laminates.length > 0 && Number(laminates[0].id)) || undefined,
             headLaminateMinThk: stepTwo.headLaminateMinThk || 0,
 
             saddleHeight: stepTwo.saddleHeight || 0,
             saddleWidth: stepTwo.saddleWidth || 0,
-            saddleLaminateId: stepTwo.saddleLaminateId || undefined,
+            saddleLaminateId: stepTwo.saddleLaminateId || (laminates.length > 0 && Number(laminates[0].id)) || undefined,
             saddleLaminateMinThk: stepTwo.saddleLaminateMinThk || 0,
 
             bodyFlange: stepTwo.bodyFlange || 'no',

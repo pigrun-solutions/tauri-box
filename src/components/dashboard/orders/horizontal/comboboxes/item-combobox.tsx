@@ -13,7 +13,7 @@ export function ItemCombobox({
     onItemSelected,
     className,
 }: {
-    items: Nozzle[] | Bolt[] | Gasket[] | SightGlasses[]
+    items: Nozzle[] | Bolt[] | Gasket[] | SightGlasses[] | { id: string; name: string }[]
     selected: string | undefined
     onItemSelected: (id: string | '') => void
     className?: string
@@ -29,7 +29,7 @@ export function ItemCombobox({
     return (
         <Popover open={open} onOpenChange={setOpen}>
             <PopoverTrigger asChild>
-                <Button variant="outline" role="combobox" aria-expanded={open} className={cn('justify-between', className)}>
+                <Button variant="outline" role="combobox" aria-expanded={open} className={cn('justify-between capitalize', className)}>
                     {selected ? items.find(item => item.id === selected)?.name : 'Select item...'}
                     <CaretSortIcon className="h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -43,7 +43,7 @@ export function ItemCombobox({
                         <ScrollArea className={cn(items.length > 3 ? 'h-28' : 'h-fit')}>
                             <CommandGroup>
                                 {items.map(item => (
-                                    <CommandItem key={item.id} value={item.id} onSelect={currentValue => handleSelect(currentValue)}>
+                                    <CommandItem key={item.id} value={item.id} onSelect={currentValue => handleSelect(currentValue)} className="capitalize">
                                         {item.name}
                                         <CheckIcon className={cn('ml-auto h-4 w-4', selected === item.id ? 'opacity-100' : 'opacity-0')} />
                                     </CommandItem>

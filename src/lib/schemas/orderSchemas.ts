@@ -68,9 +68,20 @@ export const order3Schema = z.object({
     size: z.number(),
     press: z.number(),
     loc: z.number(),
-    orient: z.number(),
+    orient: z.number().max(360),
     nozId: z.string().optional(),
     boltId: z.string().optional(),
     gasketId: z.string().optional(),
     blind: z.string().optional(),
+})
+
+export const order4Schema = z.object({
+    drawingRef: z.string().optional(),
+    manwayId: z.string().optional(),
+    size: z.number().optional(),
+    loc: z.number().optional(),
+    orient: z.number().max(360).optional(),
+    boltId: z.string().optional(),
+    gasketId: z.string().optional(),
+    hinge: z.string().default('none').optional(),
 })

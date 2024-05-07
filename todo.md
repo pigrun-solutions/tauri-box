@@ -1,5 +1,5 @@
-## Phase 1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 1 Pager
+# Phase 1 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+## 1 Pager
 [x] Additives
 [x] Glass
 [x] Resin
@@ -7,19 +7,19 @@
 [x] Lift Lugs
 [x] Ledges
 
-# 2 Pager
+## 2 Pager
 [x] Bolts
 [x] Manways
 [x] Nozzles
 [x] Sight Glasses
 [x] Gaskets
 
-# Complicated
+## Complicated
 [x] Other
 [x] Customers
 [x] Laminates
 
-## Phase 2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Phase 2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 [x] Add dark mode
 [ ] Add page 4
 [ ] Add autosave to state without next
