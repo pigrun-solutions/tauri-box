@@ -30,6 +30,12 @@ import { Route as DashboardLayoutDashboardGasketsIndexImport } from './routes/_d
 import { Route as DashboardLayoutDashboardCustomersIndexImport } from './routes/_dashboard-layout/dashboard/customers/index'
 import { Route as DashboardLayoutDashboardBoltsIndexImport } from './routes/_dashboard-layout/dashboard/bolts/index'
 import { Route as DashboardLayoutDashboardAdditivesIndexImport } from './routes/_dashboard-layout/dashboard/additives/index'
+import { Route as DashboardLayoutDashboardVertical6Import } from './routes/_dashboard-layout/dashboard/vertical/6'
+import { Route as DashboardLayoutDashboardVertical5Import } from './routes/_dashboard-layout/dashboard/vertical/5'
+import { Route as DashboardLayoutDashboardVertical4Import } from './routes/_dashboard-layout/dashboard/vertical/4'
+import { Route as DashboardLayoutDashboardVertical3Import } from './routes/_dashboard-layout/dashboard/vertical/3'
+import { Route as DashboardLayoutDashboardVertical2Import } from './routes/_dashboard-layout/dashboard/vertical/2'
+import { Route as DashboardLayoutDashboardVertical1Import } from './routes/_dashboard-layout/dashboard/vertical/1'
 import { Route as DashboardLayoutDashboardSightglassesIdImport } from './routes/_dashboard-layout/dashboard/sightglasses/$id'
 import { Route as DashboardLayoutDashboardNozzlesIdImport } from './routes/_dashboard-layout/dashboard/nozzles/$id'
 import { Route as DashboardLayoutDashboardManwaysIdImport } from './routes/_dashboard-layout/dashboard/manways/$id'
@@ -156,6 +162,42 @@ const DashboardLayoutDashboardBoltsIndexRoute =
 const DashboardLayoutDashboardAdditivesIndexRoute =
   DashboardLayoutDashboardAdditivesIndexImport.update({
     path: '/dashboard/additives/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardVertical6Route =
+  DashboardLayoutDashboardVertical6Import.update({
+    path: '/dashboard/vertical/6',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardVertical5Route =
+  DashboardLayoutDashboardVertical5Import.update({
+    path: '/dashboard/vertical/5',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardVertical4Route =
+  DashboardLayoutDashboardVertical4Import.update({
+    path: '/dashboard/vertical/4',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardVertical3Route =
+  DashboardLayoutDashboardVertical3Import.update({
+    path: '/dashboard/vertical/3',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardVertical2Route =
+  DashboardLayoutDashboardVertical2Import.update({
+    path: '/dashboard/vertical/2',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardVertical1Route =
+  DashboardLayoutDashboardVertical1Import.update({
+    path: '/dashboard/vertical/1',
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
@@ -315,6 +357,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutDashboardSightglassesIdImport
       parentRoute: typeof DashboardLayoutImport
     }
+    '/_dashboard-layout/dashboard/vertical/1': {
+      preLoaderRoute: typeof DashboardLayoutDashboardVertical1Import
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/vertical/2': {
+      preLoaderRoute: typeof DashboardLayoutDashboardVertical2Import
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/vertical/3': {
+      preLoaderRoute: typeof DashboardLayoutDashboardVertical3Import
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/vertical/4': {
+      preLoaderRoute: typeof DashboardLayoutDashboardVertical4Import
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/vertical/5': {
+      preLoaderRoute: typeof DashboardLayoutDashboardVertical5Import
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/vertical/6': {
+      preLoaderRoute: typeof DashboardLayoutDashboardVertical6Import
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboard-layout/dashboard/additives/': {
       preLoaderRoute: typeof DashboardLayoutDashboardAdditivesIndexImport
       parentRoute: typeof DashboardLayoutImport
@@ -402,6 +468,12 @@ export const routeTree = rootRoute.addChildren([
     DashboardLayoutDashboardManwaysIdRoute,
     DashboardLayoutDashboardNozzlesIdRoute,
     DashboardLayoutDashboardSightglassesIdRoute,
+    DashboardLayoutDashboardVertical1Route,
+    DashboardLayoutDashboardVertical2Route,
+    DashboardLayoutDashboardVertical3Route,
+    DashboardLayoutDashboardVertical4Route,
+    DashboardLayoutDashboardVertical5Route,
+    DashboardLayoutDashboardVertical6Route,
     DashboardLayoutDashboardAdditivesIndexRoute,
     DashboardLayoutDashboardBoltsIndexRoute,
     DashboardLayoutDashboardCustomersIndexRoute,

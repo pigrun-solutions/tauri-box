@@ -13,10 +13,10 @@ import { useNozzleStore } from '@/zustand/nozzles-store'
 import { useGasketsStore } from '@/zustand/gasket-store'
 import { order3Schema } from '@/lib/schemas/orderSchemas'
 import { ItemCombobox } from './comboboxes/item-combobox'
-import { useStepThreeStore } from '@/zustand/orders-store'
 import { BlindCombobox } from './comboboxes/blind-combobox'
 import FormHeaderSteps from '@/components/ui/form-header-steps'
 import { useSightGlassesStore } from '@/zustand/sightglasses-store'
+import { useStepThreeStore } from '@/zustand/horizontal-orders-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 type FormItemsProps = {

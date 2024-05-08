@@ -9,11 +9,11 @@ import { useBoltsStore } from '@/zustand/bolts-store'
 import { useGasketsStore } from '@/zustand/gasket-store'
 import { useManwayStore } from '@/zustand/manways-store'
 import { createFileRoute } from '@tanstack/react-router'
-import StepFourForm from '@/components/dashboard/orders/horizontal/step-four-form'
+import StepFourForm from '@/components/dashboard/orders/vertical/step-four-form'
 
-export const Route = createFileRoute('/_dashboard-layout/dashboard/horizontal/4')({ component: () => <Horizontal4 /> })
+export const Route = createFileRoute('/_dashboard-layout/dashboard/vertical/4')({ component: () => <Vertical4 /> })
 
-const Horizontal4 = () => {
+const Vertical4 = () => {
     const { setBolts } = useBoltsStore()
     const { setManways } = useManwayStore()
     const { setGaskets } = useGasketsStore()

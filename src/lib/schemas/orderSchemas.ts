@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+// ? Horizontal Schemas
 export const order1Schema = z.object({
     date: z.string().optional(),
     reference: z.string().optional(),
@@ -117,3 +118,11 @@ export const order6Schema = z.object({
     otherCostItems: z.array(z.object({ description: z.string(), itemCost: z.number().optional(), matCost: z.number().optional(), wtLbs: z.number().optional(), labHours: z.number().optional() })),
     otherCostNotes: z.array(z.object({ note: z.string() })),
 })
+
+export const order7Schema = z.object({
+    thickness: z.number(),
+    distFromHead: z.number(),
+    saddleArc: z.number(),
+})
+
+// ? Vertical Schemas

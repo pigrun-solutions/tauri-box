@@ -7,7 +7,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { order6Schema } from '@/lib/schemas/orderSchemas'
 import FormHeaderSteps from '@/components/ui/form-header-steps'
-import { useStepSixStore } from '@/zustand/horizontal-orders-store'
+import { useVerticalStepSixStore } from '@/zustand/vertical-orders-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 
@@ -132,7 +132,7 @@ const OtherCostNoteSection = ({ form, index }: { form: any; index: number }) => 
 
 const StepSixForm = () => {
     const navigate = useNavigate()
-    const { stepSix, setStepSix } = useStepSixStore()
+    const { stepSix, setStepSix } = useVerticalStepSixStore()
 
     const form = useForm<z.infer<typeof order6Schema>>({
         resolver: zodResolver(order6Schema),

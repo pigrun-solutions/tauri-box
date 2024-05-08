@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { order5Schema } from '@/lib/schemas/orderSchemas'
 // import { useAdditivesStore } from '@/zustand/additives-store'
 import FormHeaderSteps from '@/components/ui/form-header-steps'
-import { useStepFiveStore } from '@/zustand/horizontal-orders-store'
+import { useVerticalStepFiveStore } from '@/zustand/vertical-orders-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 
@@ -15,7 +15,7 @@ const StepFiveForm = () => {
     const navigate = useNavigate()
     // const { additives } = useAdditivesStore()
 
-    const { stepFive, setStepFive } = useStepFiveStore()
+    const { stepFive, setStepFive } = useVerticalStepFiveStore()
 
     const form = useForm<z.infer<typeof order5Schema>>({
         resolver: zodResolver(order5Schema),

@@ -233,7 +233,7 @@ export type Other = {
     updatedAt: string
 }
 
-// ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Complicated ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Horizontal Complicated ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // ? Step 1
 export type OrderDesign = {
@@ -362,9 +362,15 @@ export type OtherCostItems = {
     wtLbs?: number
     labHours?: number
 }
-
 export type OtherCostNotes = { note: string }
 export type Step6Type = {
     otherCostItems: OtherCostItems[]
     otherCostNotes: OtherCostNotes[]
+}
+
+// ? Step 7
+export type OrderSaddle = {
+    thickness: number
+    distFromHead: number
+    saddleArc: number
 }

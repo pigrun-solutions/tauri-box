@@ -46,7 +46,7 @@ const FormHeaderSteps: React.FC<FormHeaderStepsProps> = ({ title, loading, last 
                 </Button>
 
                 <Button type="submit" size="sm" disabled={loading}>
-                    {loading && <Loader2 className="mr-2 size-4 animate-spin" />} {last ? 'Finish' : 'Next'}
+                    {loading && <Loader2 className="mr-2 size-4 animate-spin" />} {last ? 'Create Summary' : 'Next'}
                 </Button>
             </div>
         </div>

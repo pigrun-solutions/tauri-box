@@ -11,10 +11,10 @@ import { CircleMinus, CirclePlus } from 'lucide-react'
 import { useGasketsStore } from '@/zustand/gasket-store'
 import { useManwayStore } from '@/zustand/manways-store'
 import { order4Schema } from '@/lib/schemas/orderSchemas'
-import { ItemCombobox } from './comboboxes/item-combobox'
 import FormHeaderSteps from '@/components/ui/form-header-steps'
 import { Bolt, Gasket, Manway, ManwayTable } from '@/types/types'
-import { useStepFourStore } from '@/zustand/horizontal-orders-store'
+import { ItemCombobox } from '../horizontal/comboboxes/item-combobox'
+import { useVerticalStepFourStore } from '@/zustand/vertical-orders-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 type FormItemsProps = {
@@ -78,7 +78,7 @@ const FormItems = ({ item, index, bolts, gaskets, manways, formDetails, setFormD
 
 const StepFourForm = () => {
     const navigate = useNavigate()
-    const { stepFour, setStepFour } = useStepFourStore()
+    const { stepFour, setStepFour } = useVerticalStepFourStore()
 
     const { bolts } = useBoltsStore()
     const { manways } = useManwayStore()

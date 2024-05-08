@@ -7,10 +7,10 @@ import { useNavigate } from '@tanstack/react-router'
 import { IdCombobox } from './comboboxes/id-combobox'
 import { useResinStore } from '@/zustand/resin-store'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useStepTwoStore } from '@/zustand/orders-store'
 import { order2Schema } from '@/lib/schemas/orderSchemas'
 import { useLaminateStore } from '@/zustand/laminate-store'
 import FormHeaderSteps from '@/components/ui/form-header-steps'
+import { useStepTwoStore } from '@/zustand/horizontal-orders-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { HorizontalCorrLinear, HorizontalHeads, HorizontalSeismic } from '@/config/horizontal'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -61,7 +61,7 @@ const StepTwoForm = () => {
             liquidDensity: stepTwo.liquidDensity || 0,
             pressure: stepTwo.pressure || 0,
             vacuum: stepTwo.vacuum || 0,
-            vacuumBuckle: stepTwo.vacuumBuckle || 0,
+            vacuumBuckle: stepTwo.vacuumBuckle || 5,
             snowLoad: stepTwo.snowLoad || 0,
             wind: stepTwo.wind || 0,
 

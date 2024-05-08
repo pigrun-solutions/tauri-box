@@ -5,14 +5,14 @@ import { useNavigate } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { order1Schema } from '@/lib/schemas/orderSchemas'
 import FormHeaderSteps from '@/components/ui/form-header-steps'
-import { CustomerCombobox } from './comboboxes/customer-combobox'
-import { useStepOneStore } from '@/zustand/horizontal-orders-store'
+import { useVerticalStepOneStore } from '@/zustand/vertical-orders-store'
+import { CustomerCombobox } from '../horizontal/comboboxes/customer-combobox'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 
 const StepOneForm = () => {
     const navigate = useNavigate()
-    const { stepOne, setStepOne } = useStepOneStore()
+    const { stepOne, setStepOne } = useVerticalStepOneStore()
 
     const form = useForm<z.infer<typeof order1Schema>>({
         resolver: zodResolver(order1Schema),
@@ -37,7 +37,7 @@ const StepOneForm = () => {
 
     const onSubmit = async (values: z.infer<typeof order1Schema>) => {
         setStepOne(values)
-        navigate({ to: '/dashboard/horizontal/2' })
+        navigate({ to: '/dashboard/vertical/2' })
     }
 
     return (

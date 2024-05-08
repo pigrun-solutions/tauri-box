@@ -11,11 +11,11 @@ import { useNozzleStore } from '@/zustand/nozzles-store'
 import { getAllSightGlasses } from '@/database/sightglasses'
 import { Bolt, Gasket, Nozzle, SightGlasses } from '@/types/types'
 import { useSightGlassesStore } from '@/zustand/sightglasses-store'
-import StepThreeForm from '@/components/dashboard/orders/horizontal/step-three-form'
+import StepThreeForm from '@/components/dashboard/orders/vertical/step-three-form'
 
-export const Route = createFileRoute('/_dashboard-layout/dashboard/horizontal/3')({ component: () => <Horizontal3 /> })
+export const Route = createFileRoute('/_dashboard-layout/dashboard/vertical/3')({ component: () => <Vertical3 /> })
 
-const Horizontal3 = () => {
+const Vertical3 = () => {
     const { setBolts } = useBoltsStore()
     const { setNozzles } = useNozzleStore()
     const { setGaskets } = useGasketsStore()

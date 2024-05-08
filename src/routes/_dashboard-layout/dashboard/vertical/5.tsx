@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react'
 import { getAllAdditives } from '@/database/additives'
 import { createFileRoute } from '@tanstack/react-router'
 import { useAdditivesStore } from '@/zustand/additives-store'
-import StepFiveForm from '@/components/dashboard/orders/horizontal/step-five-form'
+import StepFiveForm from '@/components/dashboard/orders/vertical/step-five-form'
 
-export const Route = createFileRoute('/_dashboard-layout/dashboard/horizontal/5')({ component: () => <Horizontal5 /> })
+export const Route = createFileRoute('/_dashboard-layout/dashboard/vertical/5')({ component: () => <Vertical5 /> })
 
-const Horizontal5 = () => {
+const Vertical5 = () => {
     const { setAdditives } = useAdditivesStore()
     const [loading, setLoading] = useState<Boolean>(true)
 
