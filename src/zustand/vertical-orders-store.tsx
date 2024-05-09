@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { AdditionalCosts, ManwayTable, OrderDesign, OrderNozzle, Step6Type } from '@/types/types'
+import { AdditionalCosts, ManwayTable, OrderDesign, OrderNozzle, OrderVerticalTankData, Step6Type } from '@/types/types'
 
 type VerticalStepOneStore = {
     stepOne: OrderDesign
@@ -11,6 +11,19 @@ export const useVerticalStepOneStore = create<VerticalStepOneStore>(set => ({
     stepOne: {} as OrderDesign,
     setStepOne: (stepOne: OrderDesign) => set({ stepOne }),
     resetStepOne: () => set({ stepOne: {} as OrderDesign }),
+}))
+// ! ======================================== ! //
+
+type VerticalStepTwoStore = {
+    stepTwo: OrderVerticalTankData
+    setStepTwo: (stepTwo: OrderVerticalTankData) => void
+    resetStepTwo: () => void
+}
+
+export const useVerticalStepTwoStore = create<VerticalStepTwoStore>(set => ({
+    stepTwo: {} as OrderVerticalTankData,
+    setStepTwo: (stepTwo: OrderVerticalTankData) => set({ stepTwo }),
+    resetStepTwo: () => set({ stepTwo: {} as OrderVerticalTankData }),
 }))
 // ! ======================================== ! //
 

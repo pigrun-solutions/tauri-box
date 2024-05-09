@@ -140,7 +140,7 @@ const StepSixForm = () => {
     })
     const onSubmit = async (values: z.infer<typeof order6Schema>) => {
         setStepSix(values)
-        navigate({ to: '/dashboard/horizontal/7' })
+        navigate({ to: '/dashboard/vertical/1' })
     }
 
     const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

@@ -49,7 +49,7 @@ const StepFiveForm = () => {
 
     const onSubmit = async (values: z.infer<typeof order5Schema>) => {
         setStepFive(values)
-        navigate({ to: '/dashboard/horizontal/6' })
+        navigate({ to: '/dashboard/vertical/6' })
     }
 
     const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

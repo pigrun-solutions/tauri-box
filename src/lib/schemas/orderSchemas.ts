@@ -126,3 +126,62 @@ export const order7Schema = z.object({
 })
 
 // ? Vertical Schemas
+export const order2VerticalSchema = z.object({
+    resinId: z.number().min(1, 'Select a resin'),
+    corrLinear: z.string().default('yes'),
+
+    shellInternalDiam: z.number(),
+    shellBottomElevation: z.number(),
+    shellLength: z.number(),
+    shellJoint1: z.number(),
+    shellJoint2: z.number(),
+    shellJoint3: z.number(),
+    shellJoint4: z.number(),
+    shellJoint5: z.number(),
+    shellJoint6: z.number(),
+    shellLaminateId: z.number().min(1, 'Select a laminate'),
+    shellLaminateMinThk: z.number(),
+
+    topHeadType: z.string().default('Conical'),
+    topHeadHeight: z.number(),
+    topHeadLaminateId: z.number().min(1, 'Select a laminate'),
+    topHeadLaminateMinThk: z.number(),
+
+    bottomHeadType: z.string().default('Conical'),
+    bottomHeadHeight: z.number(),
+    bottomHeadLaminateId: z.number().min(1, 'Select a laminate'),
+    bottomHeadLaminateMinThk: z.number(),
+
+    supportType: z.string().default('HLU Lugs'),
+    supportBcd: z.number(),
+    supportElevation: z.number(),
+    supportLaminateId: z.number().min(1, 'Select a laminate'),
+    supportLaminateMinThk: z.number(),
+
+    bodyFlange: z.string().default('no'),
+    bodyFlangeLocation1: z.number(),
+    bodyFlangeLocation2: z.number(),
+    bodyFlangeLocation3: z.number(),
+    bodyFlangeLocation4: z.number(),
+    bodyFlangeLocation5: z.number(),
+    bodyFlangeLocation6: z.number(),
+
+    packing: z.string().default('no'),
+    packingElevLev: z.number(),
+    packingDensity: z.number(),
+    packingTopLedgeId: z.number(),
+    packingBottomLedgeId: z.number(),
+
+    liquidDensity: z.number(),
+    pressure: z.number(),
+
+    vacuum: z.number(),
+    vacuumBuckle: z.number(),
+
+    snowLoad: z.number(),
+    snowLoadAxialLoad: z.number(),
+
+    wind: z.number(),
+
+    seismic: z.string().default('0'),
+})

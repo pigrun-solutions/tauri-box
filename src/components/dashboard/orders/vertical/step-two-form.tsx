@@ -7,29 +7,33 @@ import { useNavigate } from '@tanstack/react-router'
 import { useResinStore } from '@/zustand/resin-store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { IdCombobox } from '../comboboxes/id-combobox'
-import { order2Schema } from '@/lib/schemas/orderSchemas'
+import { useLedgeStore } from '@/zustand/ledges-store'
 import { useLaminateStore } from '@/zustand/laminate-store'
 import FormHeaderSteps from '@/components/ui/form-header-steps'
-import { useStepTwoStore } from '@/zustand/horizontal-orders-store'
+import { order2VerticalSchema } from '@/lib/schemas/orderSchemas'
+import { IdComboboxLedge } from '../comboboxes/id-combobox-ledge'
+import { useVerticalStepTwoStore } from '@/zustand/vertical-orders-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { HorizontalCorrLinear, HorizontalHeads, HorizontalSeismic } from '@/config/horizontal'
+import { VerticalCorrLinear, VerticalBottomHeads, VerticalSeismic, VerticalTopHeads, VerticalSupportType } from '@/config/vertical'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 const StepTwoForm = () => {
     const navigate = useNavigate()
     const { resin } = useResinStore()
+    const { ledges } = useLedgeStore()
     const { laminates } = useLaminateStore()
 
-    const { stepTwo, setStepTwo } = useStepTwoStore()
+    const { stepTwo, setStepTwo } = useVerticalStepTwoStore()
 
-    const form = useForm<z.infer<typeof order2Schema>>({
-        resolver: zodResolver(order2Schema),
+    const form = useForm<z.infer<typeof order2VerticalSchema>>({
+        resolver: zodResolver(order2VerticalSchema),
         defaultValues: {
             resinId: stepTwo.resinId || (resin.length > 0 && Number(resin[0].id)) || undefined,
             corrLinear: stepTwo.corrLinear || 'yes',
 
             shellInternalDiam: stepTwo.shellInternalDiam || 0,
+            shellBottomElevation: stepTwo.shellBottomElevation || 0,
             shellLength: stepTwo.shellLength || 0,
             shellJoint1: stepTwo.shellJoint1 || 0,
             shellJoint2: stepTwo.shellJoint2 || 0,
@@ -40,15 +44,21 @@ const StepTwoForm = () => {
             shellLaminateId: stepTwo.shellLaminateId || (laminates.length > 0 && Number(laminates[0].id)) || undefined,
             shellLaminateMinThk: stepTwo.shellLaminateMinThk || 0,
 
-            headType: stepTwo.headType || 'Conical',
-            headHeight: stepTwo.headHeight || 0,
-            headLaminateId: stepTwo.headLaminateId || (laminates.length > 0 && Number(laminates[0].id)) || undefined,
-            headLaminateMinThk: stepTwo.headLaminateMinThk || 0,
+            topHeadType: stepTwo.topHeadType || 'Conical',
+            topHeadHeight: stepTwo.topHeadHeight || 0,
+            topHeadLaminateId: stepTwo.topHeadLaminateId || (laminates.length > 0 && Number(laminates[0].id)) || undefined,
+            topHeadLaminateMinThk: stepTwo.topHeadLaminateMinThk || 0,
 
-            saddleHeight: stepTwo.saddleHeight || 0,
-            saddleWidth: stepTwo.saddleWidth || 0,
-            saddleLaminateId: stepTwo.saddleLaminateId || (laminates.length > 0 && Number(laminates[0].id)) || undefined,
-            saddleLaminateMinThk: stepTwo.saddleLaminateMinThk || 0,
+            bottomHeadType: stepTwo.bottomHeadType || 'Conical',
+            bottomHeadHeight: stepTwo.bottomHeadHeight || 0,
+            bottomHeadLaminateId: stepTwo.bottomHeadLaminateId || (laminates.length > 0 && Number(laminates[0].id)) || undefined,
+            bottomHeadLaminateMinThk: stepTwo.bottomHeadLaminateMinThk || 0,
+
+            supportType: stepTwo.supportType || 'HLU Lugs',
+            supportBcd: stepTwo.supportBcd || 0,
+            supportElevation: stepTwo.supportElevation || 0,
+            supportLaminateId: stepTwo.supportLaminateId || (laminates.length > 0 && Number(laminates[0].id)) || undefined,
+            supportLaminateMinThk: stepTwo.supportLaminateMinThk || 0,
 
             bodyFlange: stepTwo.bodyFlange || 'no',
             bodyFlangeLocation1: stepTwo.bodyFlangeLocation1 || 0,
@@ -58,20 +68,29 @@ const StepTwoForm = () => {
             bodyFlangeLocation5: stepTwo.bodyFlangeLocation5 || 0,
             bodyFlangeLocation6: stepTwo.bodyFlangeLocation6 || 0,
 
+            packing: stepTwo.packing || 'no',
+            packingElevLev: stepTwo.packingElevLev || 0,
+            packingDensity: stepTwo.packingDensity || 0,
+            packingTopLedgeId: stepTwo.packingTopLedgeId || 0,
+            packingBottomLedgeId: stepTwo.packingBottomLedgeId || 0,
+
             liquidDensity: stepTwo.liquidDensity || 0,
             pressure: stepTwo.pressure || 0,
+
             vacuum: stepTwo.vacuum || 0,
-            vacuumBuckle: stepTwo.vacuumBuckle || 5,
+            vacuumBuckle: stepTwo.vacuumBuckle || 0,
+
             snowLoad: stepTwo.snowLoad || 0,
+            snowLoadAxialLoad: stepTwo.snowLoadAxialLoad || 0,
+
             wind: stepTwo.wind || 0,
 
             seismic: stepTwo.seismic || '0',
         },
     })
-
-    const onSubmit = async (values: z.infer<typeof order2Schema>) => {
+    const onSubmit = async (values: z.infer<typeof order2VerticalSchema>) => {
         setStepTwo(values)
-        navigate({ to: '/dashboard/horizontal/3' })
+        navigate({ to: '/dashboard/vertical/3' })
     }
 
     const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -135,12 +154,20 @@ const StepTwoForm = () => {
         }
         if (form.watch('bodyFlangeLocation5') === 0) form.setValue('bodyFlangeLocation6', 0)
     }, [form.watch('bodyFlangeLocation1'), form.watch('bodyFlangeLocation2'), form.watch('bodyFlangeLocation3'), form.watch('bodyFlangeLocation4'), form.watch('bodyFlangeLocation5')])
+    useEffect(() => {
+        if (form.watch('packing') === 'no') {
+            form.setValue('packingElevLev', 0)
+            form.setValue('packingDensity', 0)
+            form.setValue('packingTopLedgeId', 0)
+            form.setValue('packingBottomLedgeId', 0)
+        }
+    }, [form.watch('packing')])
 
     return (
         <>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <FormHeaderSteps title="Horizontal Tank Data" />
+                    <FormHeaderSteps title="Vertical Tank Data" />
 
                     <Card>
                         <CardHeader>
@@ -173,7 +200,7 @@ const StepTwoForm = () => {
                                                         </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent className="capitalize">
-                                                        {HorizontalCorrLinear.map(item => (
+                                                        {VerticalCorrLinear.map(item => (
                                                             <SelectItem key={item} value={item}>
                                                                 {item}
                                                             </SelectItem>
@@ -205,7 +232,26 @@ const StepTwoForm = () => {
                                                 <FormLabel htmlFor="shellInternalDiam" className="w-32">
                                                     Internal diameter
                                                 </FormLabel>
-                                                <Input type="number" step=".01" id="shellInternalDiam" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
+                                                <Input type="number" id="shellInternalDiam" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
+                                                <span className="font-semibold text-sm">in</span>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="shellBottomElevation"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="flex items-center gap-4">
+                                                <FormLabel htmlFor="shellBottomElevation" className="w-32">
+                                                    Bottom elevation
+                                                </FormLabel>
+                                                <Input type="number" id="shellBottomElevation" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
                                                 <span className="font-semibold text-sm">in</span>
                                             </div>
                                         </FormControl>
@@ -225,7 +271,7 @@ const StepTwoForm = () => {
                                                     <FormLabel htmlFor="shellLength" className="w-32">
                                                         Length
                                                     </FormLabel>
-                                                    <Input type="number" step=".01" id="shellLength" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
+                                                    <Input type="number" id="shellLength" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
                                                     <span className="font-semibold text-sm">in</span>
                                                 </div>
                                             </FormControl>
@@ -244,7 +290,7 @@ const StepTwoForm = () => {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormControl>
-                                                    <Input type="number" step=".01" id="shellJoint1" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                    <Input type="number" id="shellJoint1" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -258,7 +304,7 @@ const StepTwoForm = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input type="number" step=".01" id="shellJoint2" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="shellJoint2" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -273,7 +319,7 @@ const StepTwoForm = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input type="number" step=".01" id="shellJoint3" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="shellJoint3" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -288,7 +334,7 @@ const StepTwoForm = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input type="number" step=".01" id="shellJoint4" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="shellJoint4" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -303,7 +349,7 @@ const StepTwoForm = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input type="number" step=".01" id="shellJoint5" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="shellJoint5" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -318,7 +364,7 @@ const StepTwoForm = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input type="number" step=".01" id="shellJoint6" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="shellJoint6" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -348,7 +394,7 @@ const StepTwoForm = () => {
                                                         <FormLabel htmlFor="shellLaminateMinThk" className="w-full whitespace-nowrap">
                                                             Min Thickness
                                                         </FormLabel>
-                                                        <Input type="number" step=".01" id="shellLaminateMinThk" min={0} className="w- h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="shellLaminateMinThk" min={0} className="w- h-8" {...field} onChange={onChangeNumber} />
                                                         <span className="font-semibold text-sm ml-4">in</span>
                                                     </div>
                                                 </FormControl>
@@ -363,17 +409,17 @@ const StepTwoForm = () => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Head</CardTitle>
+                            <CardTitle>Top Head</CardTitle>
                         </CardHeader>
                         <CardContent className="p-6 pt-0 grid gap-3">
                             <FormField
                                 control={form.control}
-                                name="headType"
+                                name="topHeadType"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
                                             <div className="flex items-center gap-4">
-                                                <FormLabel htmlFor="headType" className="w-32 whitespace-nowrap">
+                                                <FormLabel htmlFor="topHeadType" className="w-32 whitespace-nowrap">
                                                     Type
                                                 </FormLabel>
                                                 <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -383,7 +429,7 @@ const StepTwoForm = () => {
                                                         </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent className="capitalize">
-                                                        {HorizontalHeads.map(item => (
+                                                        {VerticalTopHeads.map(item => (
                                                             <SelectItem key={item.name} value={item.name}>
                                                                 {item.name}
                                                             </SelectItem>
@@ -399,20 +445,19 @@ const StepTwoForm = () => {
 
                             <FormField
                                 control={form.control}
-                                name="headHeight"
+                                name="topHeadHeight"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
                                             <div className="flex items-center gap-4">
-                                                <FormLabel htmlFor="headHeight" className="w-32">
+                                                <FormLabel htmlFor="topHeadHeight" className="w-32">
                                                     Height
                                                 </FormLabel>
                                                 <Input
                                                     type="number"
-                                                    step=".01"
-                                                    id="headHeight"
+                                                    id="topHeadHeight"
                                                     min={0}
-                                                    disabled={form.watch('headType') !== 'Conical'}
+                                                    disabled={form.watch('topHeadType') !== 'Conical'}
                                                     className="w-52 h-8"
                                                     {...field}
                                                     onChange={onChangeNumber}
@@ -427,25 +472,25 @@ const StepTwoForm = () => {
 
                             <div className="space-y-2">
                                 <div className="flex items-center gap-4">
-                                    <Label htmlFor="headLaminateId" className="w-32">
+                                    <Label htmlFor="topHeadLaminateId" className="w-32">
                                         Head Laminate
                                     </Label>
-                                    <IdCombobox className="w-52 h-8" items={laminates} selected={form.watch('headLaminateId')} onItemSelected={id => handleItemSelect(id, 'headLaminateId')} />
-                                    {form.formState.errors.headLaminateId && <span className="text-[0.8rem] font-medium text-destructive">{form.formState.errors.headLaminateId.message}</span>}
+                                    <IdCombobox className="w-52 h-8" items={laminates} selected={form.watch('topHeadLaminateId')} onItemSelected={id => handleItemSelect(id, 'topHeadLaminateId')} />
+                                    {form.formState.errors.topHeadLaminateId && <span className="text-[0.8rem] font-medium text-destructive">{form.formState.errors.topHeadLaminateId.message}</span>}
                                 </div>
 
                                 <div className="flex ml-14 items-center">
                                     <FormField
                                         control={form.control}
-                                        name="headLaminateMinThk"
+                                        name="topHeadLaminateMinThk"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormControl>
                                                     <div className="flex items-center">
-                                                        <FormLabel htmlFor="headLaminateMinThk" className="w-full whitespace-nowrap">
+                                                        <FormLabel htmlFor="topHeadLaminateMinThk" className="w-full whitespace-nowrap">
                                                             Min Thickness
                                                         </FormLabel>
-                                                        <Input type="number" step=".01" id="headLaminateMinThk" min={0} className="w- h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="topHeadLaminateMinThk" min={0} className="w- h-8" {...field} onChange={onChangeNumber} />
                                                         <span className="font-semibold text-sm ml-4">in</span>
                                                     </div>
                                                 </FormControl>
@@ -460,21 +505,33 @@ const StepTwoForm = () => {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle>Saddle</CardTitle>
+                            <CardTitle>Bottom Head</CardTitle>
                         </CardHeader>
                         <CardContent className="p-6 pt-0 grid gap-3">
                             <FormField
                                 control={form.control}
-                                name="saddleHeight"
+                                name="bottomHeadType"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
                                             <div className="flex items-center gap-4">
-                                                <FormLabel htmlFor="saddleHeight" className="w-32">
-                                                    Height
+                                                <FormLabel htmlFor="bottomHeadType" className="w-32 whitespace-nowrap">
+                                                    Type
                                                 </FormLabel>
-                                                <Input type="number" step=".01" id="saddleHeight" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
-                                                <span className="font-semibold text-sm">in</span>
+                                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                    <FormControl className="capitalize font-semibold w-52">
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="Select..." />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent className="capitalize">
+                                                        {VerticalBottomHeads.map(item => (
+                                                            <SelectItem key={item.name} value={item.name}>
+                                                                {item.name}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
                                             </div>
                                         </FormControl>
                                         <FormMessage />
@@ -484,15 +541,23 @@ const StepTwoForm = () => {
 
                             <FormField
                                 control={form.control}
-                                name="saddleWidth"
+                                name="bottomHeadHeight"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormControl>
                                             <div className="flex items-center gap-4">
-                                                <FormLabel htmlFor="saddleWidth" className="w-32">
-                                                    Width
+                                                <FormLabel htmlFor="bottomHeadHeight" className="w-32">
+                                                    Height
                                                 </FormLabel>
-                                                <Input type="number" step=".01" id="saddleWidth" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
+                                                <Input
+                                                    type="number"
+                                                    id="bottomHeadHeight"
+                                                    min={0}
+                                                    disabled={form.watch('bottomHeadType') !== 'Conical'}
+                                                    className="w-52 h-8"
+                                                    {...field}
+                                                    onChange={onChangeNumber}
+                                                />
                                                 <span className="font-semibold text-sm">in</span>
                                             </div>
                                         </FormControl>
@@ -503,25 +568,150 @@ const StepTwoForm = () => {
 
                             <div className="space-y-2">
                                 <div className="flex items-center gap-4">
-                                    <Label htmlFor="saddleLaminateId" className="w-32">
-                                        Saddle Laminate
+                                    <Label htmlFor="bottomHeadLaminateId" className="w-32">
+                                        Head Laminate
                                     </Label>
-                                    <IdCombobox className="w-52 h-8" items={laminates} selected={form.watch('saddleLaminateId')} onItemSelected={id => handleItemSelect(id, 'saddleLaminateId')} />
-                                    {form.formState.errors.saddleLaminateId && <span className="text-[0.8rem] font-medium text-destructive">{form.formState.errors.saddleLaminateId.message}</span>}
+                                    <IdCombobox
+                                        className="w-52 h-8"
+                                        items={laminates}
+                                        selected={form.watch('bottomHeadLaminateId')}
+                                        onItemSelected={id => handleItemSelect(id, 'bottomHeadLaminateId')}
+                                    />
+                                    {form.formState.errors.bottomHeadLaminateId && (
+                                        <span className="text-[0.8rem] font-medium text-destructive">{form.formState.errors.bottomHeadLaminateId.message}</span>
+                                    )}
                                 </div>
 
                                 <div className="flex ml-14 items-center">
                                     <FormField
                                         control={form.control}
-                                        name="saddleLaminateMinThk"
+                                        name="bottomHeadLaminateMinThk"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormControl>
                                                     <div className="flex items-center">
-                                                        <FormLabel htmlFor="saddleLaminateMinThk" className="w-full whitespace-nowrap">
+                                                        <FormLabel htmlFor="bottomHeadLaminateMinThk" className="w-full whitespace-nowrap">
                                                             Min Thickness
                                                         </FormLabel>
-                                                        <Input type="number" step=".01" id="saddleLaminateMinThk" min={0} className="h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="bottomHeadLaminateMinThk" min={0} className="w- h-8" {...field} onChange={onChangeNumber} />
+                                                        <span className="font-semibold text-sm ml-4">in</span>
+                                                    </div>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Support</CardTitle>
+                        </CardHeader>
+                        <CardContent className="p-6 pt-0 grid gap-3">
+                            <div className="space-y-2">
+                                <FormField
+                                    control={form.control}
+                                    name="supportType"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <div className="flex items-center gap-4">
+                                                    <FormLabel htmlFor="supportType" className="w-32 whitespace-nowrap">
+                                                        Type
+                                                    </FormLabel>
+                                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                        <FormControl className="capitalize font-semibold w-52">
+                                                            <SelectTrigger>
+                                                                <SelectValue placeholder="Select..." />
+                                                            </SelectTrigger>
+                                                        </FormControl>
+                                                        <SelectContent className="capitalize">
+                                                            {VerticalSupportType.map(item => (
+                                                                <SelectItem key={item.name} value={item.name}>
+                                                                    {item.name}
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <div className="flex ml-14 items-center">
+                                    <FormField
+                                        control={form.control}
+                                        name="supportBcd"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <div className="flex items-center">
+                                                        <FormLabel htmlFor="supportBcd" className="w-full whitespace-nowrap">
+                                                            Bolt Circ. Diam
+                                                        </FormLabel>
+                                                        <Input type="number" id="supportBcd" min={0} className="h-8" {...field} onChange={onChangeNumber} />
+                                                    </div>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </div>
+
+                            <FormField
+                                control={form.control}
+                                name="supportElevation"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="flex items-center gap-4">
+                                                <FormLabel htmlFor="supportElevation" className="w-32">
+                                                    Support Elevation
+                                                </FormLabel>
+                                                <Input
+                                                    type="number"
+                                                    id="supportElevation"
+                                                    min={0}
+                                                    disabled={form.watch('bottomHeadType') !== 'Conical'}
+                                                    className="w-52 h-8"
+                                                    {...field}
+                                                    onChange={onChangeNumber}
+                                                />
+                                                <span className="font-semibold text-sm">in</span>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-4">
+                                    <Label htmlFor="supportLaminateId" className="w-32">
+                                        Support Laminate
+                                    </Label>
+                                    <IdCombobox className="w-52 h-8" items={laminates} selected={form.watch('supportLaminateId')} onItemSelected={id => handleItemSelect(id, 'supportLaminateId')} />
+                                    {form.formState.errors.supportLaminateId && <span className="text-[0.8rem] font-medium text-destructive">{form.formState.errors.supportLaminateId.message}</span>}
+                                </div>
+
+                                <div className="flex ml-14 items-center">
+                                    <FormField
+                                        control={form.control}
+                                        name="supportLaminateMinThk"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <div className="flex items-center">
+                                                        <FormLabel htmlFor="supportLaminateMinThk" className="w-full whitespace-nowrap">
+                                                            Min Thickness
+                                                        </FormLabel>
+                                                        <Input type="number" id="supportLaminateMinThk" min={0} className="w- h-8" {...field} onChange={onChangeNumber} />
                                                         <span className="font-semibold text-sm ml-4">in</span>
                                                     </div>
                                                 </FormControl>
@@ -582,7 +772,7 @@ const StepTwoForm = () => {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormControl>
-                                                    <Input type="number" step=".01" id="bodyFlangeLocation1" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                    <Input type="number" id="bodyFlangeLocation1" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -596,7 +786,7 @@ const StepTwoForm = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input type="number" step=".01" id="bodyFlangeLocation2" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="bodyFlangeLocation2" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -611,7 +801,7 @@ const StepTwoForm = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input type="number" step=".01" id="bodyFlangeLocation3" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="bodyFlangeLocation3" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -626,7 +816,7 @@ const StepTwoForm = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input type="number" step=".01" id="bodyFlangeLocation4" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="bodyFlangeLocation4" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -641,7 +831,7 @@ const StepTwoForm = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input type="number" step=".01" id="bodyFlangeLocation5" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="bodyFlangeLocation5" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -656,7 +846,7 @@ const StepTwoForm = () => {
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
-                                                        <Input type="number" step=".01" id="bodyFlangeLocation6" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="bodyFlangeLocation6" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
@@ -664,6 +854,108 @@ const StepTwoForm = () => {
                                         />
                                     )}
                                 </div>
+                            )}
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Packing</CardTitle>
+                        </CardHeader>
+                        <CardContent className="p-6 pt-0 grid gap-3">
+                            <FormField
+                                control={form.control}
+                                name="packing"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormControl>
+                                            <div className="flex items-center gap-4">
+                                                <FormLabel htmlFor="packing" className="w-32 whitespace-nowrap">
+                                                    Packing
+                                                </FormLabel>
+                                                <Select onValueChange={field.onChange} defaultValue={'no'}>
+                                                    <FormControl className="capitalize font-semibold w-52">
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="Select..." />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent className="capitalize">
+                                                        <SelectItem key="yes" value="yes">
+                                                            Yes
+                                                        </SelectItem>
+                                                        <SelectItem key="no" value="no">
+                                                            No
+                                                        </SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {form.watch('packing') === 'yes' && (
+                                <>
+                                    <div className="grid grid-cols-6 text-sm font-semibold text-center pt-4 gap-4 rounded">
+                                        <span>Elev. in</span>
+                                        <span>Dens lb/cu ft</span>
+                                        <span>Top Ledge</span>
+                                        <span>Bot Ledge</span>
+                                    </div>
+
+                                    <div className="grid grid-cols-6 p-4 gap-4">
+                                        <FormField
+                                            control={form.control}
+                                            name="packingElevLev"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormControl>
+                                                        <Input type="number" id="packingElevLev" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <FormField
+                                            control={form.control}
+                                            name="packingDensity"
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormControl>
+                                                        <Input type="number" id="packingDensity" min={0} className="w-full h-8" {...field} onChange={onChangeNumber} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+
+                                        <div className="flex items-center gap-4">
+                                            <IdComboboxLedge
+                                                className="w-52 h-8"
+                                                items={ledges}
+                                                selected={form.watch('packingTopLedgeId')}
+                                                onItemSelected={id => handleItemSelect(id, 'packingTopLedgeId')}
+                                            />
+                                            {form.formState.errors.packingTopLedgeId && (
+                                                <span className="text-[0.8rem] font-medium text-destructive">{form.formState.errors.packingTopLedgeId.message}</span>
+                                            )}
+                                        </div>
+
+                                        <div className="flex items-center gap-4">
+                                            <IdComboboxLedge
+                                                className="w-52 h-8"
+                                                items={ledges}
+                                                selected={form.watch('packingBottomLedgeId')}
+                                                onItemSelected={id => handleItemSelect(id, 'packingBottomLedgeId')}
+                                            />
+                                            {form.formState.errors.packingBottomLedgeId && (
+                                                <span className="text-[0.8rem] font-medium text-destructive">{form.formState.errors.packingBottomLedgeId.message}</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </>
                             )}
                         </CardContent>
                     </Card>
@@ -681,9 +973,9 @@ const StepTwoForm = () => {
                                         <FormControl>
                                             <div className="flex items-center gap-4">
                                                 <FormLabel htmlFor="liquidDensity" className="w-32">
-                                                    Liquid Density
+                                                    Liquid Elevation
                                                 </FormLabel>
-                                                <Input type="number" step=".01" id="liquidDensity" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
+                                                <Input type="number" id="liquidDensity" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
                                             </div>
                                         </FormControl>
                                         <FormMessage />
@@ -701,7 +993,7 @@ const StepTwoForm = () => {
                                                 <FormLabel htmlFor="pressure" className="w-32">
                                                     Int. Pressure
                                                 </FormLabel>
-                                                <Input type="number" step=".01" id="pressure" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
+                                                <Input type="number" id="pressure" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
                                                 <span className="font-semibold text-sm">psi</span>
                                             </div>
                                         </FormControl>
@@ -721,7 +1013,7 @@ const StepTwoForm = () => {
                                                     <FormLabel htmlFor="vacuum" className="w-32">
                                                         Vacuum
                                                     </FormLabel>
-                                                    <Input type="number" step=".01" id="vacuum" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
+                                                    <Input type="number" id="vacuum" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
                                                     <span className="font-semibold text-sm">in H2O</span>
                                                 </div>
                                             </FormControl>
@@ -741,7 +1033,48 @@ const StepTwoForm = () => {
                                                         <FormLabel htmlFor="vacuumBuckle" className="w-full whitespace-nowrap">
                                                             Vacuum Buckle
                                                         </FormLabel>
-                                                        <Input type="number" step=".01" id="vacuumBuckle" min={0} className="h-8" {...field} onChange={onChangeNumber} />
+                                                        <Input type="number" id="vacuumBuckle" min={0} className="h-8" {...field} onChange={onChangeNumber} />
+                                                    </div>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <FormField
+                                    control={form.control}
+                                    name="snowLoad"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <div className="flex items-center gap-4">
+                                                    <FormLabel htmlFor="snowLoad" className="w-32">
+                                                        Snow Load
+                                                    </FormLabel>
+                                                    <Input type="number" id="snowLoad" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
+                                                    <span className="font-semibold text-sm">psf</span>
+                                                </div>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <div className="flex ml-14 items-center">
+                                    <FormField
+                                        control={form.control}
+                                        name="snowLoadAxialLoad"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormControl>
+                                                    <div className="flex items-center">
+                                                        <FormLabel htmlFor="snowLoadAxialLoad" className="w-full whitespace-nowrap">
+                                                            Axial Load
+                                                        </FormLabel>
+                                                        <Input type="number" id="snowLoadAxialLoad" min={0} className="h-8" {...field} onChange={onChangeNumber} />
                                                     </div>
                                                 </FormControl>
                                                 <FormMessage />
@@ -753,25 +1086,6 @@ const StepTwoForm = () => {
 
                             <FormField
                                 control={form.control}
-                                name="snowLoad"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormControl>
-                                            <div className="flex items-center gap-4">
-                                                <FormLabel htmlFor="snowLoad" className="w-32">
-                                                    Snow Load
-                                                </FormLabel>
-                                                <Input type="number" step=".01" id="snowLoad" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
-                                                <span className="font-semibold text-sm">psf</span>
-                                            </div>
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
                                 name="wind"
                                 render={({ field }) => (
                                     <FormItem>
@@ -780,7 +1094,7 @@ const StepTwoForm = () => {
                                                 <FormLabel htmlFor="wind" className="w-32">
                                                     Wind
                                                 </FormLabel>
-                                                <Input type="number" step=".01" id="wind" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
+                                                <Input type="number" id="wind" min={0} className="w-52 h-8" {...field} onChange={onChangeNumber} />
                                                 <span className="font-semibold text-sm">psf</span>
                                             </div>
                                         </FormControl>
@@ -806,7 +1120,7 @@ const StepTwoForm = () => {
                                                         </SelectTrigger>
                                                     </FormControl>
                                                     <SelectContent className="capitalize">
-                                                        {HorizontalSeismic.map(item => (
+                                                        {VerticalSeismic.map(item => (
                                                             <SelectItem key={item.name} value={item.name}>
                                                                 {item.name}
                                                             </SelectItem>
@@ -821,10 +1135,6 @@ const StepTwoForm = () => {
                             />
                         </CardContent>
                     </Card>
-
-                    {/* Drawing <Card className="w-fit min-w-[200px] top-12 right-4 h-fit p-6 absolute">
-                        <div className={`w-full rounded-full border bg-blue-900`} style={{ height: form.watch('shellLength') + 'px' }} />
-                    </Card> */}
                 </form>
             </Form>
         </>

@@ -22,7 +22,10 @@
 # Phase 2 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 [x] Add dark mode
 [x] Add page 4
-[~] Add page number and navigation
-[ ] Change manway table sizes to preset
+[x] Add page number and navigation
+[x] Change manway table sizes to preset
 [ ] Fix addititional cost page with additives and correct type
+[ ] Fix second page in vertical to have array of packages
+[ ] Implement a unit change
+[ ] Finish page 7 on both
 [ ] Add autosave to state without next

@@ -14,8 +14,8 @@ import { useGasketsStore } from '@/zustand/gasket-store'
 import { order3Schema } from '@/lib/schemas/orderSchemas'
 import FormHeaderSteps from '@/components/ui/form-header-steps'
 import { useSightGlassesStore } from '@/zustand/sightglasses-store'
-import { ItemCombobox } from '../horizontal/comboboxes/item-combobox'
-import { BlindCombobox } from '../horizontal/comboboxes/blind-combobox'
+import { ItemCombobox } from '../comboboxes/item-combobox'
+import { BlindCombobox } from '../comboboxes/blind-combobox'
 import { useVerticalStepThreeStore } from '@/zustand/vertical-orders-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -88,14 +88,14 @@ const StepThreeForm = () => {
 
     const onSubmit = async (_values: z.infer<typeof order3Schema>) => {
         setStepThree(formDetails)
-        navigate({ to: '/dashboard/horizontal/4' })
+        navigate({ to: '/dashboard/vertical/4' })
     }
 
     return (
         <>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <FormHeaderSteps title="Horizontal Tank Design & Estimating" />
+                    <FormHeaderSteps title="Vertical Tank Design & Estimating" />
 
                     <Card>
                         <CardHeader>

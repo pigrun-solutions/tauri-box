@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { order1Schema } from '@/lib/schemas/orderSchemas'
 import FormHeaderSteps from '@/components/ui/form-header-steps'
 import { useVerticalStepOneStore } from '@/zustand/vertical-orders-store'
-import { CustomerCombobox } from '../horizontal/comboboxes/customer-combobox'
+import { CustomerCombobox } from '../comboboxes/customer-combobox'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 
@@ -44,7 +44,7 @@ const StepOneForm = () => {
         <>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <FormHeaderSteps title="Horizontal Tank Design & Estimating" />
+                    <FormHeaderSteps title="Vertical Tank Design & Estimating" />
 
                     <Card>
                         <CardHeader>

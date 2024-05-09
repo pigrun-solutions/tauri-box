@@ -9,9 +9,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useLaminateStore } from '@/zustand/laminate-store'
 import StepTwoForm from '@/components/dashboard/orders/horizontal/step-two-form'
 
-export const Route = createFileRoute('/_dashboard-layout/dashboard/horizontal/2')({
-    component: () => <Horizontal2 />,
-})
+export const Route = createFileRoute('/_dashboard-layout/dashboard/horizontal/2')({ component: () => <Horizontal2 /> })
 
 const Horizontal2 = () => {
     const { setResin } = useResinStore()

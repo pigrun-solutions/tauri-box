@@ -44,3 +44,22 @@ export const HorizontalSeismic = [
         name: 'Special',
     },
 ]
+
+export const ManwaySizes = [
+    {
+        id: '20',
+        name: '20',
+    },
+    {
+        id: '24',
+        name: '24',
+    },
+    {
+        id: '30',
+        name: '30',
+    },
+    {
+        id: '36',
+        name: '36',
+    },
+]

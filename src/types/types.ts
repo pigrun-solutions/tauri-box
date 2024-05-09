@@ -233,7 +233,7 @@ export type Other = {
     updatedAt: string
 }
 
-// ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Horizontal Complicated ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Horizontal Order ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // ? Step 1
 export type OrderDesign = {
@@ -315,7 +315,7 @@ export type OrderNozzle = {
 export type ManwayTable = {
     drawingRef?: string
     manwayId: string
-    size: number // ? [20.0, 24.0, 30.0, 36.0]
+    size: string // ? [20.0, 24.0, 30.0, 36.0]
     loc: number
     orient: number
     boltId?: string
@@ -373,4 +373,67 @@ export type OrderSaddle = {
     thickness: number
     distFromHead: number
     saddleArc: number
+}
+
+// ! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Vertical Order ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ? Step 2
+export type OrderVerticalTankData = {
+    resinId?: number
+    corrLinear: string // ? ["yes", "no", "buckling only"]
+
+    shellInternalDiam: number
+    shellBottomElevation: number
+    shellLength: number
+    shellJoint1?: number
+    shellJoint2?: number
+    shellJoint3?: number
+    shellJoint4?: number
+    shellJoint5?: number
+    shellJoint6?: number
+    shellLaminateId?: number
+    shellLaminateMinThk: number
+
+    topHeadType: string // ? ["Conical", "Torispherical", "Elliptical", "Hemispherical", "Flat", "Special"]
+    topHeadHeight: number
+    topHeadLaminateId?: number
+    topHeadLaminateMinThk: number
+
+    bottomHeadType: string // ? ["Conical", "Torispherical", "Elliptical", "Hemispherical", "Flat", "Special"]
+    bottomHeadHeight: number
+    bottomHeadLaminateId?: number
+    bottomHeadLaminateMinThk: number
+
+    supportType: string // ? ["HLU Lugs", "Flange"]
+    supportBcd: number
+    supportElevation: number
+    supportLaminateId?: number
+    supportLaminateMinThk: number
+
+    bodyFlange: string // ? ["yes", "no"]
+    bodyFlangeLocation1?: number
+    bodyFlangeLocation2?: number
+    bodyFlangeLocation3?: number
+    bodyFlangeLocation4?: number
+    bodyFlangeLocation5?: number
+    bodyFlangeLocation6?: number
+
+    packing: string // ? ["yes", "no"]
+    packingElevLev?: number
+    packingDensity?: number
+    packingTopLedgeId?: number
+    packingBottomLedgeId?: number
+
+    liquidDensity: number
+    pressure: number
+
+    vacuum: number
+    vacuumBuckle: number
+
+    snowLoad: number
+    snowLoadAxialLoad: number
+
+    wind: number
+
+    seismic: string // ? ["0", "1", "2A", "2B", "3", "4", "Special"]
 }

@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { Form } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { ManwaySizes } from '@/config/horizontal'
 import { useNavigate } from '@tanstack/react-router'
 import { useBoltsStore } from '@/zustand/bolts-store'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -13,7 +14,7 @@ import { useManwayStore } from '@/zustand/manways-store'
 import { order4Schema } from '@/lib/schemas/orderSchemas'
 import FormHeaderSteps from '@/components/ui/form-header-steps'
 import { Bolt, Gasket, Manway, ManwayTable } from '@/types/types'
-import { ItemCombobox } from '../horizontal/comboboxes/item-combobox'
+import { ItemCombobox } from '../comboboxes/item-combobox'
 import { useVerticalStepFourStore } from '@/zustand/vertical-orders-store'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -51,7 +52,9 @@ const FormItems = ({ item, index, bolts, gaskets, manways, formDetails, setFormD
         <div className="grid grid-cols-10 gap-2">
             <Input type="text" placeholder="Reference" name="drawingRef" value={item.drawingRef} onChange={onChange} />
             <ItemCombobox items={manways} selected={formDetails[index].manwayId} onItemSelected={id => handleItemSelect(id, 'manwayId')} />
-            <Input type="number" placeholder="Size" name="size" min={0} value={item.size} onChange={onChange} />
+
+            <ItemCombobox items={ManwaySizes} selected={formDetails[index].size} onItemSelected={id => handleItemSelect(id, 'size')} />
+
             <Input type="number" placeholder="Loc" name="loc" min={0} value={item.loc} onChange={onChange} />
             <Input type="number" placeholder="Orient" name="orient" min={0} max={360} value={item.orient} onChange={onChange} />
 
@@ -96,7 +99,7 @@ const StepFourForm = () => {
             {
                 drawingRef: '',
                 manwayId: (manways.length > 0 && manways[0].id) || '',
-                size: 0,
+                size: '20',
                 loc: 0,
                 orient: 0,
                 boltId: (bolts.length > 0 && bolts[0].id) || '',
@@ -107,14 +110,14 @@ const StepFourForm = () => {
 
     const onSubmit = async (_values: z.infer<typeof order4Schema>) => {
         setStepFour(formDetails)
-        navigate({ to: '/dashboard/horizontal/5' })
+        navigate({ to: '/dashboard/vertical/5' })
     }
 
     return (
         <>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                    <FormHeaderSteps title="Horizontal Tank Design & Estimating" />
+                    <FormHeaderSteps title="Vertical Tank Design & Estimating" />
 
                     <Card>
                         <CardHeader>
