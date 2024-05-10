@@ -1,6 +1,7 @@
 import React from 'react'
+import Modal from './modal'
 import { Button } from './button'
-import { ChevronLeft, Loader2 } from 'lucide-react'
+import { ChevronLeft, Ellipsis } from 'lucide-react'
 import { Link, useRouterState } from '@tanstack/react-router'
 
 type FormHeaderProps = {
@@ -9,6 +10,7 @@ type FormHeaderProps = {
 }
 
 const FormHeader: React.FC<FormHeaderProps> = ({ title, loading }) => {
+    const [isOpen, setIsOpen] = React.useState(false)
     const router = useRouterState()
     const pathname = router.location.pathname
 
@@ -26,14 +28,11 @@ const FormHeader: React.FC<FormHeaderProps> = ({ title, loading }) => {
 
             <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold capitalize tracking-tight sm:grow-0">{title}</h1>
 
-            <div className="hidden items-center gap-2 md:ml-auto md:flex">
-                <Button type="button" disabled={loading} variant="outline" size="sm" asChild>
-                    <Link to={`${url}`}>Discard</Link>
-                </Button>
-                <Button type="submit" size="sm" disabled={loading}>
-                    {loading && <Loader2 className="mr-2 size-4 animate-spin" />} Save
-                </Button>
-            </div>
+            <Button type="button" variant="outline" size="icon" className="ml-auto" onClick={() => setIsOpen(true)}>
+                <Ellipsis className="size-4" />
+            </Button>
+
+            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}></Modal>
         </div>
     )
 }

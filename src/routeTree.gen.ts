@@ -14,6 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as DashboardLayoutImport } from './routes/_dashboard-layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as DashboardLayoutDashboardIndexImport } from './routes/_dashboard-layout/dashboard/index'
+import { Route as DashboardLayoutDashboardSingleBoxImport } from './routes/_dashboard-layout/dashboard/single-box'
+import { Route as DashboardLayoutDashboardMultiBoxImport } from './routes/_dashboard-layout/dashboard/multi-box'
 
 // Create/Update Routes
 
@@ -33,6 +35,18 @@ const DashboardLayoutDashboardIndexRoute =
     getParentRoute: () => DashboardLayoutRoute,
   } as any)
 
+const DashboardLayoutDashboardSingleBoxRoute =
+  DashboardLayoutDashboardSingleBoxImport.update({
+    path: '/dashboard/single-box',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
+const DashboardLayoutDashboardMultiBoxRoute =
+  DashboardLayoutDashboardMultiBoxImport.update({
+    path: '/dashboard/multi-box',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -45,6 +59,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLayoutImport
       parentRoute: typeof rootRoute
     }
+    '/_dashboard-layout/dashboard/multi-box': {
+      preLoaderRoute: typeof DashboardLayoutDashboardMultiBoxImport
+      parentRoute: typeof DashboardLayoutImport
+    }
+    '/_dashboard-layout/dashboard/single-box': {
+      preLoaderRoute: typeof DashboardLayoutDashboardSingleBoxImport
+      parentRoute: typeof DashboardLayoutImport
+    }
     '/_dashboard-layout/dashboard/': {
       preLoaderRoute: typeof DashboardLayoutDashboardIndexImport
       parentRoute: typeof DashboardLayoutImport
@@ -56,7 +78,11 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  DashboardLayoutRoute.addChildren([DashboardLayoutDashboardIndexRoute]),
+  DashboardLayoutRoute.addChildren([
+    DashboardLayoutDashboardMultiBoxRoute,
+    DashboardLayoutDashboardSingleBoxRoute,
+    DashboardLayoutDashboardIndexRoute,
+  ]),
 ])
 
 /* prettier-ignore-end */
