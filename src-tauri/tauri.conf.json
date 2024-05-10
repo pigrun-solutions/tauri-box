@@ -6,7 +6,7 @@
         "distDir": "../dist"
     },
     "package": {
-        "productName": "Troy Tank Clone",
+        "productName": "Patrack Box",
         "version": "0.0.1"
     },
     "tauri": {
@@ -23,7 +23,7 @@
                 "height": 900,
                 "width": 1380,
                 "contentProtected": false,
-                "title": "Troy Tank Clone",
+                "title": "Patrack Box",
                 "resizable": false
             }
         ],

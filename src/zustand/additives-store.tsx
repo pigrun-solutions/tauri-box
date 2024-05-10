@@ -1,12 +1,11 @@
 import { create } from 'zustand'
-import { Additive } from '@/types/types'
 
 type AdditivesStore = {
-    additives: Additive[]
-    setAdditives: (additives: Additive[]) => void
+    additives: string[]
+    setAdditives: (additives: string[]) => void
 }
 
 export const useAdditivesStore = create<AdditivesStore>(set => ({
-    additives: [] as Additive[],
-    setAdditives: (additives: Additive[]) => set({ additives }),
+    additives: [] as string[],
+    setAdditives: (additives: string[]) => set({ additives }),
 }))
