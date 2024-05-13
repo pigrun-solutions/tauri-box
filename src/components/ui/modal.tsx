@@ -1,27 +1,19 @@
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
 
 interface ModalProps {
-    title?: string
-    description?: string
     isOpen: boolean
     onClose: () => void
     children?: React.ReactNode
 }
 
-const Modal: React.FC<ModalProps> = ({ title, description, isOpen, onClose, children }: ModalProps) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }: ModalProps) => {
     const onChange = (open: boolean) => {
         if (!open) onClose()
     }
 
     return (
         <Dialog open={isOpen} onOpenChange={onChange}>
-            <DialogContent>
-                {title && (
-                    <DialogHeader>
-                        <DialogTitle>{title}</DialogTitle>
-                        {description && <DialogDescription>{description}</DialogDescription>}
-                    </DialogHeader>
-                )}
+            <DialogContent className="pb-2">
                 <div>{children}</div>
             </DialogContent>
         </Dialog>

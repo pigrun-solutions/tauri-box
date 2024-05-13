@@ -5,14 +5,14 @@ import { Button } from '../ui/button'
 import { SingleBox } from '@/types/types'
 import { Input } from '@/components/ui/input'
 import FormHeader from '@/components/ui/form-header'
-import { useNavigate } from '@tanstack/react-router'
+// import { useNavigate } from '@tanstack/react-router'
 import { Card, CardContent } from '@/components/ui/card'
 import FormBreadcrumbs from '@/components/ui/form-breadcrumbs'
 
 const SingleBoxForm = () => {
-    const navigate = useNavigate()
-    const [formData, setFormData] = useState<SingleBox>({ deviceType: '', uid: 0 })
+    // const navigate = useNavigate()
     const [loading, setLoading] = useState<boolean>(false)
+    const [formData, setFormData] = useState<SingleBox>({ deviceType: '', uid: 0 })
 
     const onSubmit = async (submitType: 'checkin' | 'packet') => {
         try {
@@ -20,21 +20,22 @@ const SingleBoxForm = () => {
             console.log({ ...formData, submitType })
         } catch (error) {
             console.log(error)
+            toast.error(error as string)
         } finally {
             setLoading(false)
         }
     }
 
-    const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const oners = ['deviceType']
-        const value = parseFloat(e.target.value)
-        const name = e.target.name
+    // const onChangeNumber = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    //     const oners = ['deviceType']
+    //     const value = parseFloat(e.target.value)
+    //     const name = e.target.name
 
-        const uid = typeof formData?.uid === 'number' ? formData.uid : 0 // Assuming a default value of 0 if undefined
+    //     const uid = typeof formData?.uid === 'number' ? formData.uid : 0 // Assuming a default value of 0 if undefined
 
-        const updatedFormData = { ...formData, [name]: oners.includes(name) ? Number(value.toFixed(1)) : Number(value.toFixed(2)), uid: uid }
-        setFormData(updatedFormData)
-    }
+    //     const updatedFormData = { ...formData, [name]: oners.includes(name) ? Number(value.toFixed(1)) : Number(value.toFixed(2)), uid: uid }
+    //     setFormData(updatedFormData)
+    // }
 
     return (
         <div className="max-w-2xl mx-auto space-y-4">

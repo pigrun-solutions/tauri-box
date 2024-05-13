@@ -2,6 +2,7 @@ import React from 'react'
 import Modal from './modal'
 import { Button } from './button'
 import { ChevronLeft, Ellipsis } from 'lucide-react'
+import SettingsModal from '../dashboard/settings-modal'
 import { Link, useRouterState } from '@tanstack/react-router'
 
 type FormHeaderProps = {
@@ -32,7 +33,9 @@ const FormHeader: React.FC<FormHeaderProps> = ({ title, loading }) => {
                 <Ellipsis className="size-4" />
             </Button>
 
-            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}></Modal>
+            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                <SettingsModal />
+            </Modal>
         </div>
     )
 }

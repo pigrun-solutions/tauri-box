@@ -1,20 +1,20 @@
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { Button } from '../ui/button'
+import { Checkbox } from '../ui/checkbox'
 import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import FormHeader from '@/components/ui/form-header'
-import { useNavigate } from '@tanstack/react-router'
+// import { useNavigate } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Card, CardContent } from '@/components/ui/card'
 import multiBoxSchema from '@/lib/schemas/multiBoxSchema'
 import FormBreadcrumbs from '@/components/ui/form-breadcrumbs'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Checkbox } from '../ui/checkbox'
-import { Button } from '../ui/button'
 
 const MultiBoxForm = () => {
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const [loading, setLoading] = useState<boolean>(false)
 
     const form = useForm<z.infer<typeof multiBoxSchema>>({
@@ -41,10 +41,10 @@ const MultiBoxForm = () => {
         <div className="max-w-2xl mx-auto space-y-4">
             <FormBreadcrumbs currentPage="Multi box" />
 
+            <FormHeader title="Multi Box" />
+
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pb-4">
-                    <FormHeader title="Multi Box" />
-
                     <Card className="">
                         <CardContent className="p-4">
                             <div className="grid gap-4">
