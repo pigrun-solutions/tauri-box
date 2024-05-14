@@ -17,13 +17,17 @@ const Dashboard = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-                <Card className={cn('hover:bg-muted-foreground/10 aspect-square cursor-pointer grid place-items-center h-full')} onClick={() => navigate({ to: '/dashboard/single-box' })}>
+                <Card
+                    className={cn('hover:bg-muted-foreground/10 aspect-square cursor-pointer grid place-items-center h-full active:scale-95 transition-all')}
+                    onClick={() => navigate({ to: '/dashboard/single-box' })}>
                     <div className="flex flex-col items-center p-4 gap-4">
                         <Box className="size-12" />
                         <h4 className="font-semibold text-xl">Single Box</h4>
                     </div>
                 </Card>
-                <Card className={cn('hover:bg-muted-foreground/10 aspect-square cursor-pointer grid place-items-center h-full')} onClick={() => navigate({ to: '/dashboard/multi-box' })}>
+                <Card
+                    className={cn('hover:bg-muted-foreground/10 aspect-square cursor-pointer grid place-items-center h-full active:scale-95 transition-all')}
+                    onClick={() => navigate({ to: '/dashboard/multi-box' })}>
                     <div className="flex flex-col items-center p-4 gap-4">
                         <Boxes className="size-12" />
                         <h4 className="font-semibold text-xl">Multiple Boxes</h4>

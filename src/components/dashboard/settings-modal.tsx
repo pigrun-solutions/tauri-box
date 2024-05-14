@@ -6,13 +6,15 @@ import { Button } from '../ui/button'
 import { Settings } from '@/types/types'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useSocketStore } from '@/zustand/socket-store'
 import { createEditSettings } from '@/database/settings'
 import settingsSchema from '@/lib/schemas/settingsSchema'
 import { useSettingsStore } from '@/zustand/settings-store'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 
-const SettingsModal = () => {
+const SettingsModal = ({ onClose }: { onClose: () => void }) => {
     const { settings, setSettings } = useSettingsStore()
+    const { socket, reset } = useSocketStore()
 
     const [loading, setLoading] = useState<boolean>(false)
 
@@ -27,6 +29,11 @@ const SettingsModal = () => {
 
             const response = await createEditSettings(values)
             setSettings(response.data as Settings)
+
+            socket?.disconnect()
+            reset()
+
+            onClose()
 
             toast.success('Settings saved!')
         } catch (error: any) {

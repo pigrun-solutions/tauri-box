@@ -21,7 +21,7 @@ async function createTable(db: any) {
 async function insertDefaultValues(db: any) {
     await db.execute(
         `INSERT INTO Settings (ip, lat, long, port)
-        VALUES ('52.7.138.174', 47.6062, 122.3321, 3000)`
+        VALUES ('127.0.0.1', 47.6062, 122.3321, 8285)`
     )
 }
 

@@ -34,7 +34,7 @@ const FormHeader: React.FC<FormHeaderProps> = ({ title, loading }) => {
             </Button>
 
             <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-                <SettingsModal />
+                <SettingsModal onClose={() => setIsOpen(false)} />
             </Modal>
         </div>
     )
