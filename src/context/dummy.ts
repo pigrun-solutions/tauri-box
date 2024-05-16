@@ -1,9 +1,4 @@
-const dummyData = {
-    Lat: 123456789, // Example latitude value
-    Lon: 987654321, // Example longitude value
-    Alt: 100, // Example altitude value
-    SatCnt: 8, // Example satellite count
-    HDil: 10, // Example horizontal dilution
+export const dummyData = {
     DevTime: Date.now(), // Example device time
     HardVer: 12345, // Example hardware version
     FWVer: 54321, // Example firmware version
@@ -52,3 +47,94 @@ const dummyData = {
     ELFAnalyzePeriod: 120, // Example ELF analyze period
     GEOAnalyzePeriod: 180, // Example GEO analyze period
 }
+
+export const GPSInfo = [
+    {
+        // ? Alt
+        value: 97,
+        size: 2,
+    },
+    {
+        // ? SatCnt
+        value: 9,
+        size: 1,
+    },
+    {
+        // ? Hdilution
+        value: 90,
+        size: 2,
+    },
+]
+
+export const DiagnosticInfo = [
+    {
+        //? Device Time
+        value: [10, 0, 8, 47],
+        size: 4,
+    },
+    {
+        // ? Hardware Version
+        value: '0.0.1',
+        size: 3,
+    },
+    {
+        // ? Firmware Version
+        value: '0.0.1',
+        size: 3,
+    },
+    {
+        // ? Battery
+        value: 6364,
+        size: 2,
+    },
+    {
+        // ? Error Code
+        value: 0,
+        size: 2,
+    },
+    {
+        // ? RSSI
+        value: 0,
+        size: 1,
+    },
+    {
+        // ? RSSP
+        value: 0,
+        size: 1,
+    },
+    {
+        // ? RSSQ
+        value: 0,
+        size: 1,
+    },
+    {
+        // ? SD File Count
+        value: 12,
+        size: 2,
+    },
+    {
+        // ? SD Off Count
+        value: 0,
+        size: 2,
+    },
+    {
+        // ? SD On Count
+        value: 0,
+        size: 2,
+    },
+    {
+        // ? PSG Count
+        value: 61,
+        size: 1,
+    },
+    {
+        // ? PSG Frequency
+        value: 0,
+        size: 1,
+    },
+    {
+        // ? PSG Time
+        value: new Date(),
+        size: 8,
+    },
+]

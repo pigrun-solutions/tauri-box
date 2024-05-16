@@ -1,4 +1,3 @@
-import useSocket from '@/hooks/use-socket'
 import ConnectedStatus from '@/components/ui/connected'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
@@ -9,8 +8,6 @@ export const Route = createFileRoute('/_dashboard-layout')({
         if (!isLogged()) throw redirect({ to: '/' })
     },
     component: () => {
-        useSocket()
-
         return (
             <div className="flex">
                 <ConnectedStatus />

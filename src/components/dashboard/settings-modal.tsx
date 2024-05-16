@@ -1,10 +1,10 @@
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { useState } from 'react'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Settings } from '@/types/types'
 import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useSocketStore } from '@/zustand/socket-store'
 import { createEditSettings } from '@/database/settings'
@@ -13,16 +13,14 @@ import { useSettingsStore } from '@/zustand/settings-store'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 
 const SettingsModal = ({ onClose }: { onClose: () => void }) => {
-    const { settings, setSettings } = useSettingsStore()
     const { socket, reset } = useSocketStore()
-
+    const { settings, setSettings } = useSettingsStore()
     const [loading, setLoading] = useState<boolean>(false)
 
     const form = useForm<z.infer<typeof settingsSchema>>({
         resolver: zodResolver(settingsSchema),
         defaultValues: { id: settings?.id, ip: settings?.ip, lat: settings?.lat, long: settings?.long, port: settings?.port },
     })
-
     const onSubmit = async (values: z.infer<typeof settingsSchema>) => {
         try {
             setLoading(true)
@@ -30,8 +28,9 @@ const SettingsModal = ({ onClose }: { onClose: () => void }) => {
             const response = await createEditSettings(values)
             setSettings(response.data as Settings)
 
-            socket?.disconnect()
+            socket?.close()
             reset()
+            if (socket !== null) socket.OPEN
 
             onClose()
 

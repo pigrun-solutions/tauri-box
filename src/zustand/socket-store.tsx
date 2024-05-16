@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 type SocketStore = {
-    socket: any
+    socket: any | null
     status: boolean
     setStatus: (status: boolean) => void
     setSocket: (socket: any | null) => void
