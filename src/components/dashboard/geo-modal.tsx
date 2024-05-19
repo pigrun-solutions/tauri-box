@@ -1,31 +1,34 @@
 import { z } from 'zod'
 import { toast } from 'sonner'
+import Modal from '../ui/modal'
 import { useState } from 'react'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
+import { Ellipsis } from 'lucide-react'
 import { Settings } from '@/types/types'
 import { useForm } from 'react-hook-form'
+import geoSchema from '@/lib/schemas/geoSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createEditSettings } from '@/database/settings'
-import settingsSchema from '@/lib/schemas/settingsSchema'
+import { createEditLatLong } from '@/database/settings'
 import { useSettingsStore } from '@/zustand/settings-store'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 
-const SettingsModal = ({ onClose }: { onClose: () => void }) => {
+const GeoForm = ({ onClose }: { onClose: () => void }) => {
     const { settings, setSettings } = useSettingsStore()
     const [loading, setLoading] = useState<boolean>(false)
 
-    const form = useForm<z.infer<typeof settingsSchema>>({ resolver: zodResolver(settingsSchema), defaultValues: { id: settings?.id, ip: settings?.ip, port: settings?.port } })
-    const onSubmit = async (values: z.infer<typeof settingsSchema>) => {
+    const form = useForm<z.infer<typeof geoSchema>>({ resolver: zodResolver(geoSchema), defaultValues: { id: settings?.id, lat: settings?.lat, long: settings?.long } })
+
+    const onSubmit = async (values: z.infer<typeof geoSchema>) => {
         try {
             setLoading(true)
 
-            const response = await createEditSettings(values)
+            const response = await createEditLatLong(values)
             setSettings(response.data as Settings)
 
             onClose()
 
-            toast.success('Settings saved!')
+            toast.success('Geo saved!')
         } catch (error: any) {
             console.log(error)
             toast.error(error)
@@ -43,15 +46,15 @@ const SettingsModal = ({ onClose }: { onClose: () => void }) => {
                     <div className="grid gap-4">
                         <FormField
                             control={form.control}
-                            name="ip"
+                            name="lat"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
                                         <div className="flex items-center gap-3">
-                                            <FormLabel htmlFor="ip" className="whitespace-nowrap">
-                                                IP Address
+                                            <FormLabel htmlFor="lat" className="whitespace-nowrap">
+                                                Latitude
                                             </FormLabel>
-                                            <Input id="ip" className="h-8" disabled={loading} {...field} />
+                                            <Input type="number" id="lat" className="h-8" disabled={loading} {...field} onChange={e => form.setValue('lat', Number(e.target.value))} />
                                         </div>
                                     </FormControl>
                                     <FormMessage />
@@ -61,15 +64,15 @@ const SettingsModal = ({ onClose }: { onClose: () => void }) => {
 
                         <FormField
                             control={form.control}
-                            name="port"
+                            name="long"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
                                         <div className="flex items-center gap-3">
-                                            <FormLabel htmlFor="port" className="whitespace-nowrap">
-                                                Port
+                                            <FormLabel htmlFor="long" className="whitespace-nowrap">
+                                                Longitude
                                             </FormLabel>
-                                            <Input type="number" id="port" className="h-8" disabled={loading} {...field} onChange={e => form.setValue('port', Number(e.target.value))} />
+                                            <Input type="number" id="long" className="h-8" disabled={loading} {...field} onChange={e => form.setValue('long', Number(e.target.value))} />
                                         </div>
                                     </FormControl>
                                     <FormMessage />
@@ -92,4 +95,19 @@ const SettingsModal = ({ onClose }: { onClose: () => void }) => {
     )
 }
 
-export default SettingsModal
+const GeoModal = () => {
+    const [isOpen, setIsOpen] = useState(false)
+
+    return (
+        <div className="flex items-center gap-2">
+            <Button type="button" variant="outline" size="icon" className="ml-auto" onClick={() => setIsOpen(true)}>
+                <Ellipsis className="size-4" />
+            </Button>
+            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                <GeoForm onClose={() => setIsOpen(false)} />
+            </Modal>
+        </div>
+    )
+}
+
+export default GeoModal

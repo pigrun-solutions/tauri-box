@@ -1,19 +1,20 @@
 import { toast } from 'sonner'
 import { useState } from 'react'
+import GeoModal from './geo-modal'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
+import { Loader2 } from 'lucide-react'
 import { SingleBox } from '@/types/types'
 import { Input } from '@/components/ui/input'
+import { invoke } from '@tauri-apps/api/tauri'
 import FormHeader from '@/components/ui/form-header'
-// import { useNavigate } from '@tanstack/react-router'
 import { useSocketStore } from '@/zustand/socket-store'
 import { Card, CardContent } from '@/components/ui/card'
 import { useSettingsStore } from '@/zustand/settings-store'
 import FormBreadcrumbs from '@/components/ui/form-breadcrumbs'
 
 const SingleBoxForm = () => {
-    // const navigate = useNavigate()
-    const { socket } = useSocketStore()
+    const { status, setStatus } = useSocketStore()
     const { settings } = useSettingsStore()
     const [loading, setLoading] = useState<boolean>(false)
     const [formData, setFormData] = useState<SingleBox>({ deviceType: '', uid: 200 })
@@ -176,9 +177,12 @@ const SingleBoxForm = () => {
                 // ? ELFAnalyzePeriod
                 buffer[71] = 20 & 255
 
-                // socket?.emit('data', buffer)
-
-                socket?.send(buffer)
+                if (status === false) {
+                    const connection = await invoke('connect_to_server', { address: `${settings.ip}:${settings.port}` })
+                    setStatus(connection === 'Connected successfully' ? true : false)
+                    toast.success('Connected to the server successfully!')
+                }
+                await invoke('send_checkin_packet', { message: Array.from(buffer) })
                 toast.success('Checkin sent successfully!')
             } else if (submitType === 'packet') {
                 const latScaled = (settings.lat * 2147483648) / 90
@@ -242,7 +246,6 @@ const SingleBoxForm = () => {
                 buffer[36] = NaN & 255
 
                 console.log(buffer)
-                // socket?.emit('rawBytes', buffer)
             }
         } catch (error) {
             console.log(error)
@@ -252,11 +255,23 @@ const SingleBoxForm = () => {
         }
     }
 
+    const disconnectFromServer = async () => {
+        try {
+            await invoke('disconnect_from_server')
+            setStatus(false)
+            toast.success('Disconnected from the box!')
+        } catch (error) {
+            console.error('Failed to disconnect:', error)
+        }
+    }
+
     return (
         <div className="max-w-2xl mx-auto space-y-4">
             <FormBreadcrumbs currentPage="Single Box" />
 
-            <FormHeader title="Single Box" />
+            <FormHeader title="Single Box" loading={loading}>
+                <GeoModal />
+            </FormHeader>
 
             <Card>
                 <CardContent className="grid gap-8 p-4">
@@ -279,17 +294,32 @@ const SingleBoxForm = () => {
                             <Label htmlFor="uid" className="w-32 whitespace-nowrap">
                                 Box UID
                             </Label>
-                            <Input type="number" id="uid" min={0} className="h-10" disabled={loading} value={formData.uid} onChange={e => setFormData({ ...formData, uid: Number(e.target.value) })} />
+                            <Input
+                                type="number"
+                                id="uid"
+                                min={0}
+                                className="h-10"
+                                disabled={loading || status}
+                                value={formData.uid}
+                                onChange={e => setFormData({ ...formData, uid: Number(e.target.value) })}
+                            />
                         </div>
                     </div>
 
-                    <div className="w-full flex gap-3">
-                        <Button className="w-full" onClick={() => onSubmit('checkin')}>
-                            Chekin
-                        </Button>
-                        <Button className="w-full" variant="outline" onClick={() => onSubmit('packet')}>
-                            Passage
-                        </Button>
+                    <div className="space-y-2">
+                        <div className="w-full flex gap-3">
+                            <Button className="w-full" onClick={() => onSubmit('checkin')} disabled={loading}>
+                                {loading && <Loader2 className="size-4 mr-1 animate-spin" />}Chekin
+                            </Button>
+                            <Button className="w-full" variant="outline" onClick={() => onSubmit('packet')} disabled={loading}>
+                                {loading && <Loader2 className="size-4 mr-1 animate-spin" />}Passage
+                            </Button>
+                        </div>
+                        {status && (
+                            <Button type="button" className="w-full animate-in fade-in zoom-in" variant="destructive" onClick={disconnectFromServer} disabled={loading}>
+                                Disconnect
+                            </Button>
+                        )}
                     </div>
                 </CardContent>
             </Card>

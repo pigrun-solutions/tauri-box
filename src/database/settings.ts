@@ -1,7 +1,7 @@
 import { Settings } from '@/types/types'
 import Database from 'tauri-plugin-sql-api'
 
-type SettingsProps = { id?: number } & Settings
+type SettingsProps = { id?: number; ip: string; port: number }
 
 async function doesTableExist(db: any): Promise<boolean> {
     const result = await db.select(`SELECT count(*) as count FROM sqlite_master WHERE type='table' AND name=?`, ['Settings'])
@@ -54,8 +54,22 @@ export const createEditSettings = async (data: SettingsProps) => {
     try {
         const db = await useSettings()
 
-        if (data.id) await db.execute(`UPDATE Settings SET ip = $1, lat = $2, long = $3, port = $4 WHERE id = $5`, [data.ip, data.lat, data.long, data.port, data.id])
-        else await db.execute(`INSERT INTO Settings (ip, lat, long, port) VALUES ($1, $2, $3, $4)`, [data.ip, data.lat, data.long, data.port])
+        if (data.id) await db.execute(`UPDATE Settings SET ip = $1, port = $2 WHERE id = $3`, [data.ip, data.port, data.id])
+        else await db.execute(`INSERT INTO Settings (ip, port) VALUES ($1, $2)`, [data.ip, data.port])
+
+        // ? get settings
+        const settings = (await db.select('SELECT * FROM Settings')) as Settings[]
+
+        return { success: true, data: settings[0] }
+    } catch (error) {
+        return { success: false, error }
+    }
+}
+export const createEditLatLong = async (data: { lat: number; long: number; id?: number }) => {
+    try {
+        const db = await useSettings()
+
+        await db.execute(`UPDATE Settings SET lat = $1, long = $2 WHERE id = $3`, [data.lat, data.long, data.id])
 
         // ? get settings
         const settings = (await db.select('SELECT * FROM Settings')) as Settings[]

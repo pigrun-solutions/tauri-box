@@ -8,8 +8,10 @@ import { Box, Boxes } from 'lucide-react'
 import Loader from '@/components/ui/loader'
 import { Card } from '@/components/ui/card'
 import Heading from '@/components/ui/heading'
+import { invoke } from '@tauri-apps/api/tauri'
 import { Button } from '@/components/ui/button'
 import { getSettings } from '@/database/settings'
+import { useSocketStore } from '@/zustand/socket-store'
 import { ModeToggle } from '@/components/ui/mode-toggle'
 import { useSettingsStore } from '@/zustand/settings-store'
 import SettingsModal from '@/components/dashboard/settings-modal'
@@ -19,6 +21,7 @@ export const Route = createFileRoute('/_dashboard-layout/dashboard/')({ componen
 
 const Dashboard = () => {
     const navigate = useNavigate()
+    const { setStatus } = useSocketStore()
     const [isOpen, setIsOpen] = React.useState(false)
 
     const { setSettings } = useSettingsStore()
@@ -29,8 +32,16 @@ const Dashboard = () => {
                 const settings = await getSettings()
                 const settingsData = settings.data as Settings[]
                 setSettings(settingsData[0])
+
+                const check = await invoke('get_connection_status')
+                if (check !== 'Disconnected') {
+                    console.log('Disconnecting from server...')
+                    await invoke<string>('disconnect_from_server')
+                    setStatus(false)
+                }
             } catch (error) {
                 toast.error('Server Error!')
+                setStatus(false)
             } finally {
                 setEffectLoading(false)
             }
