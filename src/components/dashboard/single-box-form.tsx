@@ -188,13 +188,13 @@ const SingleBoxForm = () => {
                 const latScaled = (settings.lat * 2147483648) / 90
                 const lonScaled = (settings.long * 2147483648) / 180
 
-                const BufferSize: number = 112
+                const BufferSize: number = 640
                 const SYNCH: number[] = [0x21, 0x7e]
 
                 // Define other values
                 let length: number = 108 // Placeholder for length
                 const squence: number = 0x01 // Sequence
-                const packetId: number = 0x01 // Packet ID
+                const packetId: number = 0x03 // Packet ID
 
                 // Create a typed array with Uint8Array
                 const buffer = new Uint8Array(BufferSize) // Allocate buffer of BufferSize bytes
@@ -245,7 +245,28 @@ const SingleBoxForm = () => {
                 // ? RawType
                 buffer[36] = NaN & 255
 
-                console.log(buffer)
+                // ? Create a loop that creates valid rawData that will be used to do a coil and geo graph from byte 60 to 640
+                const start = 60
+                const end = 640
+                for (let i = start; i < end; i++) buffer[i] = i % 2 === 0 ? 0xaa : 0x55
+                for (let i = start; i < end; i += 8) {
+                    const value = 0x1234567890abcdef
+                    for (let j = 0; j < 8; j++) buffer[i + j] = (value >> (56 - j * 8)) & 0xff
+                }
+                for (let i = start; i < end; i++) buffer[i] = i % 256
+
+                if (status === false) {
+                    const connection = await invoke('connect_to_server', { address: `${settings.ip}:${settings.port}` })
+                    setStatus(connection === 'Connected successfully' ? true : false)
+                    toast.success('Connected to the server successfully!')
+                }
+                try {
+                    const response: Uint8Array = await invoke('send_passage_packet', { message: Array.from(buffer) })
+                    console.log('Response from server:', new TextDecoder().decode(response))
+                } catch (error) {
+                    console.error('Failed to send passage packet:', error)
+                }
+                toast.success('Checkin sent successfully!')
             }
         } catch (error) {
             console.log(error)

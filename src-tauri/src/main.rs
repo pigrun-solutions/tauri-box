@@ -36,6 +36,19 @@ impl TcpClient {
             Err(e) => Err(format!("Failed to write to stream: {}", e)),
         }
     }
+
+    fn send_passage(&mut self, message: &[u8]) -> Result<Vec<u8>, String> {
+        match self.stream.write(message) {
+            Ok(_) => {
+                let mut buffer = [0; 512];
+                match self.stream.read(&mut buffer) {
+                    Ok(bytes_read) => Ok(buffer[..bytes_read].to_vec()),
+                    Err(e) => Err(format!("Failed to read from stream: {}", e)),
+                }
+            }
+            Err(e) => Err(format!("Failed to write to stream: {}", e)),
+        }
+    }
 }
 
 struct AppState {
@@ -76,6 +89,19 @@ fn send_checkin_packet(state: tauri::State<Arc<Mutex<AppState>>>, message: Vec<u
 }
 
 #[command]
+fn send_passage_packet(state: tauri::State<Arc<Mutex<AppState>>>, message: Vec<u8>) -> Result<(), String> {
+    let mut app_state = state.lock().unwrap();
+    if let Some(ref mut client) = app_state.client {
+        if let Err(e) = client.send_passage(&message) {
+            return Err(format!("Failed to send passage packet: {}", e));
+        }
+        Ok(())
+    } else {
+        Err("Not connected".into())
+    }
+}
+
+#[command]
 fn disconnect_from_server(state: tauri::State<Arc<Mutex<AppState>>>) -> Result<String, String> {
     let mut app_state = state.lock().unwrap();
     if app_state.client.is_some() {
@@ -106,6 +132,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             connect_to_server,
             send_checkin_packet,
+            send_passage_packet,
             disconnect_from_server,
             get_connection_status
         ])

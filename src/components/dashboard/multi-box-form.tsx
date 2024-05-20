@@ -6,7 +6,6 @@ import { Checkbox } from '../ui/checkbox'
 import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import FormHeader from '@/components/ui/form-header'
-// import { useNavigate } from '@tanstack/react-router'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Card, CardContent } from '@/components/ui/card'
 import multiBoxSchema from '@/lib/schemas/multiBoxSchema'
@@ -14,12 +13,11 @@ import FormBreadcrumbs from '@/components/ui/form-breadcrumbs'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 
 const MultiBoxForm = () => {
-    // const navigate = useNavigate()
     const [loading, setLoading] = useState<boolean>(false)
 
     const form = useForm<z.infer<typeof multiBoxSchema>>({
         resolver: zodResolver(multiBoxSchema),
-        defaultValues: { uidTo: 1, uidFrom: 0, psg: false, checkin: false, checkinTime: 0 },
+        defaultValues: { uidTo: 1, uidFrom: 0, checkin: false, checkinTime: 0 },
     })
 
     const onSubmit = async (values: z.infer<typeof multiBoxSchema>) => {
@@ -59,7 +57,15 @@ const MultiBoxForm = () => {
                                                         <FormLabel htmlFor="uidFrom" className="whitespace-nowrap">
                                                             UID from
                                                         </FormLabel>
-                                                        <Input type="number" id="uidFrom" min={0} className="h-8" disabled={loading} {...field} />
+                                                        <Input
+                                                            type="number"
+                                                            id="uidFrom"
+                                                            min={0}
+                                                            className="h-8"
+                                                            disabled={loading}
+                                                            {...field}
+                                                            onChange={e => form.setValue('uidFrom', Number(e.target.value))}
+                                                        />
                                                     </div>
                                                 </FormControl>
                                                 <FormMessage />
@@ -77,7 +83,15 @@ const MultiBoxForm = () => {
                                                         <FormLabel htmlFor="uidTo" className="whitespace-nowrap">
                                                             UID to
                                                         </FormLabel>
-                                                        <Input type="number" id="uidTo" min={0} className="h-8" disabled={loading} {...field} />
+                                                        <Input
+                                                            type="number"
+                                                            id="uidTo"
+                                                            min={0}
+                                                            className="h-8"
+                                                            disabled={loading}
+                                                            {...field}
+                                                            onChange={e => form.setValue('uidTo', Number(e.target.value))}
+                                                        />
                                                     </div>
                                                 </FormControl>
                                                 <FormMessage />
@@ -111,9 +125,17 @@ const MultiBoxForm = () => {
                                                     <FormControl>
                                                         <div className="flex items-center gap-3">
                                                             <FormLabel htmlFor="checkinTime" className="whitespace-nowrap">
-                                                                Checkin Timer
+                                                                Checkin Timer (s)
                                                             </FormLabel>
-                                                            <Input type="number" id="checkinTime" className="h-8" disabled={loading} {...field} />
+                                                            <Input
+                                                                type="number"
+                                                                id="checkinTime"
+                                                                min={0}
+                                                                className="h-8"
+                                                                disabled={loading}
+                                                                {...field}
+                                                                onChange={e => form.setValue('checkinTime', Number(e.target.value))}
+                                                            />
                                                         </div>
                                                     </FormControl>
                                                     <FormMessage />
@@ -123,24 +145,14 @@ const MultiBoxForm = () => {
                                     )}
                                 </div>
 
-                                <FormField
-                                    control={form.control}
-                                    name="psg"
-                                    render={({ field }) => (
-                                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                                            <FormControl>
-                                                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-                                            </FormControl>
-                                            <div className="space-y-1 leading-none">
-                                                <FormLabel>Passage?</FormLabel>
-                                            </div>
-                                        </FormItem>
-                                    )}
-                                />
-
-                                <Button className="w-full" type="submit">
-                                    Start streaming
-                                </Button>
+                                <div className="space-y-2">
+                                    <Button className="w-full" type="submit">
+                                        Start Emulation
+                                    </Button>
+                                    <Button className="w-full" type="submit" variant="secondary">
+                                        Start streaming
+                                    </Button>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>
