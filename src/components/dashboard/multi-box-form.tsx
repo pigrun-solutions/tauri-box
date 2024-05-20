@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import GeoModal from './geo-modal'
 import { Button } from '../ui/button'
 import { Checkbox } from '../ui/checkbox'
 import { useForm } from 'react-hook-form'
@@ -19,6 +20,8 @@ const MultiBoxForm = () => {
     const { settings } = useSettingsStore()
     const { status, setStatus } = useSocketStore()
     const [loading, setLoading] = useState<boolean>(false)
+    const [boxesInfo, setBoxesInfo] = useState<{ uid: number; index: number }[]>()
+    let disabledClicked = false
 
     const form = useForm<z.infer<typeof multiBoxSchema>>({
         resolver: zodResolver(multiBoxSchema),
@@ -181,22 +184,22 @@ const MultiBoxForm = () => {
     }
 
     async function disconnectFromAllServers() {
-        // try {
-        //     const response = await invoke('disconnect_all_servers')
-        //     setStatus(false)
-        //     console.log(response)
-        // } catch (error) {
-        //     console.error(error)
-        // }
         try {
-            //? count how many numbers from uid to uidTo
-            const count = form.getValues('uidTo') - form.getValues('uidFrom') + 1
-            //? disconnect from all servers
-            for (let i = 0; i < count; i++) {
-                const response = await invoke('disconnect_from_server', { clientIndex: i })
-                console.log(response)
+            disabledClicked = true
+            // ? Remove all connections except the last one
+            const connectionss = (await invoke('get_connected_server_addresses')) as string[]
+            for (let i = 0; i < connectionss.length - 1; i++) await invoke('close_connection_by_client', { clientAddress: connectionss[i] })
+
+            // ? Remove the last one
+            const connections = (await invoke('get_connected_server_addresses')) as string[]
+            console.log(connections)
+            if (connections?.length === 1) {
+                await invoke('close_connection_by_client', { clientAddress: connections[0] })
+                setStatus(false)
+                setBoxesInfo([])
+                disabledClicked = false
             }
-            setStatus(false)
+            toast.success('Disconnected from all servers')
         } catch (error) {
             console.error(error)
         }
@@ -206,11 +209,11 @@ const MultiBoxForm = () => {
         try {
             setLoading(true)
 
-            // ? connect to the server same times as the uidTo - uidFrom
             for (let i = values.uidFrom; i <= values.uidTo; i++) {
-                const connection = await invoke('connect_to_server', { address: `${settings.ip}:${settings.port}` })
-                console.log(connection)
+                const connect = (await invoke('connect_to_server_new', { address: `${settings.ip}:${settings.port}` })) as number
+                setBoxesInfo(prev => [...(prev ?? []), { uid: i, index: connect }])
             }
+
             toast.success('Started streaming')
             setStatus(true)
 
@@ -221,9 +224,14 @@ const MultiBoxForm = () => {
                 for (let i = values.uidFrom; i <= values.uidTo; i++) buffers.push(checkinMaker(i, lat + i, long + i))
 
                 const sendCheckinPackets = async () => {
-                    for (let i = 0; i < buffers.length; i++) await invoke('send_checkin_packet', { message: Array.from(buffers[i]) })
-                    setTimeout(sendCheckinPackets, values.checkinTime! * 1000)
+                    while (!disabledClicked) {
+                        for (let i = 0; i < buffers.length; i++) {
+                            await invoke('send_packet_by_client_index', { clientIndex: i, packet: Array.from(buffers[i]) })
+                        }
+                        await new Promise(resolve => setTimeout(resolve, values.checkinTime! * 1000))
+                    }
                 }
+
                 sendCheckinPackets()
             }
         } catch (error: any) {
@@ -238,7 +246,9 @@ const MultiBoxForm = () => {
         <div className="max-w-2xl mx-auto space-y-4">
             <FormBreadcrumbs currentPage="Multi box" />
 
-            <FormHeader title="Multi Box" />
+            <FormHeader title="Multi Box" loading={loading}>
+                <GeoModal />
+            </FormHeader>
 
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 pb-4">
@@ -350,7 +360,7 @@ const MultiBoxForm = () => {
                                     </Button>
                                     {status && (
                                         <Button className="w-full" type="button" variant="destructive" onClick={disconnectFromAllServers}>
-                                            Start streaming
+                                            Disconnect
                                         </Button>
                                     )}
                                 </div>

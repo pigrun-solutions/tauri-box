@@ -179,6 +179,7 @@ const SingleBoxForm = () => {
 
                 if (status === false) {
                     const connection = await invoke('connect_to_server', { address: `${settings.ip}:${settings.port}` })
+                    console.log(connection)
                     setStatus(connection === 'Connected successfully' ? true : false)
                     toast.success('Connected to the server successfully!')
                 }
