@@ -52,26 +52,21 @@ impl TcpClient {
 }
 
 struct AppState {
-    client: Option<TcpClient>,
+    clients: Vec<TcpClient>,
     status: ConnectionStatus,
 }
 
 #[command]
 fn connect_to_server(state: tauri::State<Arc<Mutex<AppState>>>, address: String) -> Result<String, String> {
-    {
-        let mut app_state = state.lock().unwrap();
-        app_state.status = ConnectionStatus::Connecting;
-    }
-
+    let mut app_state = state.lock().unwrap();
+    app_state.status = ConnectionStatus::Connecting;
     match TcpClient::connect(&address) {
         Ok(client) => {
-            let mut app_state = state.lock().unwrap();
-            app_state.client = Some(client);
+            app_state.clients.push(client);
             app_state.status = ConnectionStatus::Connected;
             Ok("Connected successfully".into())
         }
         Err(e) => {
-            let mut app_state = state.lock().unwrap();
             app_state.status = ConnectionStatus::Disconnected;
             Err(e)
         }
@@ -81,7 +76,7 @@ fn connect_to_server(state: tauri::State<Arc<Mutex<AppState>>>, address: String)
 #[command]
 fn send_checkin_packet(state: tauri::State<Arc<Mutex<AppState>>>, message: Vec<u8>) -> Result<Vec<u8>, String> {
     let mut app_state = state.lock().unwrap();
-    if let Some(ref mut client) = app_state.client {
+    if let Some(client) = app_state.clients.last_mut() {
         client.send_checkin(&message)
     } else {
         Err("Not connected".into())
@@ -89,13 +84,10 @@ fn send_checkin_packet(state: tauri::State<Arc<Mutex<AppState>>>, message: Vec<u
 }
 
 #[command]
-fn send_passage_packet(state: tauri::State<Arc<Mutex<AppState>>>, message: Vec<u8>) -> Result<(), String> {
+fn send_passage_packet(state: tauri::State<Arc<Mutex<AppState>>>, message: Vec<u8>) -> Result<Vec<u8>, String> {
     let mut app_state = state.lock().unwrap();
-    if let Some(ref mut client) = app_state.client {
-        if let Err(e) = client.send_passage(&message) {
-            return Err(format!("Failed to send passage packet: {}", e));
-        }
-        Ok(())
+    if let Some(client) = app_state.clients.last_mut() {
+        client.send_passage(&message)
     } else {
         Err("Not connected".into())
     }
@@ -104,8 +96,8 @@ fn send_passage_packet(state: tauri::State<Arc<Mutex<AppState>>>, message: Vec<u
 #[command]
 fn disconnect_from_server(state: tauri::State<Arc<Mutex<AppState>>>) -> Result<String, String> {
     let mut app_state = state.lock().unwrap();
-    if app_state.client.is_some() {
-        app_state.client = None;
+    if !app_state.clients.is_empty() {
+        app_state.clients.clear();
         app_state.status = ConnectionStatus::Disconnected;
         Ok("Disconnected successfully".into())
     } else {
@@ -126,15 +118,15 @@ fn get_connection_status(state: tauri::State<Arc<Mutex<AppState>>>) -> String {
 fn main() {
     tauri::Builder::default()
         .manage(Arc::new(Mutex::new(AppState {
-            client: None,
+            clients: Vec::new(),
             status: ConnectionStatus::Disconnected,
         })))
         .invoke_handler(tauri::generate_handler![
             connect_to_server,
             send_checkin_packet,
             send_passage_packet,
-            disconnect_from_server,
-            get_connection_status
+            get_connection_status,
+            disconnect_from_server
         ])
         .plugin(tauri_plugin_sql::Builder::default().build())
         .run(tauri::generate_context!())
