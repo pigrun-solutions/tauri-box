@@ -230,16 +230,24 @@ const SingleBoxForm = () => {
                 buffer[25] = NaN & 255
 
                 // ! Time
-                const time = new Date().getTime()
-                buffer[26] = time & 255 // byte 1 (lowest byte)
-                buffer[27] = (time >> 8) & 255 // byte 2
-                buffer[28] = (time >> 16) & 255 // byte 3
-                buffer[29] = (time >> 24) & 255 // byte 4
-                buffer[30] = (time >> 32) & 255 // byte 5
-                buffer[31] = (time >> 40) & 255 // byte 6
-                buffer[32] = (time >> 48) & 255 // byte 7
-                buffer[33] = (time >> 56) & 255 // byte 8 (highest byte)
-
+                // const time = new Date().getTime()
+                const day = new Date().getUTCDate()
+                const month = new Date().getUTCMonth()
+                const year = new Date().getUTCFullYear()
+                const hour = new Date().getUTCHours()
+                const minute = new Date().getUTCMinutes()
+                const second = new Date().getUTCSeconds()
+                const millisecond = new Date().getUTCMilliseconds()
+                const TMs = (hour * 3600 + minute * 60 + second) * 1000 + millisecond
+                buffer[26] = 0 & 255
+                buffer[27] = (year - 2000) & 255 // byte 8 (highest byte)
+                buffer[28] = (month + 1) & 255 // byte 7
+                buffer[29] = day & 255 // byte 6
+                buffer[30] = (TMs >> 24) & 255 // byte 5
+                buffer[31] = (TMs >> 16) & 255 // byte 4
+                buffer[32] = (TMs >> 8) & 255 // byte 3
+                buffer[33] = (TMs) & 255 // byte 2
+                
                 // ! DET
                 // ? DetIndex
                 buffer.set(new Uint8Array([0 >> 8, 0 & 255]), 34)

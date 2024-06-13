@@ -20,7 +20,7 @@ const MultiBoxForm = () => {
     const { settings } = useSettingsStore()
     const { status, setStatus } = useSocketStore()
     const [loading, setLoading] = useState<boolean>(false)
-    const [boxesInfo, setBoxesInfo] = useState<{ uid: number; index: number }[]>()
+    const [_boxesInfo, setBoxesInfo] = useState<{ uid: number; index: number }[]>()
     let disabledClicked = false
 
     const form = useForm<z.infer<typeof multiBoxSchema>>({
