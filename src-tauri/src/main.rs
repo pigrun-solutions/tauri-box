@@ -2,6 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use std::io::{Read, Write};
 use std::net::TcpStream;
+use std::net::UdpSocket;
 use std::sync::{Arc, Mutex};
 use tauri::command;
 
@@ -54,6 +55,7 @@ impl TcpClient {
 struct AppState {
     clients: Vec<TcpClient>,
     status: ConnectionStatus,
+    udp_socket: Option<UdpSocket>,
 }
 
 #[command]
@@ -195,11 +197,32 @@ fn get_connection_status(state: tauri::State<Arc<Mutex<AppState>>>) -> String {
     }
 }
 
+#[command]
+fn send_stream_packet(state: tauri::State<Arc<Mutex<AppState>>>, address: String, message: Vec<u8>) -> Result<(), String> {
+    let mut app_state = state.lock().unwrap();
+    let socket = UdpSocket::bind("0.0.0.0:0").map_err(|e| format!("Failed to bind socket: {}", e))?;
+    socket.send_to(&message, address).map_err(|e| format!("Failed to send packet: {}", e))?;
+    app_state.udp_socket = Some(socket);
+    Ok(())
+}
+
+#[command]
+fn disconnect_from_udp_server(state: tauri::State<Arc<Mutex<AppState>>>) -> Result<(), String> {
+    let mut app_state = state.lock().unwrap();
+    if let Some(socket) = app_state.udp_socket.take() {
+        drop(socket); // This will close the UDP socket
+        Ok(())
+    } else {
+        Err("Not connected to a UDP server".into())
+    }
+}
+
 fn main() {
     tauri::Builder::default()
         .manage(Arc::new(Mutex::new(AppState {
             clients: Vec::new(),
             status: ConnectionStatus::Disconnected,
+            udp_socket: None,
         })))
         .invoke_handler(tauri::generate_handler![
             connect_to_server,
@@ -212,7 +235,9 @@ fn main() {
             close_connection,
             check_client_existence,
             close_connection_by_client,
-            send_packet_by_client_index
+            send_packet_by_client_index,
+            send_stream_packet,
+            disconnect_from_udp_server
         ])
         .plugin(tauri_plugin_sql::Builder::default().build())
         .run(tauri::generate_context!())

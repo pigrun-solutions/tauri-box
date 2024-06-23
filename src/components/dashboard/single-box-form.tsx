@@ -1,9 +1,9 @@
 import { toast } from 'sonner'
-import { useState } from 'react'
 import GeoModal from './geo-modal'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
 import { Loader2 } from 'lucide-react'
+import { useRef, useState } from 'react'
 import { SingleBox } from '@/types/types'
 import { Input } from '@/components/ui/input'
 import { invoke } from '@tauri-apps/api/tauri'
@@ -13,13 +13,43 @@ import { Card, CardContent } from '@/components/ui/card'
 import { useSettingsStore } from '@/zustand/settings-store'
 import FormBreadcrumbs from '@/components/ui/form-breadcrumbs'
 
+// Function to generate sine wave samples
+let phase = 0
+let phaseGeo = 0
+
+function generateSineWave(frequency = 500, samplingRate: number, sampleCount: number) {
+    const samples = new Array(sampleCount)
+    const angularFrequency = 2 * Math.PI * frequency
+    const deltaT = 1 / samplingRate
+
+    for (let i = 0; i < sampleCount; i++) samples[i] = Math.sin(angularFrequency * (phase + i * deltaT)) * 1000
+
+    phase = (phase + sampleCount * deltaT) % (1 / frequency)
+
+    return samples
+}
+function generateSineWaveGeo(frequency = 500, samplingRate: number, sampleCount: number) {
+    const samples = new Array(sampleCount)
+    const angularFrequency = 2 * Math.PI * frequency
+    const deltaT = 1 / samplingRate
+
+    for (let i = 0; i < sampleCount; i++) samples[i] = Math.sin(angularFrequency * (phase + i * deltaT)) * 1000
+
+    phaseGeo = (phaseGeo + sampleCount * deltaT) % (1 / frequency)
+
+    return samples
+}
+
 const SingleBoxForm = () => {
     const { status, setStatus } = useSocketStore()
     const { settings } = useSettingsStore()
     const [loading, setLoading] = useState<boolean>(false)
     const [formData, setFormData] = useState<SingleBox>({ deviceType: '', uid: 200 })
 
-    const onSubmit = async (submitType: 'checkin' | 'packet') => {
+    const [streaming, setStreaming] = useState<boolean>(false)
+    const streamInterval = useRef<NodeJS.Timeout | null>(null)
+
+    const onSubmit = async (submitType: 'checkin' | 'packet' | 'stream') => {
         try {
             setLoading(true)
 
@@ -246,8 +276,8 @@ const SingleBoxForm = () => {
                 buffer[30] = (TMs >> 24) & 255 // byte 5
                 buffer[31] = (TMs >> 16) & 255 // byte 4
                 buffer[32] = (TMs >> 8) & 255 // byte 3
-                buffer[33] = (TMs) & 255 // byte 2
-                
+                buffer[33] = TMs & 255 // byte 2
+
                 // ! DET
                 // ? DetIndex
                 buffer.set(new Uint8Array([0 >> 8, 0 & 255]), 34)
@@ -284,7 +314,6 @@ const SingleBoxForm = () => {
             setLoading(false)
         }
     }
-
     const disconnectFromServer = async () => {
         try {
             await invoke('disconnect_from_server')
@@ -293,6 +322,92 @@ const SingleBoxForm = () => {
         } catch (error) {
             console.error('Failed to disconnect:', error)
         }
+    }
+
+    const onStream = async () => {
+        if (!streaming) {
+            setStreaming(true)
+            streamInterval.current = setInterval(async () => {
+                const SYNCH = [0x21, 0x7e]
+                const bufferLength = 740 // Total buffer size
+                const buffer = new Uint8Array(bufferLength)
+
+                // Write synchronization sequence
+                buffer.set(new Uint8Array(SYNCH), 0)
+
+                // Packet length (always 736 in your worker code) at position 2
+                const packetLength = 736
+                buffer[2] = (packetLength >> 8) & 0xff
+                buffer[3] = packetLength & 0xff
+
+                // Sequence number (for example, increment a counter each time)
+                const seq = 0 // or use a counter
+                buffer[4] = seq & 0xff
+
+                // Packet Type (assuming 4 for regular stream)
+                const packetType = 4
+                buffer[5] = packetType & 0xff
+
+                // UID first 4 bytes at position 6
+                const uid = formData.uid
+                buffer[6] = (uid >> 24) & 0xff
+                buffer[7] = (uid >> 16) & 0xff
+                buffer[8] = (uid >> 8) & 0xff
+                buffer[9] = uid & 0xff
+
+                // Time at first sample 8 bytes at position 10
+                const now = new Date()
+                const time = now.getTime() // Use the current timestamp
+                buffer[10] = (time >> 56) & 0xff
+                buffer[11] = (time >> 48) & 0xff
+                buffer[12] = (time >> 40) & 0xff
+                buffer[13] = (time >> 32) & 0xff
+                buffer[14] = (time >> 24) & 0xff
+                buffer[15] = (time >> 16) & 0xff
+                buffer[16] = (time >> 8) & 0xff
+                buffer[17] = time & 0xff
+
+                // ? Example usage
+                const sineWaveSamplesCoil = generateSineWave(22, 250, 120)
+                const sineWaveSamplesGeo = generateSineWaveGeo(100, 500, 240)
+
+                // ? Scale the samples to 16-bit integers
+
+                // ? Add geophone and coil samples to the buffer
+                let bufferIndex = 18
+                for (let i = 0; i < 144; i++) {
+                    // Add two geophone samples
+                    for (let j = 0; j < 2; j++) {
+                        let geoSample = sineWaveSamplesGeo[i * 2 + j]
+                        buffer[bufferIndex++] = (geoSample >> 8) & 0xff
+                        buffer[bufferIndex++] = geoSample & 0xff
+                    }
+                    // Add one coil sample
+                    let coilSample = sineWaveSamplesCoil[i]
+                    buffer[bufferIndex++] = (coilSample >> 8) & 0xff
+                    buffer[bufferIndex++] = coilSample & 0xff
+                }
+
+                // Calculate checksum and set it at position 738 and 739
+                let checksum = 0
+                for (let i = 0; i < 738; i++) checksum += buffer[i]
+
+                checksum = checksum & 0xffff
+                buffer[738] = (checksum >> 8) & 0xff
+                buffer[739] = checksum & 0xff
+                console.log({ Buffer: Array.from(buffer) })
+
+                // Send the packet to the server
+                await invoke('send_stream_packet', { address: `${settings.ip}:${settings.port}`, message: Array.from(buffer) })
+            }, 200)
+        }
+    }
+    const disconnectStreaming = async () => {
+        if (streamInterval.current) {
+            clearInterval(streamInterval.current)
+            streamInterval.current = null
+        }
+        setStreaming(false)
     }
 
     return (
@@ -343,6 +458,10 @@ const SingleBoxForm = () => {
                             </Button>
                             <Button className="w-full" variant="outline" onClick={() => onSubmit('packet')} disabled={loading}>
                                 {loading && <Loader2 className="size-4 mr-1 animate-spin" />}Passage
+                            </Button>
+                            <Button type="button" className="w-full" variant={!streaming ? 'outline' : 'destructive'} onClick={!streaming ? onStream : disconnectStreaming} disabled={loading}>
+                                {streaming && <Loader2 className="size-4 mr-1 animate-spin" />}
+                                {streaming ? 'Stop streaming' : 'Start Streaming'}
                             </Button>
                         </div>
                         {status && (
