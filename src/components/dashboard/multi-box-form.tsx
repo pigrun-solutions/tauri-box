@@ -1,8 +1,9 @@
 import { z } from 'zod'
 import { toast } from 'sonner'
-import { useState } from 'react'
 import GeoModal from './geo-modal'
 import { Button } from '../ui/button'
+import { Loader2 } from 'lucide-react'
+import { useRef, useState } from 'react'
 import { Checkbox } from '../ui/checkbox'
 import { useForm } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
@@ -16,6 +17,32 @@ import { useSettingsStore } from '@/zustand/settings-store'
 import FormBreadcrumbs from '@/components/ui/form-breadcrumbs'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 
+// Function to generate sine wave samples
+let phase = 0
+let phaseGeo = 0
+function generateSineWave(frequency = 500, samplingRate: number, sampleCount: number) {
+    const samples = new Array(sampleCount)
+    const angularFrequency = 2 * Math.PI * frequency
+    const deltaT = 1 / samplingRate
+
+    for (let i = 0; i < sampleCount; i++) samples[i] = Math.sin(angularFrequency * (phase + i * deltaT)) * 1000
+
+    phase = (phase + sampleCount * deltaT) % (1 / frequency)
+
+    return samples
+}
+function generateSineWaveGeo(frequency = 500, samplingRate: number, sampleCount: number) {
+    const samples = new Array(sampleCount)
+    const angularFrequency = 2 * Math.PI * frequency
+    const deltaT = 1 / samplingRate
+
+    for (let i = 0; i < sampleCount; i++) samples[i] = Math.sin(angularFrequency * (phase + i * deltaT)) * 1000
+
+    phaseGeo = (phaseGeo + sampleCount * deltaT) % (1 / frequency)
+
+    return samples
+}
+
 const MultiBoxForm = () => {
     const { settings } = useSettingsStore()
     const { status, setStatus } = useSocketStore()
@@ -23,10 +50,7 @@ const MultiBoxForm = () => {
     const [_boxesInfo, setBoxesInfo] = useState<{ uid: number; index: number }[]>()
     let disabledClicked = false
 
-    const form = useForm<z.infer<typeof multiBoxSchema>>({
-        resolver: zodResolver(multiBoxSchema),
-        defaultValues: { uidTo: 201, uidFrom: 200, checkin: false, checkinTime: 0 },
-    })
+    const form = useForm<z.infer<typeof multiBoxSchema>>({ resolver: zodResolver(multiBoxSchema), defaultValues: { uidTo: 201, uidFrom: 200, checkin: false, checkinTime: 0 } })
 
     const checkinMaker = (uid: number, lat: number, long: number) => {
         const latScaled = (lat * 2147483648) / 90
@@ -182,7 +206,6 @@ const MultiBoxForm = () => {
 
         return buffer
     }
-
     async function disconnectFromAllServers() {
         try {
             disabledClicked = true
@@ -204,7 +227,6 @@ const MultiBoxForm = () => {
             console.error(error)
         }
     }
-
     const onSubmit = async (values: z.infer<typeof multiBoxSchema>) => {
         try {
             setLoading(true)
@@ -240,6 +262,95 @@ const MultiBoxForm = () => {
         } finally {
             setLoading(false)
         }
+    }
+
+    const [streaming, setStreaming] = useState<boolean>(false)
+    const streamInterval = useRef<NodeJS.Timeout | null>(null)
+    const onStream = async () => {
+        if (!streaming) {
+            const formData = form.getValues()
+            setStreaming(true)
+            streamInterval.current = setInterval(async () => {
+                const SYNCH = [0x21, 0x7e]
+                const bufferLength = 740 // Total buffer size
+                const packetLength = 736
+
+                const now = new Date()
+                const time = now.getTime() // Use the current timestamp
+
+                // Example sine wave sample generation (implement these functions as needed)
+                const sineWaveSamplesCoil = generateSineWave(22, 250, 120)
+                const sineWaveSamplesGeo = generateSineWaveGeo(100, 500, 240)
+
+                for (let uid = formData.uidFrom; uid <= formData.uidTo; uid++) {
+                    const buffer = new Uint8Array(bufferLength)
+
+                    // Write synchronization sequence
+                    buffer.set(new Uint8Array(SYNCH), 0)
+
+                    // Packet length (always 736 in your worker code) at position 2
+                    buffer[2] = (packetLength >> 8) & 0xff
+                    buffer[3] = packetLength & 0xff
+
+                    // Sequence number (for example, increment a counter each time)
+                    const seq = 0 // or use a counter
+                    buffer[4] = seq & 0xff
+
+                    // Packet Type (assuming 4 for regular stream)
+                    const packetType = 4
+                    buffer[5] = packetType & 0xff
+
+                    // UID first 4 bytes at position 6
+                    buffer[6] = (uid >> 24) & 0xff
+                    buffer[7] = (uid >> 16) & 0xff
+                    buffer[8] = (uid >> 8) & 0xff
+                    buffer[9] = uid & 0xff
+
+                    // Time at first sample 8 bytes at position 10
+                    buffer[10] = (time >> 56) & 0xff
+                    buffer[11] = (time >> 48) & 0xff
+                    buffer[12] = (time >> 40) & 0xff
+                    buffer[13] = (time >> 32) & 0xff
+                    buffer[14] = (time >> 24) & 0xff
+                    buffer[15] = (time >> 16) & 0xff
+                    buffer[16] = (time >> 8) & 0xff
+                    buffer[17] = time & 0xff
+
+                    // Add geophone and coil samples to the buffer
+                    let bufferIndex = 18
+                    for (let i = 0; i < 144; i++) {
+                        // Add two geophone samples
+                        for (let j = 0; j < 2; j++) {
+                            let geoSample = sineWaveSamplesGeo[i * 2 + j]
+                            buffer[bufferIndex++] = (geoSample >> 8) & 0xff
+                            buffer[bufferIndex++] = geoSample & 0xff
+                        }
+                        // Add one coil sample
+                        let coilSample = sineWaveSamplesCoil[i]
+                        buffer[bufferIndex++] = (coilSample >> 8) & 0xff
+                        buffer[bufferIndex++] = coilSample & 0xff
+                    }
+
+                    // Calculate checksum and set it at position 738 and 739
+                    let checksum = 0
+                    for (let i = 0; i < 738; i++) checksum += buffer[i]
+
+                    checksum = checksum & 0xffff
+                    buffer[738] = (checksum >> 8) & 0xff
+                    buffer[739] = checksum & 0xff
+
+                    // Send the packet to the server
+                    await invoke('send_stream_packet', { address: `${settings.ip}:${settings.port}`, message: Array.from(buffer) })
+                }
+            }, 200)
+        }
+    }
+    const disconnectStreaming = async () => {
+        if (streamInterval.current) {
+            clearInterval(streamInterval.current)
+            streamInterval.current = null
+        }
+        setStreaming(false)
     }
 
     return (
@@ -357,6 +468,10 @@ const MultiBoxForm = () => {
                                 <div className="space-y-2">
                                     <Button className="w-full" type="submit" disabled={status}>
                                         Start Emulation
+                                    </Button>
+                                    <Button type="button" className="w-full" variant={!streaming ? 'outline' : 'destructive'} onClick={!streaming ? onStream : disconnectStreaming} disabled={loading}>
+                                        {streaming && <Loader2 className="size-4 mr-1 animate-spin" />}
+                                        {streaming ? 'Stop streaming' : 'Start Streaming'}
                                     </Button>
                                     {status && (
                                         <Button className="w-full" type="button" variant="destructive" onClick={disconnectFromAllServers}>
