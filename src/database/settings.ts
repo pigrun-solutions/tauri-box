@@ -2,6 +2,7 @@ import { Settings } from '@/types/types'
 import Database from 'tauri-plugin-sql-api'
 
 type SettingsProps = { id?: number; ip: string; port: number }
+type LatLongProps = { id?: number; lat: number; long: number; coilFreq: number; geoFreq: number; duration: number }
 
 async function doesTableExist(db: any): Promise<boolean> {
     const result = await db.select(`SELECT count(*) as count FROM sqlite_master WHERE type='table' AND name=?`, ['Settings'])
@@ -12,16 +13,19 @@ async function createTable(db: any) {
         `CREATE TABLE Settings (
             id INTEGER PRIMARY KEY autoincrement, 
             ip VARCHAR(255) NOT NULL,
+            port INTEGER DEFAULT 0,
             lat REAL DEFAULT 0.00,
             long REAL DEFAULT 0.00,
-            port INTEGER DEFAULT 0
+            coilFreq REAL DEFAULT 0.00,
+            geoFreq REAL DEFAULT 0.00,
+            duration INTEGER DEFAULT 0
         )`
     )
 }
 async function insertDefaultValues(db: any) {
     await db.execute(
-        `INSERT INTO Settings (ip, lat, long, port)
-        VALUES ('127.0.0.1', 47.6062, 122.3321, 8285)`
+        `INSERT INTO Settings (ip, lat, long, port, coilFreq, geoFreq, duration)
+        VALUES ('127.0.0.1', 47.6062, 122.3321, 8284, 22.0, 100.0, 200)`
     )
 }
 
@@ -65,11 +69,18 @@ export const createEditSettings = async (data: SettingsProps) => {
         return { success: false, error }
     }
 }
-export const createEditLatLong = async (data: { lat: number; long: number; id?: number }) => {
+export const createEditLatLong = async (data: LatLongProps) => {
     try {
         const db = await useSettings()
 
-        await db.execute(`UPDATE Settings SET lat = $1, long = $2 WHERE id = $3`, [data.lat, data.long, data.id])
+        await db.execute(`UPDATE Settings SET lat = $1, long = $2, coilFreq = $3, geoFreq = $4, duration = $5 WHERE id = $6`, [
+            data.lat,
+            data.long,
+            data.coilFreq,
+            data.geoFreq,
+            data.duration,
+            data.id,
+        ])
 
         // ? get settings
         const settings = (await db.select('SELECT * FROM Settings')) as Settings[]

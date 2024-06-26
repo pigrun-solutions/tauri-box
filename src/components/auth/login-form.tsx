@@ -15,7 +15,7 @@ const LoginForm = () => {
     const form = useForm<z.infer<typeof loginSchema>>({ resolver: zodResolver(loginSchema), defaultValues: { password: '' } })
 
     const onSubmit = async (values: z.infer<typeof loginSchema>) => {
-        if (values.password === '1234tml') {
+        if (values.password === 'helloworld') {
             await signIn()
             navigate({ to: '/dashboard' })
         } else form.setError('password', { type: 'manual', message: 'Incorrect password' })

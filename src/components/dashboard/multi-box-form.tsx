@@ -279,8 +279,8 @@ const MultiBoxForm = () => {
                 const time = now.getTime() // Use the current timestamp
 
                 // Example sine wave sample generation (implement these functions as needed)
-                const sineWaveSamplesCoil = generateSineWave(22, 250, 120)
-                const sineWaveSamplesGeo = generateSineWaveGeo(100, 500, 240)
+                const sineWaveSamplesCoil = generateSineWave(settings.coilFreq, 250, 120)
+                const sineWaveSamplesGeo = generateSineWaveGeo(settings.geoFreq, 500, 240)
 
                 for (let uid = formData.uidFrom; uid <= formData.uidTo; uid++) {
                     const buffer = new Uint8Array(bufferLength)
@@ -342,7 +342,7 @@ const MultiBoxForm = () => {
                     // Send the packet to the server
                     await invoke('send_stream_packet', { address: `${settings.ip}:${settings.port}`, message: Array.from(buffer) })
                 }
-            }, 200)
+            }, settings.duration)
         }
     }
     const disconnectStreaming = async () => {

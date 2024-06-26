@@ -4,6 +4,9 @@ export type Settings = {
     lat: number
     long: number
     port: number
+    coilFreq: number
+    geoFreq: number
+    duration: number
 }
 
 export type SingleBox = {

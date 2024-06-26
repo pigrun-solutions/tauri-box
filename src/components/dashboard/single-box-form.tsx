@@ -368,8 +368,8 @@ const SingleBoxForm = () => {
                 buffer[17] = time & 0xff
 
                 // ? Example usage
-                const sineWaveSamplesCoil = generateSineWave(22, 250, 120)
-                const sineWaveSamplesGeo = generateSineWaveGeo(100, 500, 240)
+                const sineWaveSamplesCoil = generateSineWave(settings.coilFreq, 250, 120)
+                const sineWaveSamplesGeo = generateSineWaveGeo(settings.geoFreq, 500, 240)
 
                 // ? Scale the samples to 16-bit integers
 
@@ -399,7 +399,7 @@ const SingleBoxForm = () => {
 
                 // Send the packet to the server
                 await invoke('send_stream_packet', { address: `${settings.ip}:${settings.port}`, message: Array.from(buffer) })
-            }, 200)
+            }, settings.duration)
         }
     }
     const disconnectStreaming = async () => {

@@ -30,6 +30,7 @@ const Dashboard = () => {
         const fetchSettings = async () => {
             try {
                 const settings = await getSettings()
+                console.log(settings)
                 const settingsData = settings.data as Settings[]
                 setSettings(settingsData[0])
 

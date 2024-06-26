@@ -17,7 +17,17 @@ const GeoForm = ({ onClose }: { onClose: () => void }) => {
     const { settings, setSettings } = useSettingsStore()
     const [loading, setLoading] = useState<boolean>(false)
 
-    const form = useForm<z.infer<typeof geoSchema>>({ resolver: zodResolver(geoSchema), defaultValues: { id: settings?.id, lat: settings?.lat, long: settings?.long } })
+    const form = useForm<z.infer<typeof geoSchema>>({
+        resolver: zodResolver(geoSchema),
+        defaultValues: {
+            id: settings?.id,
+            lat: settings?.lat,
+            long: settings?.long,
+            coilFreq: settings?.coilFreq,
+            geoFreq: settings?.geoFreq,
+            duration: settings?.duration,
+        },
+    })
 
     const onSubmit = async (values: z.infer<typeof geoSchema>) => {
         try {
@@ -73,6 +83,60 @@ const GeoForm = ({ onClose }: { onClose: () => void }) => {
                                                 Longitude
                                             </FormLabel>
                                             <Input type="number" id="long" className="h-8" disabled={loading} {...field} onChange={e => form.setValue('long', Number(e.target.value))} />
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="coilFreq"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <div className="flex items-center gap-3">
+                                            <FormLabel htmlFor="coilFreq" className="whitespace-nowrap">
+                                                Coil Frequency
+                                            </FormLabel>
+                                            <Input type="number" id="coilFreq" className="h-8" disabled={loading} {...field} onChange={e => form.setValue('coilFreq', Number(e.target.value))} />
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="geoFreq"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <div className="flex items-center gap-3">
+                                            <FormLabel htmlFor="geoFreq" className="whitespace-nowrap">
+                                                Geo Frequency
+                                            </FormLabel>
+                                            <Input type="number" id="geoFreq" className="h-8" disabled={loading} {...field} onChange={e => form.setValue('geoFreq', Number(e.target.value))} />
+                                        </div>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="duration"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <div className="flex items-center gap-3">
+                                            <FormLabel htmlFor="duration" className="whitespace-nowrap">
+                                                Duration
+                                            </FormLabel>
+                                            <Input type="number" id="duration" className="h-8" disabled={loading} {...field} onChange={e => form.setValue('duration', Number(e.target.value))} />
                                         </div>
                                     </FormControl>
                                     <FormMessage />
