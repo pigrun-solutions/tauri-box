@@ -219,7 +219,7 @@ const SingleBoxForm = () => {
 
                 // ! Passages
                 // ? PSG Type
-                buffer[23] = 0 & 255
+                buffer[23] = 1 & 255
                 // ? PSG Count
                 buffer[24] = NaN & 255
                 // ? PSG Frequency
