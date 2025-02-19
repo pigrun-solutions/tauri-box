@@ -40,13 +40,15 @@ impl TcpClient {
 
     fn send_passage(&mut self, message: &[u8]) -> Result<Vec<u8>, String> {
         match self.stream.write(message) {
-            Ok(_) => {
-                let mut buffer = [0; 512];
-                match self.stream.read(&mut buffer) {
-                    Ok(bytes_read) => Ok(buffer[..bytes_read].to_vec()),
-                    Err(e) => Err(format!("Failed to read from stream: {}", e)),
-                }
-            }
+            Ok(_) => Ok( Vec::new() ),
+            // ? Was breaking the code since backend does not send anything back
+            // {
+            //     let mut buffer = [0; 512];
+            //     match self.stream.read(&mut buffer) {
+            //         Ok(bytes_read) => Ok(buffer[..bytes_read].to_vec()),
+            //         Err(e) => Err(format!("Failed to read from stream: {}", e)),
+            //     }
+            // }
             Err(e) => Err(format!("Failed to write to stream: {}", e)),
         }
     }

@@ -166,7 +166,7 @@ const SingleBoxForm = () => {
                     try {
                         const connection = await invoke('connect_to_server', { address: `${settings.ip}:${settings.port}` })
                         console.log(connection)
-                        setStatus(connection === 'Connected successfully');
+                        setStatus(connection === 'Connected successfully')
                         console.log('Connected to the server successfully!')
                     } catch (error) {
                         console.error('Failed to connect to server:', error)
