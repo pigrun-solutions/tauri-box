@@ -181,6 +181,7 @@ const SingleBoxForm = () => {
                     console.error('Failed to send checkin packet:', error)
                 }
             } else if (submitType === 'packet') {
+                // ? Last 2 bytes should be CRC
                 const latScaled = (settings.lat * 2147483648) / 90
                 const lonScaled = (settings.long * 2147483648) / 180
 
@@ -259,6 +260,20 @@ const SingleBoxForm = () => {
                 }
                 for (let i = start; i < end; i++) buffer[i] = i % 256
 
+                // Calculate CRC
+                let crc = 0
+                for (let i = 0; i < length - 2; i++) {
+                    crc ^= buffer[i] << 8
+                    for (let j = 0; j < 8; j++) {
+                        if (crc & 0x8000) crc = ((crc << 1) ^ 0x1021) & 0xffff
+                        else crc = (crc << 1) & 0xffff
+                    }
+                }
+
+                // Write CRC to the last two bytes
+                buffer[length - 2] = (crc >> 8) & 0xff // MSB
+                buffer[length - 1] = crc & 0xff // LSB
+
                 if (status === false) {
                     const connection = await invoke('connect_to_server', { address: `${settings.ip}:${settings.port}` })
                     setStatus(connection === 'Connected successfully' ? true : false)
@@ -270,7 +285,7 @@ const SingleBoxForm = () => {
                 } catch (error) {
                     console.error('Failed to send passage packet:', error)
                 }
-                toast.success('Checkin sent successfully!')
+                toast.success('Passage sent successfully!')
             }
         } catch (error) {
             console.log(error)
